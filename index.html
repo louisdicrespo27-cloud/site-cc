@@ -2,13 +2,92 @@
 <html lang="pt-PT">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Correia & Crespo — Advogados | Direito Empresarial</title>
-  <meta name="description" content="Direito empresarial para empresas: contratos, registos, fusões e aquisições (M&A) e compliance. Atendimento por marcação, com confidencialidade." />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="index,follow" />
+
+  <title>Correia &amp; Crespo — Advogados | Litoral Oeste (Torres Vedras, Lourinhã, Peniche, Bombarral)</title>
+  <meta name="description" content="Apoio jurídico com rigor e confidencialidade no Litoral Oeste: Torres Vedras, Lourinhã, Peniche e Bombarral. Direito Empresarial e Societário, Contratos, Injunções, Contencioso Civil, Divórcio e Responsabilidades Parentais, Compliance (AML) e MiCA." />
+
+  <link rel="canonical" href="https://correiaecrespo.pt/" />
+
+  <!-- Open Graph (partilhas LinkedIn/WhatsApp) -->
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Correia &amp; Crespo — Advogados" />
+  <meta property="og:title" content="Correia &amp; Crespo — Advogados | Litoral Oeste" />
+  <meta property="og:description" content="Rigor e confidencialidade. Empresas e famílias. Torres Vedras, Lourinhã, Peniche e Bombarral." />
+  <meta property="og:url" content="https://correiaecrespo.pt/" />
+  <meta property="og:image" content="https://correiaecrespo.pt/assets/og.jpg" />
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Correia &amp; Crespo — Advogados" />
+  <meta name="twitter:description" content="Apoio jurídico no Litoral Oeste. Empresas e famílias." />
+  <meta name="twitter:image" content="https://correiaecrespo.pt/assets/og.jpg" />
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css" />
+
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "LegalService",
+  "name": "Correia & Crespo — Advogados",
+  "url": "https://correiaecrespo.pt/",
+  "areaServed": [
+    { "@type": "AdministrativeArea", "name": "Torres Vedras" },
+    { "@type": "AdministrativeArea", "name": "Lourinhã" },
+    { "@type": "AdministrativeArea", "name": "Peniche" },
+    { "@type": "AdministrativeArea", "name": "Bombarral" }
+  ],
+  "knowsAbout": [
+    "Direito empresarial",
+    "Direito societário",
+    "Atos societários",
+    "Registos comerciais",
+    "Contratos",
+    "Injunções",
+    "Contencioso civil",
+    "Divórcio",
+    "Responsabilidades parentais",
+    "Compliance",
+    "Branqueamento de capitais",
+    "MiCA"
+  ],
+  "telephone": "+351 914 376 903",
+  "email": "correiacrespo-67709L@adv.oa.pt"
+}
+  </script>
+
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "A triagem por IA substitui uma consulta?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Não. A triagem fornece informação geral e não vinculativa, não constituindo parecer jurídico. A análise do caso concreto é feita em consulta com advogado." }
+    },
+    {
+      "@type": "Question",
+      "name": "A IA cria relação advogado-cliente?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Não. A relação advogado-cliente estabelece-se apenas em contexto próprio, após aceitação do mandato." }
+    },
+    {
+      "@type": "Question",
+      "name": "Posso enviar dados pessoais no chat?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Não. Evite dados identificativos (nome, morada, NIF, email, telefone). Para partilha de documentação, utilize os canais de contacto indicados." }
+    },
+    {
+      "@type": "Question",
+      "name": "A IA fornece minutas ou instruções passo-a-passo?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Não. O objetivo é apenas enquadramento geral e encaminhamento para consulta." }
+    }
+  ]
+}
+  </script>
 </head>
 <body>
   <a class="skip-link" href="#conteudo">Saltar para o conteúdo</a>
@@ -16,7 +95,7 @@
   <!-- Top bar -->
   <header class="header">
     <div class="container header-inner">
-      <a class="brand" href="#topo" aria-label="Início">
+      <a class="brand" href="index.html#topo" aria-label="Início">
         <span class="brand-mark" aria-hidden="true">
           <img src="assets/logo-mark.png" alt="" loading="lazy" decoding="async" />
         </span>
@@ -31,9 +110,9 @@
           <span></span><span></span><span></span>
         </button>
         <div class="nav-links">
-          <a href="#servicos">Áreas Preferenciais</a>
-          <a href="#contactos">Contactos</a>
-          <a class="btn primary small" href="#contactos">Agendar Consultas</a>
+          <a href="areas-de-pratica.html">Áreas de Prática</a>
+          <a href="contactos.html">Contactos</a>
+          <a class="btn primary small" href="contactos.html">Agendar Consultas</a>
         </div>
       </nav>
     </div>
@@ -47,7 +126,7 @@
           <h1>Qual a sua Perguntinha?</h1>
         </div>
 
-        <div class="triage reveal">
+        <div class="triage reveal" id="triagem">
           <form class="triage-form" id="searchForm" autocomplete="off">
             <label class="sr-only" for="searchInput">Descreva a questão</label>
             <input
@@ -72,7 +151,7 @@
           <div id="chatMessages" class="chat-messages" aria-live="polite"></div>
 
           <div class="chat-cta">
-            <a class="btn primary" href="#contactos">Marcar consulta</a>
+            <a class="btn primary" href="contactos.html">Marcar consulta</a>
             <a class="btn secondary" id="whatsappBtn" href="#" rel="noopener">Enviar WhatsApp</a>
           </div>
         </section>
@@ -99,7 +178,7 @@
           </p>
 
           <div class="hero-actions">
-            <a class="btn primary" href="#contactos">Agendar consulta</a>
+            <a class="btn primary" href="contactos.html">Agendar consulta</a>
             <a class="btn secondary" id="whatsappHeader" href="#" rel="noopener">WhatsApp</a>
           </div>
 
@@ -308,7 +387,7 @@
           </p>
 
           <div class="inspire-actions">
-            <a class="btn primary" href="#contactos">Agendar consulta</a>
+            <a class="btn primary" href="contactos.html">Agendar consulta</a>
             <a class="btn secondary" id="whatsappBtn2" href="#" rel="noopener">Enviar WhatsApp</a>
           </div>
 
@@ -437,6 +516,8 @@
       </div>
 
       <div class="footer-links">
+        <a href="areas-de-pratica.html">Áreas de Prática</a>
+        <a href="contactos.html">Contactos</a>
         <a href="termos.html">Termos</a>
         <a href="privacidade.html">Política de Privacidade</a>
       </div>

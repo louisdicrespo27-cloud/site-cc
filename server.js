@@ -21,12 +21,30 @@ const openai = process.env.OPENAI_API_KEY
 
 app.use(express.json({ limit: '32kb' }));
 
-// Basic security headers (lightweight)
+// Security headers (mínimo útil)
 app.use((req, res, next) => {
   res.setHeader('X-Content-Type-Options', 'nosniff');
   res.setHeader('X-Frame-Options', 'DENY');
   res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
   res.setHeader('Permissions-Policy', 'camera=(), microphone=(), geolocation=()');
+
+  // CSP (ajusta se usares fontes externas)
+  res.setHeader(
+    'Content-Security-Policy',
+    [
+      "default-src 'self'",
+      "base-uri 'self'",
+      "object-src 'none'",
+      "frame-ancestors 'none'",
+      "img-src 'self' data: https:",
+      "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
+      "font-src 'self' https://fonts.gstatic.com",
+      "script-src 'self' 'unsafe-inline'",
+      "connect-src 'self'",
+      "frame-src https://www.google.com https://maps.google.com"
+    ].join('; ')
+  );
+
   next();
 });
 
