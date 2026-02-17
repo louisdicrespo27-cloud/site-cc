@@ -314,6 +314,15 @@ ul {
   min-height: 120px;
 }
 
+.chat-cta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border);
+}
+
 .chat-msg {
   margin-bottom: 1rem;
 }

@@ -1,5 +1,6 @@
 // Correia Crespo - Advogados
 // Homepage estilo Google + Assistente de IA para triagem/orientação jurídica (limitada)
+// Fluxo: 1 pergunta + máx. 1 clarificação → CTA
 
 document.addEventListener('DOMContentLoaded', () => {
   // ===== Menu mobile =====
@@ -20,7 +21,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // ===== Config =====
   const API_BASE = window.location.origin;
-  const MAX_HISTORY = 10; // mensagens (user+assistant) enviadas ao servidor
   const CONSENT_KEY = 'cc_ai_consent_v1';
 
   // ===== Elementos =====
@@ -28,28 +28,9 @@ document.addEventListener('DOMContentLoaded', () => {
   const searchInput = document.getElementById('searchInput');
   const chatPanel = document.getElementById('chatPanel');
   const chatMessages = document.getElementById('chatMessages');
-  const chatForm = document.getElementById('chatForm');
-  const chatInput = document.getElementById('chatInput');
   const topicSelect = document.getElementById('topicSelect');
+  const newQuestionBtn = document.getElementById('newQuestionBtn');
 
-
-
-  // UX: enviar com Enter (Shift+Enter para nova linha) + auto-resize
-  if (chatInput) {
-    const resize = () => {
-      chatInput.style.height = 'auto';
-      chatInput.style.height = Math.min(chatInput.scrollHeight, 160) + 'px';
-    };
-    chatInput.addEventListener('input', resize);
-    resize();
-
-    chatInput.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter' && !e.shiftKey) {
-        e.preventDefault();
-        chatForm?.requestSubmit();
-      }
-    });
-  }
   // Modal consentimento
   const consentModal = document.getElementById('consentModal');
   const consentClose = document.getElementById('consentClose');
@@ -60,12 +41,38 @@ document.addEventListener('DOMContentLoaded', () => {
   );
 
   // ===== Estado =====
-  let messageHistory = []; // histórico local (sem system)
-  let pendingQuestion = null;
+  let stage = 'initial'; // initial | awaiting_clarification | done
+  let pendingQuestion = null; // 1.ª pergunta (quando em awaiting_clarification)
+  let pendingAfterConsent = null; // pergunta a processar após aceitar consentimento
   let lastActiveElement = null;
   let isModalOpen = false;
 
-  // ===== Utilitários =====
+  // ===== Helpers do fluxo =====
+  function lockInput(msg) {
+    if (searchInput) {
+      searchInput.disabled = true;
+      searchInput.value = '';
+      searchInput.placeholder = msg || 'Para continuar, marque consulta.';
+    }
+  }
+
+  function unlockInput(placeholder) {
+    if (searchInput) {
+      searchInput.disabled = false;
+      searchInput.placeholder = placeholder || 'Descreva o problema (sem dados pessoais)…';
+      searchInput.focus();
+    }
+  }
+
+  function resetFlow() {
+    stage = 'initial';
+    pendingQuestion = null;
+    if (chatMessages) chatMessages.innerHTML = '';
+    if (chatPanel) chatPanel.hidden = true;
+    unlockInput('Descreva o problema (sem dados pessoais)…');
+  }
+
+  // ===== Consentimento =====
   function hasConsent() {
     return localStorage.getItem(CONSENT_KEY) === 'true';
   }
@@ -82,13 +89,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const pageContent = document.getElementById('pageContent');
     if (pageContent) pageContent.inert = true;
 
-    // reset checks
-    consentChecks.forEach((c) => {
-      c.checked = false;
-    });
+    consentChecks.forEach((c) => { c.checked = false; });
     updateConsentButton();
 
-    // focus first checkbox
     const first = consentModal.querySelector('input[data-consent-check]');
     first?.focus();
 
@@ -106,11 +109,10 @@ document.addEventListener('DOMContentLoaded', () => {
     if (pageContent) pageContent.inert = false;
 
     document.body.classList.remove('modal-open');
-
     modal.hidden = true;
     modal.style.display = 'none';
 
-    const focusTarget = document.getElementById('searchInput') || document.getElementById('chatInput');
+    const focusTarget = document.getElementById('searchInput');
     (lastActiveElement && typeof lastActiveElement.focus === 'function'
       ? lastActiveElement
       : focusTarget)?.focus();
@@ -124,7 +126,6 @@ document.addEventListener('DOMContentLoaded', () => {
     consentAccept.classList.toggle('consent-disabled', !allChecked);
   }
 
-  
   function getFocusableInModal() {
     if (!consentModal) return [];
     const nodes = consentModal.querySelectorAll(
@@ -135,24 +136,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function onModalKeydown(e) {
     if (!isModalOpen) return;
-
-    // ESC fecha
     if (e.key === 'Escape') {
       e.preventDefault();
-      pendingQuestion = null;
+      pendingAfterConsent = null;
       closeConsentModal();
       return;
     }
-
-    // Trap de TAB no modal
     if (e.key === 'Tab') {
       const focusables = getFocusableInModal();
       if (focusables.length === 0) return;
-
       const first = focusables[0];
       const last = focusables[focusables.length - 1];
       const active = document.activeElement;
-
       if (e.shiftKey && active === first) {
         e.preventDefault();
         last.focus();
@@ -163,11 +158,12 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-function detectPII(text) {
+  // ===== Chat / API =====
+  function detectPII(text) {
     const t = String(text || '');
     const email = /\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b/i;
     const phone = /\b(?:\+351\s*)?(?:9\d{2}|2\d{2})\s?\d{3}\s?\d{3}\b/;
-    const nif = /\b\d{9}\b/; // heurístico
+    const nif = /\b\d{9}\b/;
     const iban = /\bPT\d{23}\b/i;
     return email.test(t) || phone.test(t) || nif.test(t) || iban.test(t);
   }
@@ -178,11 +174,6 @@ function detectPII(text) {
     return `[Área: ${t}] `;
   }
 
-  function getTrimmedHistory() {
-    return messageHistory.slice(-MAX_HISTORY);
-  }
-
-  // ===== UI Chat =====
   function addMessage(role, content, isLoading = false) {
     const div = document.createElement('div');
     div.className = `chat-msg ${role}`;
@@ -208,77 +199,78 @@ function detectPII(text) {
       signal: controller.signal,
     }).finally(() => clearTimeout(timeout));
 
-    if (!response.ok) {
-      const err = await response.json().catch(() => ({}));
-      throw new Error(err.error || 'Erro ao obter resposta. Tente novamente.');
-    }
-
-    const data = await response.json();
+    const data = await response.json().catch(() => ({}));
+    if (!response.ok) throw new Error(data.error || 'Erro ao obter resposta.');
     return data.reply;
+  }
+
+  function isClarificationQuestion(text) {
+    const s = String(text || '').trim();
+    return /^pergunta\s*:/i.test(s) || /\?\s*$/.test(s);
   }
 
   async function handleQuestion(question) {
     const clean = String(question || '').trim();
     if (!clean) return;
 
+    // Consentimento
     if (!hasConsent()) {
       if (!document.getElementById('consentModal')) {
         localStorage.setItem(CONSENT_KEY, 'true');
       } else {
-        pendingQuestion = clean;
+        pendingAfterConsent = clean;
         openConsentModal();
         return;
       }
     }
 
-    if (detectPII(clean)) {
-      addMessage(
-        'assistant',
-        '⚠️ Por favor, remova dados pessoais identificativos (ex.: nomes, moradas, NIF, email, telefone) e reformule a questão de forma geral.'
-      );
+    // Bloqueia conversa se já terminou
+    if (stage === 'done') {
+      addMessage('assistant', 'Para continuar, é necessária consulta com advogado. Clique em "Marcar consulta".');
+      lockInput('Para continuar, marque consulta.');
       return;
     }
 
-    // Mostrar painel de chat
-    chatPanel.hidden = false;
+    if (detectPII(clean)) {
+      addMessage('assistant', '⚠️ Remova dados pessoais (nome, morada, NIF, email, telefone) e reformule de forma geral.');
+      return;
+    }
 
-    // UI: mensagem do utilizador
+    chatPanel.hidden = false;
     addMessage('user', clean);
 
-    const loadingBubble = addMessage(
-      'assistant',
-      'A analisar a sua questão (orientação geral)…',
-      true
-    );
+    const loading = addMessage('assistant', 'A analisar (orientação geral)…', true);
 
-    const prefixedQuestion = getTopicPrefix() + clean;
-    const outgoing = getTrimmedHistory().concat([
-      { role: 'user', content: prefixedQuestion },
-    ]);
+    const prefixed = getTopicPrefix() + clean;
+    const outgoing = [];
+
+    if (stage === 'initial') {
+      outgoing.push({ role: 'user', content: prefixed });
+    } else if (stage === 'awaiting_clarification') {
+      outgoing.push({ role: 'user', content: pendingQuestion });
+      outgoing.push({ role: 'user', content: `[Resposta à clarificação] ${prefixed}` });
+    }
 
     try {
       const reply = await getLegalOpinion(outgoing);
+      loading.classList.remove('loading');
+      loading.textContent = reply;
 
-      // Atualizar histórico local APÓS sucesso
-      messageHistory.push({ role: 'user', content: prefixedQuestion });
-      messageHistory.push({ role: 'assistant', content: reply });
+      if (stage === 'initial' && isClarificationQuestion(reply)) {
+        stage = 'awaiting_clarification';
+        pendingQuestion = prefixed;
+        unlockInput('Responda apenas à pergunta de clarificação (sem dados pessoais)…');
+        return;
+      }
 
-      loadingBubble.classList.remove('loading');
-      loadingBubble.textContent = reply;
+      stage = 'done';
+      lockInput('Para continuar, marque consulta.');
     } catch (err) {
-      const msg = (err && err.name === 'AbortError')
-        ? 'O pedido demorou demasiado tempo. Tente novamente.'
-        : (err?.message || 'Não foi possível obter uma resposta automática.');
-
-      loadingBubble.classList.remove('loading');
-      loadingBubble.innerHTML =
-        `⚠️ ${msg} <br><br>` +
-        'Se preferir, contacte-nos diretamente: ' +
-        '<a href="mailto:correiacrespo-67709L@adv.oa.pt">correiacrespo-67709L@adv.oa.pt</a> ou telefone 914 376 903.';
-
-      loadingBubble
-        .querySelector('a')
-        ?.addEventListener('click', (e) => e.stopPropagation());
+      loading.classList.remove('loading');
+      loading.textContent =
+        'Não foi possível obter resposta automática. Para análise do caso concreto, marque consulta.';
+      stage = 'done';
+      lockInput('Para continuar, marque consulta.');
       console.error(err);
     }
 
@@ -286,21 +278,13 @@ function detectPII(text) {
   }
 
   // ===== Eventos =====
-  if (searchForm && searchInput) {
-    searchForm.addEventListener('submit', (e) => {
-      e.preventDefault();
-      handleQuestion(searchInput.value);
-      searchInput.value = '';
-    });
-  }
+  searchForm?.addEventListener('submit', (e) => {
+    e.preventDefault();
+    handleQuestion(searchInput.value);
+    searchInput.value = '';
+  });
 
-  if (chatForm && chatInput) {
-    chatForm.addEventListener('submit', (e) => {
-      e.preventDefault();
-      handleQuestion(chatInput.value);
-      chatInput.value = '';
-    });
-  }
+  newQuestionBtn?.addEventListener('click', resetFlow);
 
   // Modal consentimento
   consentChecks.forEach((c) => {
@@ -309,39 +293,33 @@ function detectPII(text) {
   });
 
   consentClose?.addEventListener('click', () => {
-    pendingQuestion = null;
+    pendingAfterConsent = null;
     closeConsentModal();
   });
 
   consentCancel?.addEventListener('click', () => {
-    pendingQuestion = null;
+    pendingAfterConsent = null;
     closeConsentModal();
   });
 
-
   consentAccept?.addEventListener('click', async () => {
-    // Só avança se os checks estiverem todos ok
     const allChecked = consentChecks.length > 0 && consentChecks.every((c) => c.checked);
     if (!allChecked) {
       updateConsentButton();
       return;
     }
-
     localStorage.setItem(CONSENT_KEY, 'true');
     closeConsentModal();
-
-    // Se havia uma pergunta pendente (a 1.ª), processa-a agora
-    if (pendingQuestion) {
-      const q = pendingQuestion;
-      pendingQuestion = null;
+    if (pendingAfterConsent) {
+      const q = pendingAfterConsent;
+      pendingAfterConsent = null;
       await handleQuestion(q);
     }
   });
 
-
   consentModal?.addEventListener('click', (e) => {
     if (e.target === consentModal) {
-      pendingQuestion = null;
+      pendingAfterConsent = null;
       closeConsentModal();
     }
   });
@@ -357,9 +335,9 @@ function detectPII(text) {
     if (!allChecked) return;
     localStorage.setItem(CONSENT_KEY, 'true');
     closeConsentModal();
-    if (pendingQuestion) {
-      const q = pendingQuestion;
-      pendingQuestion = null;
+    if (pendingAfterConsent) {
+      const q = pendingAfterConsent;
+      pendingAfterConsent = null;
       handleQuestion(q);
     }
   });
@@ -403,9 +381,9 @@ function detectPII(text) {
         modal.setAttribute('aria-hidden', 'true');
       }
 
-      if (typeof pendingQuestion !== 'undefined' && pendingQuestion) {
-        const q = pendingQuestion;
-        pendingQuestion = null;
+      if (typeof pendingAfterConsent !== 'undefined' && pendingAfterConsent) {
+        const q = pendingAfterConsent;
+        pendingAfterConsent = null;
         console.log('[Consent] A processar pergunta pendente...');
         await handleQuestion(q);
       } else {

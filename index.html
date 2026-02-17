@@ -81,23 +81,10 @@
 
       <div class="chat-panel" id="chatPanel" hidden>
         <div class="chat-messages" id="chatMessages" role="log" aria-live="polite" aria-relevant="additions text"></div>
-        <form class="chat-form" id="chatForm">
-          <textarea 
-            id="chatInput" 
-            name="message"
-            class="chat-input" 
-            placeholder="Faça uma pergunta de seguimento..."
-            autocomplete="off"
-            autocapitalize="sentences"
-            spellcheck="true"
-            rows="1"
-          ></textarea>
-          <button type="submit" class="chat-send">Enviar</button>
-        </form>
-        <p class="disclaimer">
-          ℹ️ Informação geral e não vinculativa; não constitui parecer jurídico. Para análise do caso concreto, contacte-nos em 
-          <a href="mailto:correiacrespo-67709L@adv.oa.pt">correiacrespo-67709L@adv.oa.pt</a>
-        </p>
+        <div class="chat-cta">
+          <a class="btn btn-primary" href="#contactos">Marcar consulta</a>
+          <button class="btn btn-secondary" id="newQuestionBtn" type="button">Nova questão</button>
+        </div>
       </div>
 
       <div class="quick-links">
