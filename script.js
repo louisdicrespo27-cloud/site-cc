@@ -84,7 +84,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const allChecked = consentChecks.length > 0 && consentChecks.every((c) => c.checked);
     consentAccept.classList.toggle('consent-ready', allChecked);
     consentAccept.classList.toggle('consent-disabled', !allChecked);
-    consentAccept.setAttribute('aria-disabled', allChecked ? 'false' : 'true');
   }
 
   function detectPII(text) {
@@ -233,15 +232,19 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   consentModal?.addEventListener('click', (e) => {
-    // clicar fora fecha
     if (e.target === consentModal) {
       pendingQuestion = null;
       closeConsentModal();
     }
   });
 
-  // Aceitar: usar mousedown + click para maior compatibilidade
-  function handleConsentAccept() {
+  document.getElementById('consentModalCard')?.addEventListener('click', (e) => {
+    e.stopPropagation();
+  });
+
+  const consentForm = document.getElementById('consentForm');
+  consentForm?.addEventListener('submit', (e) => {
+    e.preventDefault();
     const allChecked = consentChecks.length > 0 && consentChecks.every((c) => c.checked);
     if (!allChecked) return;
     localStorage.setItem(CONSENT_KEY, 'true');
@@ -250,18 +253,6 @@ document.addEventListener('DOMContentLoaded', () => {
       const q = pendingQuestion;
       pendingQuestion = null;
       handleQuestion(q);
-    }
-  }
-
-  consentAccept?.addEventListener('click', (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    handleConsentAccept();
-  });
-  consentAccept?.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter' || e.key === ' ') {
-      e.preventDefault();
-      handleConsentAccept();
     }
   });
 

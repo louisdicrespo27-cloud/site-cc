@@ -241,33 +241,35 @@
 
   <!-- Modal de consentimento (obrigatório antes da 1.ª questão) -->
   <div id="consentModal" class="modal modal-backdrop" hidden aria-hidden="true" role="dialog" aria-modal="true">
-    <div class="modal-card">
-      <button class="modal-close" id="consentClose" aria-label="Fechar">×</button>
+    <div class="modal-card" id="consentModalCard">
+      <button class="modal-close" id="consentClose" aria-label="Fechar" type="button">×</button>
 
       <h2 class="modal-title">Antes de começar</h2>
       <p class="modal-subtitle">
         Este assistente fornece <strong>orientação jurídica geral</strong>. Não substitui consulta com advogado.
       </p>
 
-      <div class="modal-checks">
-        <label class="check">
-          <input type="checkbox" data-consent-check />
-          Não vou inserir dados pessoais identificativos (nome, morada, NIF, email, telefone, etc.).
-        </label>
-        <label class="check">
-          <input type="checkbox" data-consent-check />
-          Compreendo que é informação geral e não vinculativa; não constitui parecer jurídico.
-        </label>
-        <label class="check">
-          <input type="checkbox" data-consent-check />
-          Compreendo que não se estabelece relação advogado-cliente através deste chat.
-        </label>
-      </div>
+      <form id="consentForm" class="consent-form">
+        <div class="modal-checks">
+          <label class="check">
+            <input type="checkbox" data-consent-check name="check1" required />
+            Não vou inserir dados pessoais identificativos (nome, morada, NIF, email, telefone, etc.).
+          </label>
+          <label class="check">
+            <input type="checkbox" data-consent-check name="check2" required />
+            Compreendo que é informação geral e não vinculativa; não constitui parecer jurídico.
+          </label>
+          <label class="check">
+            <input type="checkbox" data-consent-check name="check3" required />
+            Compreendo que não se estabelece relação advogado-cliente através deste chat.
+          </label>
+        </div>
 
-      <div class="modal-actions">
-        <button class="btn btn-secondary" id="consentCancel" type="button">Cancelar</button>
-        <button class="btn btn-primary consent-disabled" id="consentAccept" type="button" aria-disabled="true">Aceitar e continuar</button>
-      </div>
+        <div class="modal-actions">
+          <button class="btn btn-secondary" id="consentCancel" type="button">Cancelar</button>
+          <button class="btn btn-primary" id="consentAccept" type="submit">Aceitar e continuar</button>
+        </div>
+      </form>
 
       <p class="modal-legal">
         Ao continuar, confirma que leu os <a href="termos.html">Termos</a> e a <a href="privacidade.html">Política de Privacidade</a>.
