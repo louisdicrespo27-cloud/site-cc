@@ -117,4 +117,17 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
   }
+
+  // Newsletter
+  const newsletterForm = document.querySelector('.contactos .newsletter-form');
+  if (newsletterForm) {
+    newsletterForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const email = newsletterForm.querySelector('input[type="email"]').value;
+      if (email) {
+        alert('Obrigado! Receberá as nossas atualizações em ' + email);
+        newsletterForm.reset();
+      }
+    });
+  }
 });
