@@ -123,6 +123,46 @@
       <div class="hero-glow" aria-hidden="true"></div>
     </section>
 
+    <!-- Triage / AI (single input) — no topo -->
+    <section class="section landing" id="triagem">
+      <div class="container">
+        <div class="section-head reveal">
+          <h2>Triagem discreta (informação geral)</h2>
+          <p>Uma primeira orientação curta para enquadrar o assunto. Sem dados pessoais. Sem parecer jurídico.</p>
+        </div>
+
+        <div class="triage reveal">
+          <form class="triage-form" id="searchForm" autocomplete="off">
+            <label class="sr-only" for="searchInput">Descreva a questão</label>
+            <input
+              id="searchInput"
+              name="q"
+              type="text"
+              inputmode="text"
+              autocomplete="off"
+              spellcheck="true"
+              autocapitalize="sentences"
+              placeholder="Ex.: Preciso rever um contrato de prestação de serviços com cláusulas de exclusividade…"
+            />
+            <button class="btn primary" type="submit">Obter orientação</button>
+          </form>
+
+          <div class="triage-note">
+            ⚠️ Não insira nomes, moradas, NIF, emails, telefones ou detalhes identificativos.
+          </div>
+        </div>
+
+        <section id="chatPanel" class="chat-panel" hidden aria-label="Resposta">
+          <div id="chatMessages" class="chat-messages" aria-live="polite"></div>
+
+          <div class="chat-cta">
+            <a class="btn primary" href="#contactos">Marcar consulta</a>
+            <a class="btn secondary" id="whatsappBtn" href="#" rel="noopener">Enviar WhatsApp</a>
+          </div>
+        </section>
+      </div>
+    </section>
+
     <!-- Services -->
     <section class="section" id="servicos">
       <div class="container">
@@ -240,76 +280,35 @@
           </div>
         </div>
 
-        <!-- FAQ accordion -->
+        <!-- FAQ accordion (site / IA / deontologia) -->
         <div class="faq reveal" aria-label="Perguntas frequentes">
           <h3 class="faq-title">Perguntas frequentes</h3>
           <div class="accordion" data-accordion>
             <button class="acc-item" type="button" aria-expanded="false">
-              <span>Trabalha com PME e grupos?</span>
+              <span>O conteúdo deste site constitui aconselhamento jurídico?</span>
               <span class="acc-icon">+</span>
             </button>
             <div class="acc-panel" hidden>
-              <p>Sim. O enquadramento e o nível de formalismo são ajustados à dimensão e ao risco da operação.</p>
+              <p>Não. O site e a triagem oferecem informação geral e limitada. Para análise do caso concreto e parecer jurídico, é necessária consulta com advogado.</p>
             </div>
 
             <button class="acc-item" type="button" aria-expanded="false">
-              <span>É possível começar com uma triagem breve?</span>
+              <span>A triagem usa inteligência artificial?</span>
               <span class="acc-icon">+</span>
             </button>
             <div class="acc-panel" hidden>
-              <p>Sim. A triagem ajuda a enquadrar a questão e a preparar a consulta, mantendo a confidencialidade.</p>
+              <p>Sim. Uma ferramenta de IA fornece orientação geral de triagem. As respostas são limitadas, não personalizadas e não substituem consulta. Não deve inserir dados pessoais.</p>
             </div>
 
             <button class="acc-item" type="button" aria-expanded="false">
-              <span>Quanto tempo demora a análise?</span>
+              <span>Como é garantida a confidencialidade e a deontologia?</span>
               <span class="acc-icon">+</span>
             </button>
             <div class="acc-panel" hidden>
-              <p>Depende do volume documental e da urgência. Em consulta, define-se um plano e prazos realistas.</p>
+              <p>O escritório está vinculado ao Estatuto da Ordem dos Advogados e ao segredo profissional. A triagem não estabelece relação advogado-cliente. Para matéria confidencial, marque consulta.</p>
             </div>
           </div>
         </div>
-      </div>
-    </section>
-
-    <!-- Triage / AI (single input) -->
-    <section class="section" id="triagem">
-      <div class="container">
-        <div class="section-head reveal">
-          <h2>Triagem discreta (informação geral)</h2>
-          <p>Uma primeira orientação curta para enquadrar o assunto. Sem dados pessoais. Sem parecer jurídico.</p>
-        </div>
-
-        <div class="triage reveal">
-          <form class="triage-form" id="searchForm" autocomplete="off">
-            <label class="sr-only" for="searchInput">Descreva a questão</label>
-            <input
-              id="searchInput"
-              name="q"
-              type="text"
-              inputmode="text"
-              autocomplete="off"
-              spellcheck="true"
-              autocapitalize="sentences"
-              placeholder="Ex.: Preciso rever um contrato de prestação de serviços com cláusulas de exclusividade…"
-            />
-            <button class="btn primary" type="submit">Obter orientação</button>
-          </form>
-
-          <div class="triage-note">
-            ⚠️ Não insira nomes, moradas, NIF, emails, telefones ou detalhes identificativos.
-          </div>
-        </div>
-
-        <!-- Response panel -->
-        <section id="chatPanel" class="chat-panel" hidden aria-label="Resposta">
-          <div id="chatMessages" class="chat-messages" aria-live="polite"></div>
-
-          <div class="chat-cta">
-            <a class="btn primary" href="#contactos">Marcar consulta</a>
-            <a class="btn secondary" id="whatsappBtn" href="#" rel="noopener">Enviar WhatsApp</a>
-          </div>
-        </section>
       </div>
     </section>
 

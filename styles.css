@@ -220,7 +220,8 @@ a:hover{ opacity: 0.95; }
   justify-content: center;
   text-align: center;
 }
-.hero h1{
+.hero h1,
+.hero h2{
   margin: 14px 0 10px;
   font-size: clamp(2.2rem, 3.8vw, 3.5rem);
   letter-spacing: -0.02em;
@@ -730,4 +731,31 @@ body.modal-open{ overflow:hidden; }
     min-width: 220px;
   }
   .nav-links.active{ display:flex; }
+}
+
+/* ========== Landing (Google-like) ========== */
+.section.landing{
+  padding-top: 48px;
+  padding-bottom: 56px;
+}
+.section.landing .section-head{
+  text-align: center;
+  justify-content: center;
+  flex-direction: column;
+  margin-bottom: 28px;
+}
+.section.landing .section-head h2{
+  margin-bottom: 8px;
+}
+.section.landing .section-head p{
+  margin: 0 auto;
+  max-width: 56ch;
+}
+.section.landing .triage{
+  max-width: 640px;
+  margin: 0 auto;
+}
+.section.landing .chat-panel{
+  max-width: 720px;
+  margin: 20px auto 0;
 }
