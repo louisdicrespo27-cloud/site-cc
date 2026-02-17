@@ -28,7 +28,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const searchInput = document.getElementById('searchInput');
   const chatPanel = document.getElementById('chatPanel');
   const chatMessages = document.getElementById('chatMessages');
-  const topicSelect = document.getElementById('topicSelect');
   const newQuestionBtn = document.getElementById('newQuestionBtn');
 
   // Modal consentimento
@@ -168,12 +167,6 @@ document.addEventListener('DOMContentLoaded', () => {
     return email.test(t) || phone.test(t) || nif.test(t) || iban.test(t);
   }
 
-  function getTopicPrefix() {
-    const t = topicSelect?.value?.trim();
-    if (!t || t === 'Sem categoria') return '';
-    return `[Área: ${t}] `;
-  }
-
   function addMessage(role, content, isLoading = false) {
     const div = document.createElement('div');
     div.className = `chat-msg ${role}`;
@@ -241,7 +234,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const loading = addMessage('assistant', 'A analisar (orientação geral)…', true);
 
-    const prefixed = getTopicPrefix() + clean;
+    const prefixed = clean;
     const outgoing = [];
 
     if (stage === 'initial') {

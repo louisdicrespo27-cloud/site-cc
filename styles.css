@@ -427,41 +427,13 @@ ul {
   color: var(--accent);
 }
 
-/* ========== Search controls (categoria + privacidade) ========== */
-.search-controls {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 12px;
-  flex-wrap: wrap;
-  margin: 0 0 12px;
-}
-
-.topic-label {
-  font-size: 0.9rem;
-  color: var(--text-secondary);
-}
-
-.topic-select {
-  padding: 10px 12px;
-  background: var(--bg-secondary);
-  color: var(--text-primary);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-xl);
-  outline: none;
-  font-family: var(--font-main);
-}
-
-.topic-select:focus {
-  border-color: var(--text-muted);
-}
-
+/* ========== Search (privacidade) ========== */
 .privacy-note {
   width: 100%;
   text-align: center;
   font-size: 0.9rem;
   color: var(--text-muted);
-  margin: 6px 0 0;
+  margin: 0 0 12px;
 }
 
 .privacy-hint {
