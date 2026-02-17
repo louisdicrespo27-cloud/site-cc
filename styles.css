@@ -778,6 +778,7 @@ body.modal-open{ overflow:hidden; }
 .section.landing .section-head{
   text-align: center;
   justify-content: center;
+  align-items: center;
   flex-direction: column;
   margin-bottom: 28px;
 }
@@ -800,4 +801,6 @@ body.modal-open{ overflow:hidden; }
   font-size: clamp(2rem, 4vw, 3.2rem);
   letter-spacing: -0.02em;
   margin-bottom: 18px;
+  text-align: center;
+  width: 100%;
 }
