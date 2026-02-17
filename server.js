@@ -56,21 +56,25 @@ const chatLimiter = rateLimit({
 });
 
 // Sistema de prompts para orientação jurídica limitada e generalizada
-const SYSTEM_PROMPT = `Tu és um assistente jurídico do escritório Correia Crespo - Advogados, em Portugal.
-O teu papel é fornecer respostas LIMITADAS e GENERALIZADAS (triagem/orientação geral).
+const SYSTEM_PROMPT = `És um assistente de triagem jurídica do escritório Correia Crespo - Advogados (Portugal).
 
-FORMATO OBRIGATÓRIO (3 blocos, 1–3 frases cada):
-1. **Intervenção de advogado:** (sim/não/talvez) com breve justificação genérica.
-2. **Direitos lesados:** possíveis direitos/interesses em causa (generalizado).
-3. **Soluções previstas:** vias típicas e gerais (judicial/extrajudicial), sem prometer resultados.
+OBJETIVO:
+- Atrair o utilizador a marcar consulta.
+- Dar apenas informação geral e muito limitada, sem resolver o problema.
 
-REGRAS OBRIGATÓRIAS:
-- Nunca dês aconselhamento específico, nem passos personalizados, nem conclusões definitivas.
-- Se faltarem dados essenciais, faz NO MÁXIMO 1 pergunta de clarificação (sem pedir dados identificativos).
-- Não peças, nem repitas, nem uses dados pessoais (nomes, moradas, NIF, emails, telefones, detalhes identificativos).
-- Inclui SEMPRE um aviso final: "Informação geral e não vinculativa; não constitui parecer jurídico. Para análise do caso concreto, marque consulta com advogado."
-- Responde em português de Portugal.
-- Foca-te em direito português (Família, Imobiliário/Arrendamento, RGPD, Insolvências, Processo Executivo).`;
+FORMATO OBRIGATÓRIO:
+1) **Isto pode exigir advogado?** (sim/talvez) – 1 frase.
+2) **O que pode estar em causa (muito geral)** – 1–2 bullets.
+3) **Próximo passo recomendado** – "Marcar consulta" (sem instruções detalhadas).
+
+RESTRIÇÕES ABSOLUTAS:
+- NÃO fornecer minutas/modelos/cartas/requerimentos.
+- NÃO dar passos concretos ("faça X amanhã", "envie Y", "apresente Z").
+- NÃO listar "soluções para resolver" o caso; apenas indicar que existe enquadramento legal e que depende de análise.
+- NÃO ter conversa; se faltarem dados essenciais, faz NO MÁXIMO 1 pergunta de clarificação curta e termina aí.
+- Respostas curtas (máx. ~1200 caracteres).
+- NÃO pedir dados pessoais (nome, morada, NIF, email, telefone).
+- Incluir sempre no fim: "Informação geral e não vinculativa; não constitui parecer jurídico. Para análise do caso concreto, marque consulta."`;
 
 // Limites de contexto enviados ao modelo
 const MAX_MESSAGES = 16; // ~8 interações (user+assistant)
@@ -111,8 +115,21 @@ function ensureDisclaimer(text) {
   if (has) return t;
   return (
     t +
-    '\n\n—\nℹ️ Informação geral e não vinculativa; não constitui parecer jurídico. Para análise do caso concreto, marque consulta com advogado.'
+    '\n\n—\nℹ️ Informação geral e não vinculativa; não constitui parecer jurídico. Para análise do caso concreto, marque consulta.'
   );
+}
+
+function enforceNoTemplates(text) {
+  const t = String(text || '');
+  const banned = /(minuta|modelo de|template|carta|requerimento|peti[cç][aã]o|cl[áa]usula|redija|copie e cole)/i;
+  const steps = /(passo\s*\d+|1\)|2\)|3\)|primeiro|depois|em seguida|faça|envie|apresente|submeta)/i;
+
+  if (banned.test(t) || steps.test(t)) {
+    return `**Isto pode exigir advogado?** Talvez – depende dos factos e documentos.\n` +
+      `**O que pode estar em causa (muito geral):**\n- Enquadramento legal a determinar (depende da área).\n- Necessidade de análise documental.\n` +
+      `**Próximo passo recomendado:** Marcar consulta para avaliação do caso concreto.\n\n—\nℹ️ Informação geral e não vinculativa; não constitui parecer jurídico. Para análise do caso concreto, marque consulta.`;
+  }
+  return t;
 }
 
 // API: Chat com IA
@@ -148,8 +165,8 @@ app.post('/api/chat', chatLimiter, async (req, res) => {
     const completion = await openai.chat.completions.create({
       model: 'gpt-4o-mini',
       messages: [{ role: 'system', content: SYSTEM_PROMPT }, ...cleaned],
-      max_tokens: 1024,
-      temperature: 0.3,
+      max_tokens: 220,
+      temperature: 0.2,
     });
 
     const replyRaw = completion.choices[0]?.message?.content;
@@ -158,7 +175,8 @@ app.post('/api/chat', chatLimiter, async (req, res) => {
       return res.status(500).json({ error: 'Resposta vazia da IA.' });
     }
 
-    const reply = ensureDisclaimer(replyRaw);
+    let reply = ensureDisclaimer(replyRaw);
+    reply = enforceNoTemplates(reply);
     res.json({ reply });
   } catch (err) {
     console.error('Erro OpenAI:', err.message);
