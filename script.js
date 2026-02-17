@@ -67,8 +67,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function updateConsentButton() {
     if (!consentAccept) return;
-    const allChecked = consentChecks.every((c) => c.checked);
-    consentAccept.disabled = !allChecked;
+    const allChecked = consentChecks.length > 0 && consentChecks.every((c) => c.checked);
+    if (allChecked) {
+      consentAccept.removeAttribute('disabled');
+      consentAccept.removeAttribute('aria-disabled');
+    } else {
+      consentAccept.setAttribute('disabled', '');
+      consentAccept.setAttribute('aria-disabled', 'true');
+    }
   }
 
   function detectPII(text) {
@@ -197,7 +203,10 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // Modal consentimento
-  consentChecks.forEach((c) => c.addEventListener('change', updateConsentButton));
+  consentChecks.forEach((c) => {
+    c.addEventListener('change', updateConsentButton);
+    c.addEventListener('click', updateConsentButton);
+  });
 
   consentClose?.addEventListener('click', () => {
     pendingQuestion = null;
@@ -217,7 +226,10 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  consentAccept?.addEventListener('click', async () => {
+  consentAccept?.addEventListener('click', async (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (consentAccept.hasAttribute('disabled')) return;
     localStorage.setItem(CONSENT_KEY, 'true');
     closeConsentModal();
     if (pendingQuestion) {
