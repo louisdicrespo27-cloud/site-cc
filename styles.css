@@ -967,3 +967,23 @@ body.modal-open {
 .modal[hidden] {
   display: none !important;
 }
+
+/* Marca: nome + subtítulo por baixo */
+.brand-stack {
+  display: inline-flex;
+  flex-direction: column;
+  line-height: 1.05;
+}
+
+.brand-stack .brand-name {
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.brand-stack .brand-sub {
+  font-size: 0.62em;
+  font-weight: 500;
+  opacity: 0.75;
+  letter-spacing: 0.08em;
+  margin-top: 3px;
+}
