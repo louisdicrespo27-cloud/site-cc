@@ -97,6 +97,11 @@ document.addEventListener('DOMContentLoaded', () => {
     isModalOpen = false;
     document.removeEventListener('keydown', onModalKeydown, true);
 
+    // Se usas inert:
+    const pageContent = document.getElementById('pageContent');
+    if (pageContent) pageContent.inert = false;
+    document.body.classList.remove('modal-open');
+
     // mover foco para fora do modal ANTES de o esconder
     const fallback = document.getElementById('searchInput') || document.getElementById('chatInput');
     (lastActiveElement && typeof lastActiveElement.focus === 'function'
@@ -104,7 +109,6 @@ document.addEventListener('DOMContentLoaded', () => {
       : fallback)?.focus();
 
     consentModal.hidden = true;
-    document.body.classList.remove('modal-open');
   }
 
   function updateConsentButton() {
@@ -354,6 +358,63 @@ function detectPII(text) {
       handleQuestion(q);
     }
   });
+
+  // =============================
+  // CONSENT MODAL — FIX DEFINITIVO
+  // =============================
+  (function consentFix() {
+    const KEY = CONSENT_KEY || 'cc_ai_consent_v1';
+
+    function allCheckedNow() {
+      const checks = Array.from(document.querySelectorAll('input[data-consent-check]'));
+      return checks.length > 0 && checks.every((c) => c.checked);
+    }
+
+    document.addEventListener('click', async (e) => {
+      const btn = e.target?.closest?.('#consentAccept');
+      if (!btn) return;
+
+      e.preventDefault();
+      e.stopPropagation();
+
+      console.log('[Consent] Clique em consentAccept. disabled=', btn.disabled);
+
+      if (btn.disabled) return;
+
+      if (!allCheckedNow()) {
+        console.warn('[Consent] Ainda faltam checkboxes.');
+        try { updateConsentButton?.(); } catch {}
+        return;
+      }
+
+      localStorage.setItem(KEY, 'true');
+      console.log('[Consent] Gravado em localStorage:', localStorage.getItem(KEY));
+
+      const modal = document.getElementById('consentModal');
+      if (modal) {
+        modal.hidden = true;
+        document.body.classList.remove('modal-open');
+        modal.setAttribute('aria-hidden', 'true');
+      }
+
+      if (typeof pendingQuestion !== 'undefined' && pendingQuestion) {
+        const q = pendingQuestion;
+        pendingQuestion = null;
+        console.log('[Consent] A processar pergunta pendente...');
+        await handleQuestion(q);
+      } else {
+        console.log('[Consent] Sem pergunta pendente. Modal fechado.');
+      }
+    });
+
+    document.addEventListener('change', (e) => {
+      if (!e.target?.matches?.('input[data-consent-check]')) return;
+      const btn = document.getElementById('consentAccept');
+      if (!btn) return;
+      btn.disabled = !allCheckedNow();
+      console.log('[Consent] Checks alterados. btn.disabled=', btn.disabled);
+    });
+  })();
 
   // Newsletter
   const newsletterForm = document.querySelector('.contactos .newsletter-form');
