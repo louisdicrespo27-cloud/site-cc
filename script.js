@@ -144,9 +144,13 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!clean) return;
 
     if (!hasConsent()) {
-      pendingQuestion = clean;
-      openConsentModal();
-      return;
+      if (!document.getElementById('consentModal')) {
+        localStorage.setItem(CONSENT_KEY, 'true');
+      } else {
+        pendingQuestion = clean;
+        openConsentModal();
+        return;
+      }
     }
 
     if (detectPII(clean)) {

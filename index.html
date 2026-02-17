@@ -35,6 +35,23 @@
       </div>
 
       <div class="search-section">
+        <div class="search-controls">
+          <label for="topicSelect" class="topic-label">Área</label>
+          <select id="topicSelect" class="topic-select" aria-label="Escolher área jurídica">
+            <option>Sem categoria</option>
+            <option>Família</option>
+            <option>Arrendamento / Imobiliário</option>
+            <option>RGPD</option>
+            <option>Insolvência / Execução</option>
+            <option>Trabalho</option>
+            <option>Penal</option>
+            <option>Contraordenações</option>
+            <option>Outra</option>
+          </select>
+          <p class="privacy-note">
+            ⚠️ Não insira dados pessoais (nomes, moradas, NIF, email, telefone). O assistente dá orientação geral e não vinculativa.
+          </p>
+        </div>
         <form class="search-form" id="searchForm">
           <div class="search-box">
             <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -55,18 +72,6 @@
             </button>
           </div>
         </form>
-        <div class="search-controls">
-          <label class="topic-label" for="topicSelect">Área</label>
-          <select id="topicSelect" class="topic-select" aria-label="Selecionar área jurídica">
-            <option>Sem categoria</option>
-            <option>Família</option>
-            <option>Arrendamento / Imobiliário</option>
-            <option>RGPD</option>
-            <option>Insolvência / Execução</option>
-            <option>Outra</option>
-          </select>
-          <span class="privacy-hint">⚠️ Não inclua dados pessoais (nomes, moradas, NIF, email, telefone).</span>
-        </div>
         <p class="search-hint">Ex: "O meu senhorio quer despejar-me. Quais são os meus direitos?" ou "Como funciona o divórcio em Portugal?"</p>
       </div>
 
@@ -234,37 +239,39 @@
     </div>
   </footer>
 
-  <div class="modal-backdrop" id="consentModal" hidden aria-hidden="true" role="dialog" aria-modal="true">
-    <div class="modal" role="document">
-      <div class="modal-header">
-        <h3 class="modal-title">Antes de começar</h3>
-        <button class="modal-close" id="consentClose" aria-label="Fechar">×</button>
-      </div>
-      <p class="modal-text">
-        Este assistente fornece <strong>orientação jurídica geral</strong> (triagem) e tem limites.
-        Para proteger a sua privacidade e evitar erros, confirme o seguinte:
+  <!-- Modal de consentimento (obrigatório antes da 1.ª questão) -->
+  <div id="consentModal" class="modal modal-backdrop" hidden aria-hidden="true" role="dialog" aria-modal="true">
+    <div class="modal-card">
+      <button class="modal-close" id="consentClose" aria-label="Fechar">×</button>
+
+      <h2 class="modal-title">Antes de começar</h2>
+      <p class="modal-subtitle">
+        Este assistente fornece <strong>orientação jurídica geral</strong>. Não substitui consulta com advogado.
       </p>
+
       <div class="modal-checks">
-        <label class="check-row">
+        <label class="check">
           <input type="checkbox" data-consent-check />
-          <span>Não vou inserir dados pessoais identificativos (nomes, moradas, NIF, email, telefone, etc.).</span>
+          Não vou inserir dados pessoais identificativos (nome, morada, NIF, email, telefone, etc.).
         </label>
-        <label class="check-row">
+        <label class="check">
           <input type="checkbox" data-consent-check />
-          <span>Compreendo que a resposta é <strong>informação geral</strong> e <strong>não vinculativa</strong>.</span>
+          Compreendo que é informação geral e não vinculativa; não constitui parecer jurídico.
         </label>
-        <label class="check-row">
+        <label class="check">
           <input type="checkbox" data-consent-check />
-          <span>Compreendo que isto <strong>não cria relação advogado‑cliente</strong> nem substitui consulta.</span>
+          Compreendo que não se estabelece relação advogado-cliente através deste chat.
         </label>
       </div>
-      <p class="modal-links">
-        Ao continuar, aceita os <a href="termos.html">Termos</a> e a <a href="privacidade.html">Política de Privacidade</a>.
-      </p>
+
       <div class="modal-actions">
-        <button class="btn btn-secondary" type="button" id="consentCancel">Cancelar</button>
-        <button class="btn btn-primary" type="button" id="consentAccept" disabled aria-disabled="true">Continuar</button>
+        <button class="btn btn-secondary" id="consentCancel" type="button">Cancelar</button>
+        <button class="btn btn-primary" id="consentAccept" type="button" disabled>Aceitar e continuar</button>
       </div>
+
+      <p class="modal-legal">
+        Ao continuar, confirma que leu os <a href="termos.html">Termos</a> e a <a href="privacidade.html">Política de Privacidade</a>.
+      </p>
     </div>
   </div>
 
