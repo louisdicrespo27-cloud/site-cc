@@ -44,7 +44,6 @@ document.addEventListener('DOMContentLoaded', () => {
   // ===== Estado =====
   let messageHistory = []; // histórico local (sem system)
   let pendingQuestion = null;
-  let focusBeforeModal = null;
 
   // ===== Utilitários =====
   function hasConsent() {
@@ -53,32 +52,23 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function openConsentModal() {
     if (!consentModal) return;
-    focusBeforeModal = document.activeElement;
     consentModal.hidden = false;
-    consentModal.removeAttribute('hidden');
-    consentModal.setAttribute('aria-hidden', 'false');
     document.body.classList.add('modal-open');
     consentChecks.forEach((c) => { c.checked = false; });
     updateConsentButton();
-    setTimeout(() => {
-      const firstCheck = consentChecks[0];
-      if (firstCheck) firstCheck.focus();
-      else consentClose?.focus();
-    }, 0);
+
+    const first = consentModal.querySelector('input[data-consent-check]');
+    first?.focus();
   }
 
   function closeConsentModal() {
     if (!consentModal) return;
-    const toFocus = focusBeforeModal || searchInput || document.querySelector('a, button');
-    if (toFocus && toFocus !== consentModal && typeof toFocus.focus === 'function') {
-      toFocus.focus();
-    }
-    setTimeout(() => {
-      consentModal.hidden = true;
-      consentModal.setAttribute('aria-hidden', 'true');
-      document.body.classList.remove('modal-open');
-      focusBeforeModal = null;
-    }, 0);
+
+    const focusTarget = document.getElementById('searchInput') || document.getElementById('chatInput');
+    focusTarget?.focus();
+
+    consentModal.hidden = true;
+    document.body.classList.remove('modal-open');
   }
 
   function updateConsentButton() {
