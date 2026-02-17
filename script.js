@@ -55,8 +55,10 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!consentModal) return;
     focusBeforeModal = document.activeElement;
     consentModal.hidden = false;
+    consentModal.removeAttribute('hidden');
     consentModal.setAttribute('aria-hidden', 'false');
     document.body.classList.add('modal-open');
+    consentChecks.forEach((c) => { c.checked = false; });
     updateConsentButton();
     setTimeout(() => {
       const firstCheck = consentChecks[0];
@@ -80,13 +82,9 @@ document.addEventListener('DOMContentLoaded', () => {
   function updateConsentButton() {
     if (!consentAccept) return;
     const allChecked = consentChecks.length > 0 && consentChecks.every((c) => c.checked);
-    if (allChecked) {
-      consentAccept.removeAttribute('disabled');
-      consentAccept.removeAttribute('aria-disabled');
-    } else {
-      consentAccept.setAttribute('disabled', '');
-      consentAccept.setAttribute('aria-disabled', 'true');
-    }
+    consentAccept.classList.toggle('consent-ready', allChecked);
+    consentAccept.classList.toggle('consent-disabled', !allChecked);
+    consentAccept.setAttribute('aria-disabled', allChecked ? 'false' : 'true');
   }
 
   function detectPII(text) {
@@ -242,16 +240,28 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  consentAccept?.addEventListener('click', async (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    if (consentAccept.hasAttribute('disabled')) return;
+  // Aceitar: usar mousedown + click para maior compatibilidade
+  function handleConsentAccept() {
+    const allChecked = consentChecks.length > 0 && consentChecks.every((c) => c.checked);
+    if (!allChecked) return;
     localStorage.setItem(CONSENT_KEY, 'true');
     closeConsentModal();
     if (pendingQuestion) {
       const q = pendingQuestion;
       pendingQuestion = null;
-      await handleQuestion(q);
+      handleQuestion(q);
+    }
+  }
+
+  consentAccept?.addEventListener('click', (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    handleConsentAccept();
+  });
+  consentAccept?.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      handleConsentAccept();
     }
   });
 

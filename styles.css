@@ -598,6 +598,13 @@ body.modal-open {
   transform: none !important;
 }
 
+/* Botão consentimento: parece desativado mas recebe cliques (validamos no JS) */
+#consentAccept.consent-disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
 /* ========== Sections ========== */
 .wix-section {
   padding: 4rem 0;
