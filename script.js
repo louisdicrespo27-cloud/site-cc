@@ -309,6 +309,27 @@ function detectPII(text) {
     closeConsentModal();
   });
 
+
+  consentAccept?.addEventListener('click', async () => {
+    // Só avança se os checks estiverem todos ok
+    const allChecked = consentChecks.length > 0 && consentChecks.every((c) => c.checked);
+    if (!allChecked) {
+      updateConsentButton();
+      return;
+    }
+
+    localStorage.setItem(CONSENT_KEY, 'true');
+    closeConsentModal();
+
+    // Se havia uma pergunta pendente (a 1.ª), processa-a agora
+    if (pendingQuestion) {
+      const q = pendingQuestion;
+      pendingQuestion = null;
+      await handleQuestion(q);
+    }
+  });
+
+
   consentModal?.addEventListener('click', (e) => {
     if (e.target === consentModal) {
       pendingQuestion = null;
