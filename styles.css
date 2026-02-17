@@ -7,12 +7,11 @@
   --text: rgba(255,255,255,0.92);
   --muted: rgba(255,255,255,0.68);
 
-  /* Bordeaux (premium) */
-  --accent: #7A0C1B;
-  --cc-accent: #7A0C1B;
-  --accent-hover: #5F0914;
-  --accent-active: #4A070F;
-  --accent-soft: rgba(122, 12, 27, 0.25);
+  /* Tom bordeaux (conforme logótipo fornecido) */
+  --accent: #4B1A29;
+  --accent-hover: #5A1F31;
+  --accent-active: #3A1420;
+  --accent-soft: rgba(75, 26, 41, 0.25);
 
   --radius: 18px;
   --shadow: 0 18px 60px rgba(0,0,0,0.55);
@@ -27,7 +26,7 @@ body{
   margin: 0;
   font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
   color: var(--text);
-  background: radial-gradient(1200px 600px at 70% 10%, rgba(122,12,27,0.16), transparent 60%),
+  background: radial-gradient(1200px 600px at 70% 10%, rgba(75,26,41,0.16), transparent 60%),
               radial-gradient(900px 520px at 20% 80%, rgba(255,255,255,0.06), transparent 55%),
               var(--bg);
   overflow-x: hidden;
@@ -74,10 +73,15 @@ a:hover{ opacity: 0.95; }
   gap: 10px;
 }
 .brand-mark{
-  width: 28px;
-  height: 28px;
+  width: 34px;
+  height: 34px;
   flex-shrink: 0;
-  color: var(--accent);
+  display: block;
+}
+.brand-mark img{
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
 }
 .brand-stack{
   display: inline-flex;
@@ -90,7 +94,7 @@ a:hover{ opacity: 0.95; }
   text-transform: uppercase;
 }
 .brand-stack .brand-sub{
-  font-size: 0.55em;
+  font-size: 0.50em;
   font-weight: 600;
   opacity: 0.75;
   letter-spacing: 0.16em;
@@ -234,7 +238,7 @@ a:hover{ opacity: 0.95; }
   height: 8px;
   border-radius: 999px;
   background: var(--accent);
-  box-shadow: 0 0 0 6px rgba(122,12,27,0.18);
+  box-shadow: 0 0 0 6px rgba(75,26,41,0.18);
 }
 
 .hero-visual{
@@ -256,7 +260,7 @@ a:hover{ opacity: 0.95; }
   inset: -240px -240px auto auto;
   width: 520px;
   height: 520px;
-  background: radial-gradient(circle at 30% 30%, rgba(122,12,27,0.45), transparent 55%);
+  background: radial-gradient(circle at 30% 30%, rgba(75,26,41,0.45), transparent 55%);
   filter: blur(40px);
   opacity: 0.55;
   pointer-events:none;
@@ -311,7 +315,7 @@ a:hover{ opacity: 0.95; }
   content:"";
   position:absolute;
   inset:-1px;
-  background: radial-gradient(600px 240px at 20% 20%, rgba(122,12,27,0.18), transparent 60%);
+  background: radial-gradient(600px 240px at 20% 20%, rgba(75,26,41,0.18), transparent 60%);
   opacity: 0;
   transition: opacity 160ms ease;
   pointer-events:none;
@@ -376,8 +380,8 @@ a:hover{ opacity: 0.95; }
   border-radius: 18px;
   display:grid;
   place-items:center;
-  background: rgba(122,12,27,0.18);
-  border: 1px solid rgba(122,12,27,0.25);
+  background: rgba(75,26,41,0.18);
+  border: 1px solid rgba(75,26,41,0.25);
   font-weight: 800;
   letter-spacing: 0.06em;
 }
@@ -448,8 +452,8 @@ a:hover{ opacity: 0.95; }
 }
 .triage-form input::placeholder{ color: rgba(255,255,255,0.45); }
 .triage-form input:focus{
-  border-color: rgba(122,12,27,0.45);
-  box-shadow: 0 0 0 4px rgba(122,12,27,0.15);
+  border-color: rgba(75,26,41,0.45);
+  box-shadow: 0 0 0 4px rgba(75,26,41,0.15);
 }
 .triage-note{
   margin-top: 10px;
@@ -481,8 +485,8 @@ a:hover{ opacity: 0.95; }
   white-space: pre-wrap;
 }
 .chat-msg.user .chat-msg-bubble{
-  background: rgba(122,12,27,0.18);
-  border-color: rgba(122,12,27,0.22);
+  background: rgba(75,26,41,0.18);
+  border-color: rgba(75,26,41,0.22);
 }
 .chat-msg-bubble.loading{
   opacity: 0.85;
@@ -511,7 +515,7 @@ a:hover{ opacity: 0.95; }
   padding: 16px;
   border-radius: 22px;
   border: 1px solid rgba(255,255,255,0.08);
-  background: radial-gradient(800px 260px at 20% 10%, rgba(122,12,27,0.22), rgba(255,255,255,0.03));
+  background: radial-gradient(800px 260px at 20% 10%, rgba(75,26,41,0.22), rgba(255,255,255,0.03));
   display:flex;
   align-items:center;
   justify-content:space-between;
@@ -594,7 +598,6 @@ a:hover{ opacity: 0.95; }
   width: 24px;
   height: 24px;
   flex-shrink: 0;
-  color: var(--accent);
 }
 .footer-brand .footer-note{
   flex-basis: 100%;
