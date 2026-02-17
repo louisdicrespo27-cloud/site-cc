@@ -87,18 +87,24 @@ a:hover{ opacity: 0.95; }
   display: inline-flex;
   flex-direction: column;
   line-height: 1.06;
+  background: var(--accent);
+  color: #ffffff;
+  padding: 8px 14px;
+  border-radius: 10px;
 }
 .brand-stack .brand-name{
   font-weight: 700;
   letter-spacing: 0.06em;
   text-transform: uppercase;
+  color: #ffffff;
 }
 .brand-stack .brand-sub{
   font-size: 0.50em;
   font-weight: 600;
-  opacity: 0.75;
+  opacity: 0.9;
   letter-spacing: 0.16em;
   margin-top: 3px;
+  color: rgba(255,255,255,0.9);
   text-transform: uppercase;
 }
 
