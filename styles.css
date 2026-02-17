@@ -825,3 +825,88 @@ body.modal-open{ overflow:hidden; }
   position: relative;
   z-index: 1;
 }
+
+/* ===== Secção "Slogan + Imagem" ===== */
+.inspire{
+  padding: 72px 0;
+}
+
+.inspire-grid{
+  display: grid;
+  grid-template-columns: 1.05fr 0.95fr;
+  gap: 28px;
+  align-items: center;
+}
+
+.inspire-kicker{
+  display: inline-block;
+  padding: 10px 14px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.10);
+  color: rgba(255,255,255,0.82);
+  letter-spacing: 0.06em;
+  font-size: 0.88rem;
+  margin-bottom: 14px;
+  backdrop-filter: blur(10px);
+}
+
+.inspire-title{
+  font-size: clamp(2.0rem, 3.6vw, 3.0rem);
+  line-height: 1.06;
+  margin: 0 0 12px;
+  letter-spacing: -0.02em;
+}
+
+.inspire-sub{
+  margin: 0 0 18px;
+  color: rgba(255,255,255,0.78);
+  font-size: 1.05rem;
+  line-height: 1.55;
+  max-width: 56ch;
+}
+
+.inspire-actions{
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  align-items: center;
+  margin-top: 8px;
+}
+
+.inspire-note{
+  margin-top: 14px;
+  color: rgba(255,255,255,0.60);
+  font-size: 0.92rem;
+}
+
+.inspire-art{
+  position: relative;
+  border-radius: 26px;
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,0.10);
+  background: rgba(255,255,255,0.03);
+  box-shadow: 0 24px 80px rgba(0,0,0,0.35);
+  transform: translateZ(0);
+}
+
+.inspire-svg{
+  width: 100%;
+  height: auto;
+  display: block;
+  transform: scale(1.02);
+  transition: transform 900ms cubic-bezier(.2,.8,.2,1);
+}
+
+.inspire-art:hover .inspire-svg{
+  transform: scale(1.05);
+}
+
+@media (max-width: 960px){
+  .inspire-grid{
+    grid-template-columns: 1fr;
+  }
+  .inspire-art{
+    order: -1;
+  }
+}

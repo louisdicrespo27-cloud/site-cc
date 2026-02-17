@@ -119,6 +119,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const whatsappHeader = document.getElementById('whatsappHeader');
   const whatsappBtn = document.getElementById('whatsappBtn');
+  const whatsappBtn2 = document.getElementById('whatsappBtn2');
   const whatsappContact = document.getElementById('whatsappContact');
 
   // Consent modal
@@ -345,5 +346,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
   attachWhatsApp(whatsappHeader);
   attachWhatsApp(whatsappBtn);
+  attachWhatsApp(whatsappBtn2);
   attachWhatsApp(whatsappContact);
 });
