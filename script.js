@@ -22,13 +22,14 @@ document.addEventListener('DOMContentLoaded', () => {
   // ===== Config =====
   const API_BASE = window.location.origin;
   const CONSENT_KEY = 'cc_ai_consent_v1';
+  const WHATSAPP_NUMBER = '351914376903'; // sem +, sem espaços
 
   // ===== Elementos =====
   const searchForm = document.getElementById('searchForm');
   const searchInput = document.getElementById('searchInput');
   const chatPanel = document.getElementById('chatPanel');
   const chatMessages = document.getElementById('chatMessages');
-  const newQuestionBtn = document.getElementById('newQuestionBtn');
+  const whatsappBtn = document.getElementById('whatsappBtn');
 
   // Modal consentimento
   const consentModal = document.getElementById('consentModal');
@@ -43,6 +44,7 @@ document.addEventListener('DOMContentLoaded', () => {
   let stage = 'initial'; // initial | awaiting_clarification | done
   let pendingQuestion = null; // 1.ª pergunta (quando em awaiting_clarification)
   let pendingAfterConsent = null; // pergunta a processar após aceitar consentimento
+  let lastUserQuestion = '';
   let lastActiveElement = null;
   let isModalOpen = false;
 
@@ -61,14 +63,6 @@ document.addEventListener('DOMContentLoaded', () => {
       searchInput.placeholder = placeholder || 'Descreva o problema (sem dados pessoais)…';
       searchInput.focus();
     }
-  }
-
-  function resetFlow() {
-    stage = 'initial';
-    pendingQuestion = null;
-    if (chatMessages) chatMessages.innerHTML = '';
-    if (chatPanel) chatPanel.hidden = true;
-    unlockInput('Descreva o problema (sem dados pessoais)…');
   }
 
   // ===== Consentimento =====
@@ -206,6 +200,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const clean = String(question || '').trim();
     if (!clean) return;
 
+    lastUserQuestion = clean;
+
     // Consentimento
     if (!hasConsent()) {
       if (!document.getElementById('consentModal')) {
@@ -277,7 +273,21 @@ document.addEventListener('DOMContentLoaded', () => {
     searchInput.value = '';
   });
 
-  newQuestionBtn?.addEventListener('click', resetFlow);
+  function buildWhatsAppUrl() {
+    const base = 'https://wa.me/' + WHATSAPP_NUMBER;
+    const msg =
+      'Olá. Gostaria de marcar consulta.\n\n' +
+      'Questão (resumo): ' + (lastUserQuestion || '[não preenchida]') + '\n\n' +
+      'Preferência de contacto: (WhatsApp/telefone/email)\n' +
+      'Melhor horário: (manhã/tarde/noite)\n';
+    return base + '?text=' + encodeURIComponent(msg);
+  }
+
+  whatsappBtn?.addEventListener('click', (e) => {
+    e.preventDefault();
+    const url = buildWhatsAppUrl();
+    window.open(url, '_blank', 'noopener,noreferrer');
+  });
 
   // Modal consentimento
   consentChecks.forEach((c) => {

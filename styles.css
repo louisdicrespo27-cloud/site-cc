@@ -987,3 +987,10 @@ body.modal-open {
   letter-spacing: 0.08em;
   margin-top: 3px;
 }
+
+#whatsappBtn.btn.btn-secondary {
+  border-color: rgba(255, 255, 255, 0.22);
+}
+#whatsappBtn.btn.btn-secondary:hover {
+  border-color: rgba(255, 255, 255, 0.35);
+}
