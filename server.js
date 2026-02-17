@@ -3,9 +3,9 @@
  * Serve o site estático e a API de chat com IA para pareceres jurídicos
  */
 
-require('dotenv').config();
-const express = require('express');
 const path = require('path');
+require('dotenv').config({ path: path.join(__dirname, '.env') });
+const express = require('express');
 const OpenAI = require('openai');
 const rateLimit = require('express-rate-limit');
 
