@@ -12,8 +12,8 @@
   --text-primary: #ffffff;
   --text-secondary: #b3b3b3;
   --text-muted: #6b6b6b;
-  --accent: #1DB954;
-  --accent-hover: #1ed760;
+  --accent: #7A0C1B;
+  --accent-hover: #5F0914;
   --font-main: 'Inter', -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', sans-serif;
   --radius-sm: 8px;
   --radius-md: 12px;
@@ -1052,4 +1052,26 @@ button:focus-visible,
 input[type="submit"]:focus-visible {
   outline: 3px solid var(--cc-accent-soft) !important;
   outline-offset: 3px;
+}
+
+/* Apanhar botões/links com estilo de CTA mesmo sem .btn-primary */
+button[type="submit"],
+button.cta,
+a.cta,
+.cta-button,
+#consentAccept,
+#whatsappBtn {
+  background: var(--cc-accent) !important;
+  border-color: var(--cc-accent) !important;
+  color: var(--cc-on-accent) !important;
+}
+
+button[type="submit"]:hover,
+button.cta:hover,
+a.cta:hover,
+.cta-button:hover,
+#consentAccept:hover,
+#whatsappBtn:hover {
+  background: var(--cc-accent-hover) !important;
+  border-color: var(--cc-accent-hover) !important;
 }
