@@ -76,7 +76,11 @@ document.addEventListener('DOMContentLoaded', () => {
     isModalOpen = true;
 
     consentModal.hidden = false;
+    consentModal.style.display = 'flex';
     document.body.classList.add('modal-open');
+
+    const pageContent = document.getElementById('pageContent');
+    if (pageContent) pageContent.inert = true;
 
     // reset checks
     consentChecks.forEach((c) => {
@@ -92,23 +96,24 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function closeConsentModal() {
-    if (!consentModal) return;
+    const modal = document.getElementById('consentModal');
+    if (!modal) return;
 
     isModalOpen = false;
     document.removeEventListener('keydown', onModalKeydown, true);
 
-    // Se usas inert:
     const pageContent = document.getElementById('pageContent');
     if (pageContent) pageContent.inert = false;
+
     document.body.classList.remove('modal-open');
 
-    // mover foco para fora do modal ANTES de o esconder
-    const fallback = document.getElementById('searchInput') || document.getElementById('chatInput');
+    modal.hidden = true;
+    modal.style.display = 'none';
+
+    const focusTarget = document.getElementById('searchInput') || document.getElementById('chatInput');
     (lastActiveElement && typeof lastActiveElement.focus === 'function'
       ? lastActiveElement
-      : fallback)?.focus();
-
-    consentModal.hidden = true;
+      : focusTarget)?.focus();
   }
 
   function updateConsentButton() {
@@ -393,6 +398,7 @@ function detectPII(text) {
       const modal = document.getElementById('consentModal');
       if (modal) {
         modal.hidden = true;
+        modal.style.display = 'none';
         document.body.classList.remove('modal-open');
         modal.setAttribute('aria-hidden', 'true');
       }

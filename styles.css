@@ -981,3 +981,8 @@ body.modal-open {
     flex-direction: column;
   }
 }
+
+/* Garantir que o atributo hidden esconde mesmo o modal */
+.modal[hidden] {
+  display: none !important;
+}
