@@ -225,33 +225,6 @@ a:hover{ opacity: 0.95; }
   box-shadow: 0 0 0 6px rgba(122,12,27,0.18);
 }
 
-.trust{
-  display:flex;
-  gap: 18px;
-  flex-wrap: wrap;
-  margin-top: 8px;
-}
-.trust-item{
-  border: 1px solid rgba(255,255,255,0.08);
-  background: rgba(255,255,255,0.03);
-  border-radius: 16px;
-  padding: 12px 14px;
-  min-width: 170px;
-}
-.trust-kpi{
-  display:block;
-  font-size: 1.6rem;
-  font-weight: 700;
-  letter-spacing: -0.02em;
-}
-.trust-label{
-  display:block;
-  margin-top: 4px;
-  color: rgba(255,255,255,0.65);
-  font-weight: 500;
-  font-size: 0.92rem;
-}
-
 .hero-visual{
   position: relative;
   border-radius: 30px;
