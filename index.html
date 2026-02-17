@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Correia Crespo - Advogados. Coloque a sua questão jurídica e obtenha um parecer preliminar em segundos. Soluções à distância de um clique.">
+  <title>Correia Crespo | Advogados</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Source+Sans+3:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <!-- Navegação minimalista (estilo Google) -->
+  <header class="header header-minimal">
+    <nav class="nav container">
+      <a href="#" class="logo">Correia Crespo</a>
+      <button class="nav-toggle" aria-label="Abrir menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+      <ul class="nav-menu">
+        <li><a href="#areas">Áreas</a></li>
+        <li><a href="#sobre">Sobre</a></li>
+        <li><a href="#contactos">Contactos</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- Homepage estilo Google -->
+  <main id="inicio" class="homepage">
+    <div class="homepage-inner">
+      <div class="branding">
+        <h1 class="brand-logo">Correia Crespo</h1>
+        <p class="brand-tagline">Advogados · Parecer jurídico com IA</p>
+      </div>
+
+      <!-- Barra de pesquisa = IA Jurídica -->
+      <div class="search-section">
+        <form class="search-form" id="searchForm">
+          <div class="search-box">
+            <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="11" cy="11" r="8"/>
+              <path d="m21 21-4.35-4.35"/>
+            </svg>
+            <input 
+              type="text" 
+              id="searchInput" 
+              class="search-input" 
+              placeholder="Coloque a sua questão jurídica aqui..."
+              autocomplete="off"
+            />
+            <button type="submit" class="search-btn" aria-label="Obter parecer">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M5 12h14M12 5l7 7-7 7"/>
+              </svg>
+            </button>
+          </div>
+        </form>
+        <p class="search-hint">Ex: "O meu senhorio quer despejar-me. Quais são os meus direitos?" ou "Como funciona o divórcio em Portugal?"</p>
+      </div>
+
+      <!-- Painel de chat (aparece após primeira questão) -->
+      <div class="chat-panel" id="chatPanel" hidden>
+        <div class="chat-messages" id="chatMessages"></div>
+        <form class="chat-form" id="chatForm">
+          <input 
+            type="text" 
+            id="chatInput" 
+            class="chat-input" 
+            placeholder="Faça uma pergunta de seguimento..."
+          />
+          <button type="submit" class="chat-send">Enviar</button>
+        </form>
+        <p class="disclaimer">
+          ℹ️ O parecer é meramente informativo. Para consultoria personalizada, contacte-nos em 
+          <a href="mailto:correiacrespo-67709L@adv.oa.pt">correiacrespo-67709L@adv.oa.pt</a>
+        </p>
+      </div>
+
+      <div class="quick-links">
+        <a href="#areas">Direito da Família</a>
+        <a href="#areas">Imobiliário</a>
+        <a href="#areas">RGPD</a>
+        <a href="#areas">Insolvências</a>
+      </div>
+    </div>
+  </main>
+
+  <!-- Resto do site – layout e cores do Wix original -->
+  <section class="consulta wix-section">
+    <div class="container">
+      <div class="consulta-grid">
+        <div class="consulta-content">
+          <h2>Consulta Jurídica</h2>
+          <p>Coloca as tuas questões numa consulta jurídica <strong>online</strong>, que terá lugar em menos de 24h. Protege os teus direitos ou faz progredir os teus projetos, tomando ações informadas e conscientes, assim como as suas vantagens e riscos.</p>
+          <a href="mailto:correiacrespo-67709L@adv.oa.pt?subject=Pedido%20de%20Consulta%20Jurídica" class="btn btn-primary">Agendar Consulta</a>
+        </div>
+        <div class="consulta-visual"></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="areas" class="areas wix-section">
+    <div class="container">
+      <h2 class="section-title">Áreas de Atuação</h2>
+      <div class="areas-grid">
+        <article class="area-card">
+          <div class="area-icon">⚖</div>
+          <h3>Direito da Família</h3>
+          <ul>
+            <li>Divórcios e Partilhas</li>
+            <li>Responsabilidades Parentais</li>
+          </ul>
+          <a href="#contactos" class="area-link">Saber mais →</a>
+        </article>
+        <article class="area-card">
+          <div class="area-icon">📋</div>
+          <h3>Insolvências e Processo Executivo</h3>
+          <ul>
+            <li>Processos de insolvência</li>
+            <li>Execuções e penhoras</li>
+          </ul>
+          <a href="#contactos" class="area-link">Saber mais →</a>
+        </article>
+        <article class="area-card">
+          <div class="area-icon">🏠</div>
+          <h3>Direito Imobiliário</h3>
+          <ul>
+            <li>Arrendamento e Despejo</li>
+            <li>Consultoria em Compra e Venda</li>
+            <li>Partilhas e Inventário</li>
+          </ul>
+          <a href="#contactos" class="area-link">Saber mais →</a>
+        </article>
+        <article class="area-card">
+          <div class="area-icon">🔒</div>
+          <h3>RGPD</h3>
+          <ul>
+            <li>Consultoria e Pareceres</li>
+            <li>Auditorias</li>
+            <li>Implementação RGPD empresarial</li>
+          </ul>
+          <a href="#contactos" class="area-link">Saber mais →</a>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta wix-section">
+    <div class="container">
+      <h2 class="cta-title">Faça crescer a sua Visão</h2>
+      <blockquote class="cta-quote">"Transforme incertezas em resoluções. Dê o primeiro passo para a merecida Justiça."</blockquote>
+      <a href="#contactos" class="btn btn-accent">Começar Agora</a>
+    </div>
+  </section>
+
+  <section id="sobre" class="sobre wix-section">
+    <div class="container">
+      <div class="sobre-grid">
+        <div class="sobre-content">
+          <h2>Uma Revolução na Advocacia</h2>
+          <p>A advocacia vai além de apenas resolver conflitos; é, acima de tudo, uma prática centrada nas pessoas e nas empresas. Cada cliente é único, e a nossa missão é entender as suas necessidades e objetivos, oferecendo soluções personalizadas que realmente façam a diferença.</p>
+          <p>Ao escolher o nosso escritório, opta por um compromisso genuíno com o seu bem-estar e sucesso. Estamos aqui para construir relações de confiança e garantir que os seus interesses sejam sempre priorizados.</p>
+        </div>
+        <div class="sobre-visual"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="why-us wix-section">
+    <div class="container">
+      <h2 class="section-title">Porquê Nós?</h2>
+      <p class="why-us-lead">Não estamos perante uma era de mudanças, mas sim perante uma mudança de Era.</p>
+      <p class="why-us-text">Combinamos tradição e inovação: a solidez do direito com a agilidade das consultas online. Respostas rápidas, sem perder o cuidado e o rigor que cada caso merece.</p>
+      <a href="#contactos" class="btn btn-secondary-light">Saiba mais</a>
+    </div>
+  </section>
+
+  <section id="contactos" class="contactos wix-section">
+    <div class="container">
+      <h2 class="section-title">Contactos</h2>
+      <div class="contactos-grid">
+        <div class="contactos-info">
+          <div class="contact-item">
+            <span class="contact-label">Telefone</span>
+            <a href="tel:+351914376903">914 376 903</a>
+          </div>
+          <div class="contact-item">
+            <span class="contact-label">Email</span>
+            <a href="mailto:correiacrespo-67709L@adv.oa.pt">correiacrespo-67709L@adv.oa.pt</a>
+          </div>
+          <div class="contact-item">
+            <span class="contact-label">Morada</span>
+            <p>Rua do Sol Nascente, Lote 2, Urbanização do Vale Vite<br>2530-804 Vimeiro, Lourinhã</p>
+          </div>
+        </div>
+        <div class="contactos-form">
+          <p class="form-title">Receba notícias e atualizações sobre Correia Crespo - Advogados.</p>
+          <form class="newsletter-form" action="#" method="post">
+            <input type="email" name="email" placeholder="Email" required>
+            <button type="submit" class="btn btn-accent">Assinar</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer wix-footer">
+    <div class="container">
+      <div class="footer-content">
+        <p class="footer-brand">Correia Crespo · Advogados</p>
+        <p class="footer-copy">© 2035 por Correia Crespo. Orgulhosamente criado com profissionalismo.</p>
+        <div class="footer-social">
+          <a href="#" aria-label="LinkedIn">LinkedIn</a>
+          <a href="#" aria-label="Facebook">Facebook</a>
+          <a href="#" aria-label="Twitter">Twitter</a>
+          <a href="#" aria-label="Instagram">Instagram</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
