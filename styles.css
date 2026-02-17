@@ -994,3 +994,9 @@ body.modal-open {
 #whatsappBtn.btn.btn-secondary:hover {
   border-color: rgba(255, 255, 255, 0.35);
 }
+
+.fine-note {
+  margin-top: 10px;
+  font-size: 0.92rem;
+  opacity: 0.72;
+}
