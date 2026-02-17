@@ -1,275 +1,450 @@
 <!DOCTYPE html>
 <html lang="pt-PT">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Correia Crespo - Advogados. Coloque a sua questão jurídica e obtenha orientação jurídica geral (triagem) em segundos. Informação limitada e não vinculativa.">
-  <title>Correia Crespo | Advogados</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Correia Crespo — Advogado | Direito Empresarial</title>
+  <meta name="description" content="Direito empresarial para empresas: contratos, registos, fusões e aquisições (M&A) e compliance. Atendimento por marcação, com confidencialidade." />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <header class="header header-minimal">
-    <nav class="nav container">
-      <a href="/" class="logo">
+  <a class="skip-link" href="#conteudo">Saltar para o conteúdo</a>
+
+  <!-- Top bar -->
+  <header class="header">
+    <div class="container header-inner">
+      <a class="brand" href="#topo" aria-label="Início">
         <span class="brand-stack">
-          <span class="brand-name">Correia Crespo</span>
-          <span class="brand-sub">Advogado</span>
+          <span class="brand-name">CORREIA CRESPO</span>
+          <span class="brand-sub">ADVOGADO</span>
         </span>
       </a>
-      <button class="nav-toggle" aria-label="Abrir menu">
-        <span></span>
-        <span></span>
-        <span></span>
-      </button>
-      <ul class="nav-menu">
-        <li><a href="#areas">Áreas</a></li>
-        <li><a href="#sobre">Sobre</a></li>
-        <li><a href="#contactos">Contactos</a></li>
-      </ul>
-    </nav>
+
+      <nav class="nav" aria-label="Navegação principal">
+        <button class="nav-toggle" type="button" aria-label="Abrir menu" aria-expanded="false">
+          <span></span><span></span><span></span>
+        </button>
+        <div class="nav-links">
+          <a href="#servicos">Serviços</a>
+          <a href="#metodo">Método</a>
+          <a href="#triagem">Triagem</a>
+          <a href="#insights">Insights</a>
+          <a href="#contactos">Contactos</a>
+          <a class="btn primary small" href="#contactos">Marcar consulta</a>
+        </div>
+      </nav>
+    </div>
   </header>
 
-  <main id="inicio" class="homepage">
-    <div class="homepage-inner">
-      <div class="branding">
-        <h1 class="brand-logo">
-          <span class="brand-stack">
-            <span class="brand-name">Correia Crespo</span>
-            <span class="brand-sub">Advogado</span>
-          </span>
-        </h1>
-        <p class="brand-tagline">Advogados · Orientação jurídica geral com IA</p>
-      </div>
+  <main id="conteudo">
+    <!-- Hero -->
+    <section class="hero" id="topo">
+      <div class="container hero-grid">
+        <div class="hero-copy">
+          <div class="badge">Direito Empresarial • Contratos • M&A • Compliance</div>
+          <h1>Quando a decisão importa.</h1>
+          <p class="lead">
+            Rigor técnico e confidencialidade, para decisões informadas em registos, contratos,
+            reestruturações e governação corporativa.
+          </p>
 
-      <div class="search-section">
-        <p class="privacy-note">
-          ⚠️ Não insira dados pessoais (nomes, moradas, NIF, email, telefone). O assistente dá orientação geral e não vinculativa.
-        </p>
-        <form class="search-form" id="searchForm">
-          <div class="search-box">
-            <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <circle cx="11" cy="11" r="8"/>
-              <path d="m21 21-4.35-4.35"/>
-            </svg>
-            <input 
-              type="text" 
-              id="searchInput" 
-              name="q"
-              class="search-input" 
-              placeholder="Descreva a sua situação (sem dados pessoais)..."
-              autocomplete="off"
-              autocapitalize="sentences"
-              spellcheck="true"
-              inputmode="text"
-            />
-            <button type="submit" class="search-btn" aria-label="Obter orientação geral">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M5 12h14M12 5l7 7-7 7"/>
-              </svg>
-            </button>
+          <div class="hero-actions">
+            <a class="btn primary" href="#contactos">Agendar consulta</a>
+            <a class="btn secondary" id="whatsappHeader" href="#" rel="noopener">WhatsApp</a>
           </div>
-        </form>
-        <p class="search-hint">Ex: "O meu senhorio quer despejar-me. Quais são os meus direitos?" ou "Como funciona o divórcio em Portugal?"</p>
-      </div>
 
-      <div class="chat-panel" id="chatPanel" hidden>
-        <div class="chat-messages" id="chatMessages" role="log" aria-live="polite" aria-relevant="additions text"></div>
-        <div class="chat-cta">
-          <a class="btn btn-primary" href="#contactos">Marcar consulta</a>
-          <a class="btn btn-secondary" id="whatsappBtn" href="#" rel="noopener">Enviar WhatsApp</a>
+          <div class="trust">
+            <div class="trust-item">
+              <span class="trust-kpi" data-counter="12">0</span>
+              <span class="trust-label">anos de prática</span>
+            </div>
+            <div class="trust-item">
+              <span class="trust-kpi" data-counter="240">0</span>
+              <span class="trust-label">processos empresariais</span>
+            </div>
+            <div class="trust-item">
+              <span class="trust-kpi" data-counter="98">0</span>
+              <span class="trust-label">% satisfação</span>
+            </div>
+          </div>
+
+          <div class="hero-mini">
+            <span class="dot"></span>
+            <span>Atendimento por marcação • Total reserva</span>
+          </div>
+        </div>
+
+        <div class="hero-visual" aria-hidden="true">
+          <!-- Abstract corporate law illustration (inline SVG, no external assets) -->
+          <svg class="hero-svg" viewBox="0 0 720 540" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="g1" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0" stop-color="rgba(255,255,255,0.18)"/>
+                <stop offset="1" stop-color="rgba(255,255,255,0.02)"/>
+              </linearGradient>
+              <linearGradient id="g2" x1="1" y1="0" x2="0" y2="1">
+                <stop offset="0" stop-color="rgba(122,12,27,0.55)"/>
+                <stop offset="1" stop-color="rgba(122,12,27,0.08)"/>
+              </linearGradient>
+              <filter id="blur" x="-20%" y="-20%" width="140%" height="140%">
+                <feGaussianBlur stdDeviation="18"/>
+              </filter>
+            </defs>
+
+            <rect x="26" y="34" width="668" height="472" rx="30" fill="url(#g1)"/>
+            <g filter="url(#blur)">
+              <circle cx="540" cy="140" r="120" fill="url(#g2)"/>
+              <circle cx="210" cy="420" r="160" fill="rgba(255,255,255,0.06)"/>
+            </g>
+
+            <!-- Skyline -->
+            <g opacity="0.75">
+              <rect x="90" y="290" width="72" height="170" rx="10" fill="rgba(255,255,255,0.09)"/>
+              <rect x="178" y="250" width="92" height="210" rx="10" fill="rgba(255,255,255,0.11)"/>
+              <rect x="288" y="210" width="110" height="250" rx="10" fill="rgba(255,255,255,0.08)"/>
+              <rect x="416" y="268" width="78" height="192" rx="10" fill="rgba(255,255,255,0.10)"/>
+              <rect x="510" y="232" width="120" height="228" rx="10" fill="rgba(255,255,255,0.07)"/>
+            </g>
+
+            <!-- Minimal scales mark -->
+            <g transform="translate(140 120)" opacity="0.9">
+              <path d="M220 40v190" stroke="rgba(255,255,255,0.35)" stroke-width="8" stroke-linecap="round"/>
+              <path d="M140 90h160" stroke="rgba(255,255,255,0.35)" stroke-width="8" stroke-linecap="round"/>
+              <path d="M160 90l-42 78a52 52 0 0 0 84 0L160 90z" fill="rgba(255,255,255,0.10)" stroke="rgba(255,255,255,0.25)" stroke-width="3"/>
+              <path d="M300 90l-42 78a52 52 0 0 0 84 0L300 90z" fill="rgba(255,255,255,0.10)" stroke="rgba(255,255,255,0.25)" stroke-width="3"/>
+              <circle cx="220" cy="40" r="10" fill="rgba(122,12,27,0.9)"/>
+            </g>
+
+            <!-- Lines -->
+            <path d="M92 184h540" stroke="rgba(255,255,255,0.10)" stroke-width="2"/>
+            <path d="M92 214h460" stroke="rgba(255,255,255,0.08)" stroke-width="2"/>
+          </svg>
         </div>
       </div>
+      <div class="hero-glow" aria-hidden="true"></div>
+    </section>
 
-      <div class="quick-links">
-        <a href="#areas">Direito da Família</a>
-        <a href="#areas">Imobiliário</a>
-        <a href="#areas">RGPD</a>
-        <a href="#areas">Insolvências</a>
+    <!-- Services -->
+    <section class="section" id="servicos">
+      <div class="container">
+        <div class="section-head reveal">
+          <h2>Serviços empresariais</h2>
+          <p>Foco em empresas, administração e operações — com linguagem clara e decisões fundamentadas.</p>
+        </div>
+
+        <div class="cards grid-3">
+          <article class="card reveal" data-tilt>
+            <div class="card-icon">📑</div>
+            <h3>Contratos &amp; negociação</h3>
+            <p>Revisão, redação e gestão de risco contratual em fornecimento, prestação de serviços, tecnologia e parcerias.</p>
+            <ul class="mini-list">
+              <li>Cláusulas críticas</li>
+              <li>Responsabilidade &amp; garantias</li>
+              <li>Rescisão &amp; penalidades</li>
+            </ul>
+          </article>
+
+          <article class="card reveal" data-tilt>
+            <div class="card-icon">🏢</div>
+            <h3>Registos &amp; societário</h3>
+            <p>Constituição, alterações, atas, poderes e governança — para manter a empresa alinhada com a sua estrutura real.</p>
+            <ul class="mini-list">
+              <li>Constituição &amp; alterações</li>
+              <li>Órgãos sociais</li>
+              <li>Procurações</li>
+            </ul>
+          </article>
+
+          <article class="card reveal" data-tilt>
+            <div class="card-icon">🔁</div>
+            <h3>Fusões, aquisições &amp; reestruturação</h3>
+            <p>Apoio em processos de M&amp;A: diligências, instrumentos e etapas formais, com gestão de confidencialidade.</p>
+            <ul class="mini-list">
+              <li>Due diligence</li>
+              <li>SPA/APA (alto nível)</li>
+              <li>Integração documental</li>
+            </ul>
+          </article>
+
+          <article class="card reveal" data-tilt>
+            <div class="card-icon">🛡️</div>
+            <h3>Compliance &amp; RGPD</h3>
+            <p>Mapeamento de risco, políticas internas e conformidade operacional — proporcional à dimensão do negócio.</p>
+            <ul class="mini-list">
+              <li>Políticas e procedimentos</li>
+              <li>Formação interna</li>
+              <li>RGPD (governança)</li>
+            </ul>
+          </article>
+
+          <article class="card reveal" data-tilt>
+            <div class="card-icon">⚖️</div>
+            <h3>Litígios comerciais</h3>
+            <p>Avaliação de risco e estratégia processual, com foco em proteção de posição, prova e negociação.</p>
+            <ul class="mini-list">
+              <li>Incumprimento</li>
+              <li>Responsabilidade</li>
+              <li>Providências</li>
+            </ul>
+          </article>
+
+          <article class="card reveal" data-tilt>
+            <div class="card-icon">🔎</div>
+            <h3>Auditoria documental</h3>
+            <p>Revisão de documentação corporativa e contratual para identificar lacunas e alinhar com a realidade operacional.</p>
+            <ul class="mini-list">
+              <li>Checklists internas</li>
+              <li>Arquitetura documental</li>
+              <li>Prioridades por risco</li>
+            </ul>
+          </article>
+        </div>
       </div>
-    </div>
+    </section>
+
+    <!-- Method -->
+    <section class="section alt" id="metodo">
+      <div class="container">
+        <div class="section-head reveal">
+          <h2>Método de trabalho</h2>
+          <p>Um processo curto, previsível e orientado ao que importa: decisão e execução com segurança.</p>
+        </div>
+
+        <div class="timeline">
+          <div class="step reveal">
+            <div class="step-num">01</div>
+            <div class="step-body">
+              <h3>Triagem &amp; objetivo</h3>
+              <p>Compreender o contexto empresarial e o objetivo: reduzir risco, viabilizar operação ou resolver bloqueio.</p>
+            </div>
+          </div>
+          <div class="step reveal">
+            <div class="step-num">02</div>
+            <div class="step-body">
+              <h3>Análise documental</h3>
+              <p>Leitura e estruturação da informação — com confidencialidade e foco em pontos de decisão.</p>
+            </div>
+          </div>
+          <div class="step reveal">
+            <div class="step-num">03</div>
+            <div class="step-body">
+              <h3>Opções &amp; estratégia</h3>
+              <p>Explicação clara das opções (alto nível), riscos e dependências. Decisão com base em critério.</p>
+            </div>
+          </div>
+          <div class="step reveal">
+            <div class="step-num">04</div>
+            <div class="step-body">
+              <h3>Execução</h3>
+              <p>Implementação jurídica: registos, contratos e conformidade, com acompanhamento até fecho.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- FAQ accordion -->
+        <div class="faq reveal" aria-label="Perguntas frequentes">
+          <h3 class="faq-title">Perguntas frequentes</h3>
+          <div class="accordion" data-accordion>
+            <button class="acc-item" type="button" aria-expanded="false">
+              <span>Trabalha com PME e grupos?</span>
+              <span class="acc-icon">+</span>
+            </button>
+            <div class="acc-panel" hidden>
+              <p>Sim. O enquadramento e o nível de formalismo são ajustados à dimensão e ao risco da operação.</p>
+            </div>
+
+            <button class="acc-item" type="button" aria-expanded="false">
+              <span>É possível começar com uma triagem breve?</span>
+              <span class="acc-icon">+</span>
+            </button>
+            <div class="acc-panel" hidden>
+              <p>Sim. A triagem ajuda a enquadrar a questão e a preparar a consulta, mantendo a confidencialidade.</p>
+            </div>
+
+            <button class="acc-item" type="button" aria-expanded="false">
+              <span>Quanto tempo demora a análise?</span>
+              <span class="acc-icon">+</span>
+            </button>
+            <div class="acc-panel" hidden>
+              <p>Depende do volume documental e da urgência. Em consulta, define-se um plano e prazos realistas.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Triage / AI (single input) -->
+    <section class="section" id="triagem">
+      <div class="container">
+        <div class="section-head reveal">
+          <h2>Triagem discreta (informação geral)</h2>
+          <p>Uma primeira orientação curta para enquadrar o assunto. Sem dados pessoais. Sem parecer jurídico.</p>
+        </div>
+
+        <div class="triage reveal">
+          <form class="triage-form" id="searchForm" autocomplete="off">
+            <label class="sr-only" for="searchInput">Descreva a questão</label>
+            <input
+              id="searchInput"
+              name="q"
+              type="text"
+              inputmode="text"
+              autocomplete="off"
+              spellcheck="true"
+              autocapitalize="sentences"
+              placeholder="Ex.: Preciso rever um contrato de prestação de serviços com cláusulas de exclusividade…"
+            />
+            <button class="btn primary" type="submit">Obter orientação</button>
+          </form>
+
+          <div class="triage-note">
+            ⚠️ Não insira nomes, moradas, NIF, emails, telefones ou detalhes identificativos.
+          </div>
+        </div>
+
+        <!-- Response panel -->
+        <section id="chatPanel" class="chat-panel" hidden aria-label="Resposta">
+          <div id="chatMessages" class="chat-messages" aria-live="polite"></div>
+
+          <div class="chat-cta">
+            <a class="btn primary" href="#contactos">Marcar consulta</a>
+            <a class="btn secondary" id="whatsappBtn" href="#" rel="noopener">Enviar WhatsApp</a>
+          </div>
+        </section>
+      </div>
+    </section>
+
+    <!-- Insights -->
+    <section class="section alt" id="insights">
+      <div class="container">
+        <div class="section-head reveal">
+          <h2>Insights práticos para empresas</h2>
+          <p>Pequenos apontamentos (alto nível) sobre risco, governança e contratos — sem ruído.</p>
+        </div>
+
+        <div class="insights grid-3">
+          <article class="insight reveal">
+            <h3>Três sinais de risco num contrato</h3>
+            <p>Exclusividade, responsabilidade ilimitada e rescisão assimétrica são sinais para rever com cuidado.</p>
+          </article>
+          <article class="insight reveal">
+            <h3>Societário em dia evita bloqueios</h3>
+            <p>Atas, poderes e registos alinhados reduzem atrasos em banca, parceiros e operações.</p>
+          </article>
+          <article class="insight reveal">
+            <h3>Compliance proporcional</h3>
+            <p>Políticas simples e treino interno costumam gerar mais efeito do que documentos longos sem aplicação.</p>
+          </article>
+        </div>
+
+        <div class="cta-strip reveal">
+          <div class="cta-strip-text">
+            <h3>Precisa de uma abordagem estratégica?</h3>
+            <p>Marque consulta e traga o essencial do contexto. A análise completa faz-se com documentos.</p>
+          </div>
+          <a class="btn primary" href="#contactos">Agendar</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contact + Map -->
+    <section class="section" id="contactos">
+      <div class="container">
+        <div class="section-head reveal">
+          <h2>Contactos</h2>
+          <p>Atendimento por marcação. Confidencialidade total.</p>
+        </div>
+
+        <div class="contact-grid">
+          <div class="contact-card reveal">
+            <h3>Agendamento</h3>
+            <p class="muted">Escolha o canal mais conveniente.</p>
+
+            <div class="contact-list">
+              <a class="contact-item" href="mailto:correiacrespo-67709L@adv.oa.pt">
+                <span class="ci">✉️</span>
+                <span>correiacrespo-67709L@adv.oa.pt</span>
+              </a>
+              <a class="contact-item" href="tel:+351914376903">
+                <span class="ci">📞</span>
+                <span>+351 914 376 903</span>
+              </a>
+              <a class="contact-item" id="whatsappContact" href="#" rel="noopener">
+                <span class="ci">💬</span>
+                <span>WhatsApp</span>
+              </a>
+            </div>
+
+            <div class="legal-mini">
+              Informação geral e não vinculativa. Para análise do caso concreto, marque consulta com advogado.
+            </div>
+          </div>
+
+          <div class="map-card reveal" aria-label="Mapa">
+            <!-- Substituir o SRC pelo endereço exato (Google Maps Embed) -->
+            <iframe
+              title="Localização"
+              loading="lazy"
+              referrerpolicy="no-referrer-when-downgrade"
+              src="https://www.google.com/maps?q=Lisboa&output=embed"
+            ></iframe>
+          </div>
+        </div>
+      </div>
+    </section>
   </main>
 
-  <section class="consulta wix-section">
-    <div class="container">
-      <div class="consulta-grid">
-        <div class="consulta-content">
-          <h2>Quando a Decisão Importa</h2>
-          <p>Rigor técnico e confidencialidade, para decisões informadas.</p>
-          <p class="fine-note">Atendimento por marcação. Confidencialidade total.</p>
-          <a href="mailto:correiacrespo-67709L@adv.oa.pt?subject=Pedido%20de%20Consulta%20Jurídica" class="btn btn-primary">Agendar Consulta</a>
-        </div>
-        <div class="consulta-visual"></div>
+  <footer class="footer">
+    <div class="container footer-inner">
+      <div class="footer-brand">
+        <span class="brand-stack">
+          <span class="brand-name">CORREIA CRESPO</span>
+          <span class="brand-sub">ADVOGADO</span>
+        </span>
+        <span class="footer-note">Direito empresarial • Portugal</span>
       </div>
-    </div>
-  </section>
 
-  <section id="areas" class="areas wix-section">
-    <div class="container">
-      <h2 class="section-title">Áreas de Atuação</h2>
-      <div class="areas-grid">
-        <article class="area-card">
-          <div class="area-icon">⚖</div>
-          <h3>Direito da Família</h3>
-          <ul>
-            <li>Divórcios e Partilhas</li>
-            <li>Responsabilidades Parentais</li>
-          </ul>
-          <a href="#contactos" class="area-link">Saber mais →</a>
-        </article>
-        <article class="area-card">
-          <div class="area-icon">📋</div>
-          <h3>Insolvências e Processo Executivo</h3>
-          <ul>
-            <li>Processos de insolvência</li>
-            <li>Execuções e penhoras</li>
-          </ul>
-          <a href="#contactos" class="area-link">Saber mais →</a>
-        </article>
-        <article class="area-card">
-          <div class="area-icon">🏠</div>
-          <h3>Direito Imobiliário</h3>
-          <ul>
-            <li>Arrendamento e Despejo</li>
-            <li>Consultoria em Compra e Venda</li>
-            <li>Partilhas e Inventário</li>
-          </ul>
-          <a href="#contactos" class="area-link">Saber mais →</a>
-        </article>
-        <article class="area-card">
-          <div class="area-icon">🔒</div>
-          <h3>RGPD</h3>
-          <ul>
-            <li>Consultoria e Pareceres</li>
-            <li>Auditorias</li>
-            <li>Implementação RGPD empresarial</li>
-          </ul>
-          <a href="#contactos" class="area-link">Saber mais →</a>
-        </article>
+      <div class="footer-links">
+        <a href="termos.html">Termos</a>
+        <a href="privacidade.html">Política de Privacidade</a>
       </div>
-    </div>
-  </section>
 
-  <section class="cta wix-section">
-    <div class="container">
-      <h2 class="cta-title">Faça crescer a sua Visão</h2>
-      <blockquote class="cta-quote">"Transforme incertezas em resoluções. Dê o primeiro passo para a merecida Justiça."</blockquote>
-      <a href="#contactos" class="btn btn-accent">Começar Agora</a>
-    </div>
-  </section>
-
-  <section id="sobre" class="sobre wix-section">
-    <div class="container">
-      <div class="sobre-grid">
-        <div class="sobre-content">
-          <h2>Uma Revolução na Advocacia</h2>
-          <p>A advocacia vai além de apenas resolver conflitos; é, acima de tudo, uma prática centrada nas pessoas e nas empresas. Cada cliente é único, e a nossa missão é entender as suas necessidades e objetivos, oferecendo soluções personalizadas que realmente façam a diferença.</p>
-          <p>Ao escolher o nosso escritório, opta por um compromisso genuíno com o seu bem-estar e sucesso. Estamos aqui para construir relações de confiança e garantir que os seus interesses sejam sempre priorizados.</p>
-        </div>
-        <div class="sobre-visual"></div>
-      </div>
-    </div>
-  </section>
-
-  <section class="why-us wix-section">
-    <div class="container">
-      <h2 class="section-title">Porquê Nós?</h2>
-      <p class="why-us-lead">Não estamos perante uma era de mudanças, mas sim perante uma mudança de Era.</p>
-      <p class="why-us-text">Combinamos tradição e inovação: a solidez do direito com a agilidade das consultas online. Respostas rápidas, sem perder o cuidado e o rigor que cada caso merece.</p>
-      <a href="#contactos" class="btn btn-secondary-light">Saiba mais</a>
-    </div>
-  </section>
-
-  <section id="contactos" class="contactos wix-section">
-    <div class="container">
-      <h2 class="section-title">Contactos</h2>
-      <div class="contactos-grid">
-        <div class="contactos-info">
-          <div class="contact-item">
-            <span class="contact-label">Telefone</span>
-            <a href="tel:+351914376903">914 376 903</a>
-          </div>
-          <div class="contact-item">
-            <span class="contact-label">Email</span>
-            <a href="mailto:correiacrespo-67709L@adv.oa.pt">correiacrespo-67709L@adv.oa.pt</a>
-          </div>
-          <div class="contact-item">
-            <span class="contact-label">Morada</span>
-            <p>Rua do Sol Nascente, Lote 2, Urbanização do Vale Vite<br>2530-804 Vimeiro, Lourinhã</p>
-          </div>
-        </div>
-        <div class="contactos-form">
-          <p class="form-title">Receba notícias e atualizações sobre <span class="brand-stack"><span class="brand-name">Correia Crespo</span><span class="brand-sub">Advogado</span></span>.</p>
-          <form class="newsletter-form" action="#" method="post">
-            <input 
-              type="email" 
-              id="newsletterEmail" 
-              name="email" 
-              autocomplete="email" 
-              inputmode="email" 
-              placeholder="O seu email" 
-              required
-            />
-            <button type="submit" class="btn btn-accent">Assinar</button>
-          </form>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <footer class="footer wix-footer">
-    <div class="container">
-      <div class="footer-content">
-        <p class="footer-brand"><span class="brand-stack"><span class="brand-name">Correia Crespo</span><span class="brand-sub">Advogado</span></span></p>
-        <p class="footer-copy">© 2026 por <span class="brand-stack"><span class="brand-name">Correia Crespo</span><span class="brand-sub">Advogado</span></span>. Orgulhosamente criado com profissionalismo.</p>
-        <div class="footer-legal">
-          <a href="privacidade.html">Política de Privacidade</a>
-          <span class="footer-sep">·</span>
-          <a href="termos.html">Termos de Utilização</a>
-        </div>
-        <div class="footer-social">
-          <a href="#" aria-label="LinkedIn">LinkedIn</a>
-          <a href="#" aria-label="Facebook">Facebook</a>
-          <a href="#" aria-label="Twitter">Twitter</a>
-          <a href="#" aria-label="Instagram">Instagram</a>
-        </div>
-      </div>
+      <div class="footer-copy">© <span id="year"></span> Correia Crespo — Advogado</div>
     </div>
   </footer>
 
-  <!-- Modal de consentimento (obrigatório antes da 1.ª questão) -->
-  <div id="consentModal" class="modal modal-backdrop" hidden role="dialog" aria-modal="true" aria-labelledby="consentTitle" aria-describedby="consentDesc">
-    <div class="modal-card" id="consentModalCard">
+  <!-- Consent modal -->
+  <div id="consentModal" class="modal" hidden role="dialog" aria-modal="true" aria-labelledby="consentTitle" aria-describedby="consentDesc">
+    <div class="modal-card" role="document">
       <button class="modal-close" id="consentClose" aria-label="Fechar" type="button">×</button>
 
       <h2 class="modal-title" id="consentTitle">Antes de começar</h2>
       <p class="modal-subtitle" id="consentDesc">
-        Este assistente fornece <strong>orientação jurídica geral</strong>. Não substitui consulta com advogado.
+        Esta triagem fornece <strong>informação geral</strong>. Não substitui consulta com advogado.
       </p>
 
-      <form id="consentForm" class="consent-form">
-        <div class="modal-checks">
-          <label class="check">
-            <input type="checkbox" data-consent-check name="check1" required />
-            Não vou inserir dados pessoais identificativos (nome, morada, NIF, email, telefone, etc.).
-          </label>
-          <label class="check">
-            <input type="checkbox" data-consent-check name="check2" required />
-            Compreendo que é informação geral e não vinculativa; não constitui parecer jurídico.
-          </label>
-          <label class="check">
-            <input type="checkbox" data-consent-check name="check3" required />
-            Compreendo que não se estabelece relação advogado-cliente através deste chat.
-          </label>
-        </div>
+      <div class="modal-checks">
+        <label class="check">
+          <input type="checkbox" data-consent-check />
+          Não vou inserir dados pessoais (nome, morada, NIF, email, telefone, etc.).
+        </label>
+        <label class="check">
+          <input type="checkbox" data-consent-check />
+          Compreendo que é informação geral e não vinculativa; não constitui parecer jurídico.
+        </label>
+        <label class="check">
+          <input type="checkbox" data-consent-check />
+          Compreendo que não se estabelece relação advogado-cliente através desta triagem.
+        </label>
+      </div>
 
-        <div class="modal-actions">
-          <button class="btn btn-secondary" id="consentCancel" type="button">Cancelar</button>
-          <button class="btn btn-primary" id="consentAccept" type="button" disabled>Aceitar e continuar</button>
-        </div>
-      </form>
+      <div class="modal-actions">
+        <button class="btn secondary" id="consentCancel" type="button">Cancelar</button>
+        <button class="btn primary" id="consentAccept" type="button" disabled>Aceitar e continuar</button>
+      </div>
 
       <p class="modal-legal">
         Ao continuar, confirma que leu os <a href="termos.html">Termos</a> e a <a href="privacidade.html">Política de Privacidade</a>.

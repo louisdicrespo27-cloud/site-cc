@@ -1,32 +1,78 @@
 <!DOCTYPE html>
-<html lang="pt">
+<html lang="pt-PT">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Termos de Utilização | Correia Crespo - Advogados</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css">
-  <style>
-    .legal-page { padding: 6rem 1.5rem 4rem; max-width: 720px; margin: 0 auto; }
-    .legal-page h1 { font-size: 1.75rem; margin-bottom: 1.5rem; }
-    .legal-page h2 { font-size: 1.125rem; margin: 2rem 0 0.75rem; color: var(--text-secondary); }
-    .legal-page p { color: var(--text-secondary); margin-bottom: 1rem; line-height: 1.7; }
-    .legal-page a { color: var(--accent); }
-    .back-link { display: inline-block; margin-bottom: 2rem; color: var(--text-secondary); }
-    .back-link:hover { color: var(--accent); }
-  </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Termos — Correia Crespo | Advogado</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <div class="legal-page">
-    <a href="index.html" class="back-link">← Voltar</a>
-    <h1>Termos de Utilização</h1>
-    <p>Os presentes Termos regulam a utilização do site e do assistente de orientação jurídica geral do escritório <span class="brand-stack"><span class="brand-name">Correia Crespo</span><span class="brand-sub">Advogado</span></span>.</p>
-    <h2>1. Natureza do serviço</h2>
-    <p>O assistente de IA fornece informação jurídica geral e limitada (triagem). Não constitui parecer jurídico nem cria relação advogado-cliente.</p>
-    <h2>2. Utilização</h2>
-    <p>O utilizador compromete-se a não inserir dados pessoais identificativos. A utilização do serviço implica a aceitação destes Termos.</p>
-    <h2>3. Contacto</h2>
-    <p>Para consultoria personalizada, contacte-nos em <a href="mailto:correiacrespo-67709L@adv.oa.pt">correiacrespo-67709L@adv.oa.pt</a> ou 914 376 903.</p>
-  </div>
+  <header class="header">
+    <div class="container header-inner">
+      <a class="brand" href="index.html#topo" aria-label="Início">
+        <span class="brand-stack">
+          <span class="brand-name">CORREIA CRESPO</span>
+          <span class="brand-sub">ADVOGADO</span>
+        </span>
+      </a>
+      <nav class="nav" aria-label="Navegação">
+        <div class="nav-links">
+          <a href="index.html#servicos">Serviços</a>
+          <a href="index.html#triagem">Triagem</a>
+          <a href="index.html#contactos">Contactos</a>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <main class="section">
+    <div class="container">
+      <div class="section-head">
+        <h2>Termos</h2>
+        <p>Condições de utilização do website e da triagem informativa.</p>
+      </div>
+
+      <article class="card" style="max-width: 920px;">
+        <h3>1) Natureza informativa</h3>
+        <p>O conteúdo do website, incluindo a funcionalidade de triagem, tem caráter meramente informativo e geral. Não constitui parecer jurídico, consulta formal, nem estabelece relação advogado-cliente.</p>
+
+        <h3>2) Não inserção de dados pessoais</h3>
+        <p>O utilizador deve evitar inserir dados pessoais identificativos (nome, morada, NIF, email, telefone) ou informação sensível. Para análise do caso concreto, recomenda-se marcação de consulta.</p>
+
+        <h3>3) Limitação de responsabilidade</h3>
+        <p>As informações prestadas podem não refletir todas as especificidades do caso. A decisão e utilização da informação são da exclusiva responsabilidade do utilizador.</p>
+
+        <h3>4) Contactos e agendamento</h3>
+        <p>O agendamento de consulta é realizado pelos contactos disponibilizados no website.</p>
+
+        <h3>5) Atualizações</h3>
+        <p>Estes termos podem ser atualizados sem aviso prévio. Consulte esta página regularmente.</p>
+      </article>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer-inner">
+      <div class="footer-brand">
+        <span class="brand-stack">
+          <span class="brand-name">CORREIA CRESPO</span>
+          <span class="brand-sub">ADVOGADO</span>
+        </span>
+        <span class="footer-note">Direito empresarial • Portugal</span>
+      </div>
+      <div class="footer-links">
+        <a href="termos.html">Termos</a>
+        <a href="privacidade.html">Política de Privacidade</a>
+      </div>
+      <div class="footer-copy">© <span id="year"></span> Correia Crespo — Advogado</div>
+    </div>
+  </footer>
+
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
 </body>
 </html>

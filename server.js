@@ -1,84 +1,76 @@
 /**
- * Correia Crespo - Servidor
- * Serve o site estático e a API de chat com IA para orientação jurídica (limitada)
+ * Corporate-law landing (Correia Crespo) - Node/Express server
+ * - Serves static site
+ * - Provides /api/chat with strict, limited "triage" responses
  */
-
-const path = require('path');
-require('dotenv').config({ path: path.join(__dirname, '.env') });
+require('dotenv').config();
 const express = require('express');
+const path = require('path');
 const OpenAI = require('openai');
 const rateLimit = require('express-rate-limit');
 
 const app = express();
 app.disable('x-powered-by');
+
 const PORT = process.env.PORT || 3000;
 
-// Chave da API OpenAI (definir em OPENAI_API_KEY)
+// OpenAI client
 const openai = process.env.OPENAI_API_KEY
   ? new OpenAI({ apiKey: process.env.OPENAI_API_KEY })
   : null;
 
-// Middleware
 app.use(express.json({ limit: '32kb' }));
 
-// Headers básicos de segurança
+// Basic security headers (lightweight)
 app.use((req, res, next) => {
   res.setHeader('X-Content-Type-Options', 'nosniff');
-  res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
   res.setHeader('X-Frame-Options', 'DENY');
+  res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
   res.setHeader('Permissions-Policy', 'camera=(), microphone=(), geolocation=()');
   next();
 });
 
-// Rotas explícitas para a página principal (antes do static)
-app.get('/', (req, res) => {
+// Avoid caching index during development
+app.get('/', (req, res, next) => {
   res.setHeader('Cache-Control', 'no-store');
-  res.sendFile(path.join(__dirname, 'index.html'));
-});
-app.get('/index.html', (req, res) => {
-  res.setHeader('Cache-Control', 'no-store');
-  res.sendFile(path.join(__dirname, 'index.html'));
-});
-
-// Bloquear acesso a .env
-app.use((req, res, next) => {
-  if (req.path.includes('.env')) return res.status(404).end();
   next();
 });
+
 app.use(express.static(path.join(__dirname)));
 
-// Rate-limit (anti abuso / controlo de custos)
+// Rate limit for chat endpoint
 const chatLimiter = rateLimit({
-  windowMs: 5 * 60 * 1000, // 5 min
-  limit: 10, // 10 pedidos / 5 min / IP
+  windowMs: 5 * 60 * 1000,
+  limit: 10,
   standardHeaders: true,
   legacyHeaders: false,
 });
 
-// Sistema de prompts para orientação jurídica limitada e generalizada
-const SYSTEM_PROMPT = `És um assistente de triagem jurídica do escritório Correia Crespo - Advogados (Portugal).
+// Strict system prompt: corporate-law triage, no templates, no steps, no conversation
+const SYSTEM_PROMPT = `És um assistente de TRIAGEM JURÍDICA do escritório Correia Crespo (Portugal), focado em Direito Empresarial.
+O utilizador procura orientação geral para decidir se deve marcar consulta.
 
 OBJETIVO:
-- Atrair o utilizador a marcar consulta.
-- Dar apenas informação geral e muito limitada, sem resolver o problema.
+- Ser útil apenas ao nível de enquadramento geral.
+- Incentivar marcação de consulta para análise documental.
+- Evitar que o utilizador resolva o problema aqui.
 
-FORMATO OBRIGATÓRIO:
+FORMATO OBRIGATÓRIO (resposta curta):
 1) **Isto pode exigir advogado?** (sim/talvez) – 1 frase.
-2) **O que pode estar em causa (muito geral)** – 1–2 bullets.
-3) **Próximo passo recomendado** – "Marcar consulta" (sem instruções detalhadas).
+2) **O que pode estar em causa (muito geral)** – 2–4 bullets.
+3) **Próximo passo recomendado** – "Marcar consulta" – 1 frase.
 
-RESTRIÇÕES ABSOLUTAS:
-- NÃO fornecer minutas/modelos/cartas/requerimentos.
-- NÃO dar passos concretos ("faça X amanhã", "envie Y", "apresente Z").
-- NÃO listar "soluções para resolver" o caso; apenas indicar que existe enquadramento legal e que depende de análise.
-- NÃO ter conversa; se faltarem dados essenciais, faz NO MÁXIMO 1 pergunta de clarificação curta e termina aí.
-- Respostas curtas (máx. ~1200 caracteres).
+REGRAS ABSOLUTAS:
+- NÃO redigir minutas/modelos/cartas/requerimentos.
+- NÃO dar instruções operacionais ("faça X", "envie Y", "submeta Z") nem listas de passos.
+- NÃO indicar “soluções” para resolver o caso; apenas enquadramento genérico e fatores a analisar.
+- NÃO conversar: se faltar dado essencial, faz NO MÁXIMO 1 pergunta curta de clarificação e termina.
 - NÃO pedir dados pessoais (nome, morada, NIF, email, telefone).
-- Incluir sempre no fim: "Informação geral e não vinculativa; não constitui parecer jurídico. Para análise do caso concreto, marque consulta."`;
+- Responder em português de Portugal.
+- Incluir SEMPRE no final: "Informação geral e não vinculativa; não constitui parecer jurídico. Para análise do caso concreto, marque consulta."`;
 
-// Limites de contexto enviados ao modelo
-const MAX_MESSAGES = 16; // ~8 interações (user+assistant)
-const MAX_CHARS_PER_MESSAGE = 1800;
+const MAX_MESSAGES = 6; // keep context minimal
+const MAX_CHARS_PER_MESSAGE = 900;
 
 function truncateStr(s, max) {
   if (!s) return '';
@@ -96,7 +88,6 @@ function sanitizeMessages(messages) {
     if (!content) continue;
     cleaned.push({ role, content });
   }
-  // manter apenas as últimas mensagens
   return cleaned.slice(-MAX_MESSAGES);
 }
 
@@ -104,14 +95,14 @@ function looksLikePII(text) {
   const t = String(text || '');
   const email = /\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b/i;
   const phone = /\b(?:\+351\s*)?(?:9\d{2}|2\d{2})\s?\d{3}\s?\d{3}\b/;
-  const nif = /\b\d{9}\b/; // heurístico
+  const nif = /\b\d{9}\b/;
   const iban = /\bPT\d{23}\b/i;
   return email.test(t) || phone.test(t) || nif.test(t) || iban.test(t);
 }
 
 function ensureDisclaimer(text) {
   const t = String(text || '').trim();
-  const has = /não constitui\s+(parecer|aconselhamento)|meramente\s+informativ|não\s+vinculativ/i.test(t);
+  const has = /não constitui\s+(parecer|aconselhamento)|não\s+vinculativ/i.test(t);
   if (has) return t;
   return (
     t +
@@ -123,26 +114,28 @@ function enforceNoTemplates(text) {
   const t = String(text || '');
   const banned = /(minuta|modelo de|template|carta|requerimento|peti[cç][aã]o|cl[áa]usula|redija|copie e cole)/i;
   const steps = /(passo\s*\d+|1\)|2\)|3\)|primeiro|depois|em seguida|faça|envie|apresente|submeta)/i;
-
   if (banned.test(t) || steps.test(t)) {
-    return `**Isto pode exigir advogado?** Talvez – depende dos factos e documentos.\n` +
-      `**O que pode estar em causa (muito geral):**\n- Enquadramento legal a determinar (depende da área).\n- Necessidade de análise documental.\n` +
-      `**Próximo passo recomendado:** Marcar consulta para avaliação do caso concreto.\n\n—\nℹ️ Informação geral e não vinculativa; não constitui parecer jurídico. Para análise do caso concreto, marque consulta.`;
+    return (
+      `**Isto pode exigir advogado?** Talvez – depende dos factos e documentos.\n` +
+      `**O que pode estar em causa (muito geral):**\n` +
+      `- Enquadramento contratual/societário a determinar.\n` +
+      `- Risco e obrigações a validar em documentos.\n` +
+      `- Eventual impacto em registos e compliance.\n` +
+      `**Próximo passo recomendado:** Marcar consulta para avaliação do caso concreto.`
+    );
   }
   return t;
 }
 
-// API: Chat com IA
+// Chat endpoint
 app.post('/api/chat', chatLimiter, async (req, res) => {
-  const { messages } = req.body;
-
   if (!openai) {
     return res.status(503).json({
-      error:
-        'O assistente de IA não está configurado. Defina a variável OPENAI_API_KEY no ambiente.',
+      error: 'Assistente indisponível. OPENAI_API_KEY não está configurada no servidor.',
     });
   }
 
+  const { messages } = req.body;
   if (!messages || !Array.isArray(messages) || messages.length === 0) {
     return res.status(400).json({ error: 'Mensagens em falta.' });
   }
@@ -152,56 +145,55 @@ app.post('/api/chat', chatLimiter, async (req, res) => {
     return res.status(400).json({ error: 'Mensagens inválidas.' });
   }
 
-  // Bloqueio simples de dados pessoais (reduz risco RGPD e evita mandato implícito)
   const anyPII = cleaned.some((m) => m.role === 'user' && looksLikePII(m.content));
   if (anyPII) {
     return res.status(400).json({
-      error:
-        'Por favor, remova dados pessoais identificativos (ex.: nomes, moradas, NIF, email, telefone) e reformule a questão de forma geral.',
+      error: 'Remova dados pessoais identificativos (nome, morada, NIF, email, telefone) e reformule de forma geral.',
     });
   }
 
   try {
     const completion = await openai.chat.completions.create({
-      model: 'gpt-4o-mini',
+      model: process.env.OPENAI_MODEL || 'gpt-4o-mini',
       messages: [{ role: 'system', content: SYSTEM_PROMPT }, ...cleaned],
       max_tokens: 220,
       temperature: 0.2,
     });
 
     const replyRaw = completion.choices[0]?.message?.content;
-
-    if (!replyRaw) {
-      return res.status(500).json({ error: 'Resposta vazia da IA.' });
-    }
+    if (!replyRaw) return res.status(500).json({ error: 'Resposta vazia da IA.' });
 
     let reply = ensureDisclaimer(replyRaw);
     reply = enforceNoTemplates(reply);
+    reply = ensureDisclaimer(reply);
+
     res.json({ reply });
   } catch (err) {
-    console.error('Erro OpenAI:', err.message);
-    res.status(500).json({
-      error: err.message || 'Erro ao processar o pedido. Tente novamente.',
-    });
+    const msg = err?.message || 'Erro ao processar o pedido.';
+    console.error('Erro OpenAI:', msg);
+
+    // Friendly mapping for common quota errors
+    if (String(msg).includes('quota') || String(msg).includes('billing')) {
+      return res.status(429).json({
+        error:
+          'Serviço temporariamente indisponível por limite de utilização. Por favor, marque consulta para análise do caso concreto.',
+      });
+    }
+
+    res.status(500).json({ error: 'Serviço temporariamente indisponível. Tente novamente.' });
   }
 });
 
 // SPA fallback
 app.get('*', (req, res) => {
   if (!req.path.startsWith('/api')) {
-    res.setHeader('Cache-Control', 'no-store');
-  res.sendFile(path.join(__dirname, 'index.html'));
+    res.sendFile(path.join(__dirname, 'index.html'));
   }
 });
 
 app.listen(PORT, () => {
-  console.log(`\n  Correia Crespo - Servidor em http://localhost:${PORT}\n`);
+  console.log(`\n  Servidor em http://localhost:${PORT}\n`);
   if (!openai) {
-    console.log(
-      '  AVISO: OPENAI_API_KEY não definida. O assistente de IA não funcionará.\n'
-    );
-    console.log(
-      '  Para ativar: export OPENAI_API_KEY=sk-...  (e reiniciar)\n'
-    );
+    console.log('  AVISO: OPENAI_API_KEY não definida. O chat não funcionará.\n');
   }
 });

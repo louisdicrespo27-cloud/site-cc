@@ -1,165 +1,202 @@
-// Correia Crespo - Advogados
-// Homepage estilo Google + Assistente de IA para triagem/orientação jurídica (limitada)
-// Fluxo: 1 pergunta + máx. 1 clarificação → CTA
-
+// Corporate-law landing + limited triage assistant
 document.addEventListener('DOMContentLoaded', () => {
-  // ===== Menu mobile =====
+  // ===== Year =====
+  const yearEl = document.getElementById('year');
+  if (yearEl) yearEl.textContent = String(new Date().getFullYear());
+
+  // ===== Mobile nav =====
   const navToggle = document.querySelector('.nav-toggle');
-  const navMenu = document.querySelector('.nav-menu');
-  if (navToggle && navMenu) {
+  const navLinks = document.querySelector('.nav-links');
+
+  if (navToggle && navLinks) {
     navToggle.addEventListener('click', () => {
-      navMenu.classList.toggle('active');
-      navToggle.setAttribute(
-        'aria-label',
-        navMenu.classList.contains('active') ? 'Fechar menu' : 'Abrir menu'
-      );
+      const isOpen = navLinks.classList.toggle('active');
+      navToggle.setAttribute('aria-expanded', String(isOpen));
+      navToggle.setAttribute('aria-label', isOpen ? 'Fechar menu' : 'Abrir menu');
     });
-    navMenu.querySelectorAll('a').forEach((link) => {
-      link.addEventListener('click', () => navMenu.classList.remove('active'));
+
+    navLinks.querySelectorAll('a').forEach((a) => {
+      a.addEventListener('click', () => navLinks.classList.remove('active'));
     });
   }
 
-  // ===== Config =====
-  const API_BASE = window.location.origin;
-  const CONSENT_KEY = 'cc_ai_consent_v1';
-  const WHATSAPP_NUMBER = '351914376903'; // sem +, sem espaços
+  // ===== Reveal on scroll =====
+  const revealEls = Array.from(document.querySelectorAll('.reveal'));
+  const io = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((e) => {
+        if (e.isIntersecting) {
+          e.target.classList.add('is-visible');
+          io.unobserve(e.target);
+        }
+      });
+    },
+    { threshold: 0.12 }
+  );
+  revealEls.forEach((el) => io.observe(el));
 
-  // ===== Elementos =====
+  // ===== Counters (simple) =====
+  const counterEls = Array.from(document.querySelectorAll('[data-counter]'));
+  const counterIo = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((e) => {
+        if (!e.isIntersecting) return;
+        const el = e.target;
+        const target = Number(el.getAttribute('data-counter') || '0');
+        animateCounter(el, target);
+        counterIo.unobserve(el);
+      });
+    },
+    { threshold: 0.35 }
+  );
+  counterEls.forEach((el) => counterIo.observe(el));
+
+  function animateCounter(el, target) {
+    const duration = 900;
+    const start = performance.now();
+    const from = 0;
+
+    function tick(now) {
+      const t = Math.min(1, (now - start) / duration);
+      const eased = 1 - Math.pow(1 - t, 3);
+      const val = Math.round(from + (target - from) * eased);
+      el.textContent = String(val);
+      if (t < 1) requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+  }
+
+  // ===== Accordion =====
+  const accordion = document.querySelector('[data-accordion]');
+  if (accordion) {
+    const items = Array.from(accordion.querySelectorAll('.acc-item'));
+    items.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const panel = btn.nextElementSibling;
+        const expanded = btn.getAttribute('aria-expanded') === 'true';
+
+        // Close all
+        items.forEach((b) => {
+          b.setAttribute('aria-expanded', 'false');
+          const p = b.nextElementSibling;
+          if (p) p.hidden = true;
+          const icon = b.querySelector('.acc-icon');
+          if (icon) icon.textContent = '+';
+        });
+
+        // Toggle current
+        if (!expanded) {
+          btn.setAttribute('aria-expanded', 'true');
+          if (panel) panel.hidden = false;
+          const icon = btn.querySelector('.acc-icon');
+          if (icon) icon.textContent = '–';
+        }
+      });
+    });
+  }
+
+  // ===== Card tilt (subtle, pointer-based) =====
+  const tiltCards = Array.from(document.querySelectorAll('[data-tilt]'));
+  tiltCards.forEach((card) => {
+    card.addEventListener('pointermove', (e) => {
+      const r = card.getBoundingClientRect();
+      const px = (e.clientX - r.left) / r.width - 0.5;
+      const py = (e.clientY - r.top) / r.height - 0.5;
+      const rx = (-py * 4).toFixed(2);
+      const ry = (px * 6).toFixed(2);
+      card.style.transform = `translateY(-3px) rotateX(${rx}deg) rotateY(${ry}deg)`;
+    });
+    card.addEventListener('pointerleave', () => {
+      card.style.transform = '';
+    });
+  });
+
+  // ===== Triage assistant (single input, limited flow) =====
   const searchForm = document.getElementById('searchForm');
   const searchInput = document.getElementById('searchInput');
   const chatPanel = document.getElementById('chatPanel');
   const chatMessages = document.getElementById('chatMessages');
-  const whatsappBtn = document.getElementById('whatsappBtn');
 
-  // Modal consentimento
+  const whatsappHeader = document.getElementById('whatsappHeader');
+  const whatsappBtn = document.getElementById('whatsappBtn');
+  const whatsappContact = document.getElementById('whatsappContact');
+
+  // Consent modal
+  const CONSENT_KEY = 'cc_ai_consent_v2';
   const consentModal = document.getElementById('consentModal');
   const consentClose = document.getElementById('consentClose');
   const consentCancel = document.getElementById('consentCancel');
   const consentAccept = document.getElementById('consentAccept');
-  const consentChecks = Array.from(
-    document.querySelectorAll('input[data-consent-check]')
-  );
+  const consentChecks = Array.from(document.querySelectorAll('input[data-consent-check]'));
 
-  // ===== Estado =====
-  let stage = 'initial'; // initial | awaiting_clarification | done
-  let pendingQuestion = null; // 1.ª pergunta (quando em awaiting_clarification)
-  let pendingAfterConsent = null; // pergunta a processar após aceitar consentimento
+  // WhatsApp number (international format, no +)
+  const WHATSAPP_NUMBER = '351914376903';
+
+  // Flow control:
+  // initial -> awaiting_clarification -> done
+  let stage = 'initial';
+  let firstQuestion = '';
   let lastUserQuestion = '';
-  let lastActiveElement = null;
-  let isModalOpen = false;
 
-  // ===== Helpers do fluxo =====
-  function lockInput(msg) {
-    if (searchInput) {
-      searchInput.disabled = true;
-      searchInput.value = '';
-      searchInput.placeholder = msg || 'Para continuar, marque consulta.';
-    }
-  }
-
-  function unlockInput(placeholder) {
-    if (searchInput) {
-      searchInput.disabled = false;
-      searchInput.placeholder = placeholder || 'Descreva o problema (sem dados pessoais)…';
-      searchInput.focus();
-    }
-  }
-
-  // ===== Consentimento =====
   function hasConsent() {
     return localStorage.getItem(CONSENT_KEY) === 'true';
   }
 
   function openConsentModal() {
     if (!consentModal) return;
-    lastActiveElement = document.activeElement;
-    isModalOpen = true;
-
     consentModal.hidden = false;
     consentModal.style.display = 'flex';
     document.body.classList.add('modal-open');
 
-    const pageContent = document.getElementById('pageContent');
-    if (pageContent) pageContent.inert = true;
-
-    consentChecks.forEach((c) => { c.checked = false; });
+    // reset checks
+    consentChecks.forEach((c) => (c.checked = false));
     updateConsentButton();
 
-    const first = consentModal.querySelector('input[data-consent-check]');
+    // focus first checkbox
+    const first = consentChecks[0];
     first?.focus();
-
-    document.addEventListener('keydown', onModalKeydown, true);
   }
 
   function closeConsentModal() {
-    const modal = document.getElementById('consentModal');
-    if (!modal) return;
+    if (!consentModal) return;
 
-    isModalOpen = false;
-    document.removeEventListener('keydown', onModalKeydown, true);
+    // move focus out before hiding
+    searchInput?.focus();
 
-    const pageContent = document.getElementById('pageContent');
-    if (pageContent) pageContent.inert = false;
-
+    consentModal.hidden = true;
+    consentModal.style.display = 'none';
     document.body.classList.remove('modal-open');
-    modal.hidden = true;
-    modal.style.display = 'none';
-
-    const focusTarget = document.getElementById('searchInput');
-    (lastActiveElement && typeof lastActiveElement.focus === 'function'
-      ? lastActiveElement
-      : focusTarget)?.focus();
   }
 
   function updateConsentButton() {
     if (!consentAccept) return;
-    const allChecked = consentChecks.length > 0 && consentChecks.every((c) => c.checked);
-    consentAccept.disabled = !allChecked;
-    consentAccept.classList.toggle('consent-ready', allChecked);
-    consentAccept.classList.toggle('consent-disabled', !allChecked);
+    const all = consentChecks.length > 0 && consentChecks.every((c) => c.checked);
+    consentAccept.disabled = !all;
   }
 
-  function getFocusableInModal() {
-    if (!consentModal) return [];
-    const nodes = consentModal.querySelectorAll(
-      'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
-    );
-    return Array.from(nodes).filter((el) => !el.disabled && el.offsetParent !== null);
-  }
+  consentChecks.forEach((c) => c.addEventListener('change', updateConsentButton));
 
-  function onModalKeydown(e) {
-    if (!isModalOpen) return;
-    if (e.key === 'Escape') {
-      e.preventDefault();
-      pendingAfterConsent = null;
-      closeConsentModal();
-      return;
-    }
-    if (e.key === 'Tab') {
-      const focusables = getFocusableInModal();
-      if (focusables.length === 0) return;
-      const first = focusables[0];
-      const last = focusables[focusables.length - 1];
-      const active = document.activeElement;
-      if (e.shiftKey && active === first) {
-        e.preventDefault();
-        last.focus();
-      } else if (!e.shiftKey && active === last) {
-        e.preventDefault();
-        first.focus();
-      }
-    }
-  }
+  consentClose?.addEventListener('click', () => closeConsentModal());
+  consentCancel?.addEventListener('click', () => closeConsentModal());
 
-  // ===== Chat / API =====
-  function detectPII(text) {
-    const t = String(text || '');
-    const email = /\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b/i;
-    const phone = /\b(?:\+351\s*)?(?:9\d{2}|2\d{2})\s?\d{3}\s?\d{3}\b/;
-    const nif = /\b\d{9}\b/;
-    const iban = /\bPT\d{23}\b/i;
-    return email.test(t) || phone.test(t) || nif.test(t) || iban.test(t);
-  }
+  consentModal?.addEventListener('click', (e) => {
+    if (e.target === consentModal) closeConsentModal();
+  });
+
+  consentAccept?.addEventListener('click', () => {
+    if (consentAccept.disabled) return;
+    localStorage.setItem(CONSENT_KEY, 'true');
+    closeConsentModal();
+    // after consent, if user already typed something, they can submit again (no auto-submit)
+    searchInput?.focus();
+  });
+
+  // ESC closes modal
+  document.addEventListener('keydown', (e) => {
+    if (e.key !== 'Escape') return;
+    if (!consentModal || consentModal.hidden) return;
+    closeConsentModal();
+  });
 
   function addMessage(role, content, isLoading = false) {
     const div = document.createElement('div');
@@ -175,79 +212,95 @@ document.addEventListener('DOMContentLoaded', () => {
     return bubble;
   }
 
-  async function getLegalOpinion(outgoingMessages) {
-    const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 20000);
+  function detectPII(text) {
+    const t = String(text || '');
+    const email = /\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b/i;
+    const phone = /\b(?:\+351\s*)?(?:9\d{2}|2\d{2})\s?\d{3}\s?\d{3}\b/;
+    const nif = /\b\d{9}\b/;
+    const iban = /\bPT\d{23}\b/i;
+    return email.test(t) || phone.test(t) || nif.test(t) || iban.test(t);
+  }
 
-    const response = await fetch(`${API_BASE}/api/chat`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ messages: outgoingMessages }),
-      signal: controller.signal,
-    }).finally(() => clearTimeout(timeout));
+  function lockInput(message) {
+    if (!searchInput) return;
+    searchInput.disabled = true;
+    searchInput.value = '';
+    searchInput.placeholder = message || 'Para continuar, marque consulta.';
+  }
 
-    const data = await response.json().catch(() => ({}));
-    if (!response.ok) throw new Error(data.error || 'Erro ao obter resposta.');
-    return data.reply;
+  function unlockInput(message) {
+    if (!searchInput) return;
+    searchInput.disabled = false;
+    searchInput.placeholder = message || 'Descreva a questão (sem dados pessoais)…';
+    searchInput.focus();
   }
 
   function isClarificationQuestion(text) {
     const s = String(text || '').trim();
-    return /^pergunta\s*:/i.test(s) || /\?\s*$/.test(s);
+    // If it looks like a single clarifying question (ends with ? and is not too long)
+    return /\?\s*$/.test(s) && s.length < 220;
   }
 
-  async function handleQuestion(question) {
-    const clean = String(question || '').trim();
+  async function getReply(messages) {
+    const res = await fetch(`${window.location.origin}/api/chat`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ messages }),
+    });
+
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok) throw new Error(data.error || 'Erro ao obter resposta.');
+    return data.reply;
+  }
+
+  async function handleSubmit(raw) {
+    const clean = String(raw || '').trim();
     if (!clean) return;
 
-    lastUserQuestion = clean;
-
-    // Consentimento
     if (!hasConsent()) {
-      if (!document.getElementById('consentModal')) {
-        localStorage.setItem(CONSENT_KEY, 'true');
-      } else {
-        pendingAfterConsent = clean;
-        openConsentModal();
-        return;
-      }
-    }
-
-    // Bloqueia conversa se já terminou
-    if (stage === 'done') {
-      addMessage('assistant', 'Para continuar, é necessária consulta com advogado. Clique em "Marcar consulta".');
-      lockInput('Para continuar, marque consulta.');
+      openConsentModal();
       return;
     }
 
     if (detectPII(clean)) {
+      chatPanel.hidden = false;
       addMessage('assistant', '⚠️ Remova dados pessoais (nome, morada, NIF, email, telefone) e reformule de forma geral.');
       return;
     }
 
+    // Do not allow conversation beyond one clarifying turn
+    if (stage === 'done') {
+      chatPanel.hidden = false;
+      addMessage('assistant', 'Para continuar, é necessária consulta com advogado. Clique em “Marcar consulta” ou envie WhatsApp.');
+      lockInput('Para continuar, marque consulta.');
+      return;
+    }
+
+    lastUserQuestion = clean;
+
     chatPanel.hidden = false;
     addMessage('user', clean);
+    const loading = addMessage('assistant', 'A analisar (informação geral)…', true);
 
-    const loading = addMessage('assistant', 'A analisar (orientação geral)…', true);
-
-    const prefixed = clean;
-    const outgoing = [];
-
+    // Minimal message set to keep costs low and avoid back-and-forth
+    let outgoing = [];
     if (stage === 'initial') {
-      outgoing.push({ role: 'user', content: prefixed });
+      outgoing = [{ role: 'user', content: clean }];
     } else if (stage === 'awaiting_clarification') {
-      outgoing.push({ role: 'user', content: pendingQuestion });
-      outgoing.push({ role: 'user', content: `[Resposta à clarificação] ${prefixed}` });
+      outgoing = [
+        { role: 'user', content: firstQuestion },
+        { role: 'user', content: `Resposta à clarificação: ${clean}` },
+      ];
     }
 
     try {
-      const reply = await getLegalOpinion(outgoing);
+      const reply = await getReply(outgoing);
       loading.classList.remove('loading');
       loading.textContent = reply;
 
       if (stage === 'initial' && isClarificationQuestion(reply)) {
         stage = 'awaiting_clarification';
-        pendingQuestion = prefixed;
+        firstQuestion = clean;
         unlockInput('Responda apenas à pergunta de clarificação (sem dados pessoais)…');
         return;
       }
@@ -256,163 +309,41 @@ document.addEventListener('DOMContentLoaded', () => {
       lockInput('Para continuar, marque consulta.');
     } catch (err) {
       loading.classList.remove('loading');
-      loading.textContent =
-        'Não foi possível obter resposta automática. Para análise do caso concreto, marque consulta.';
+      loading.textContent = 'Serviço temporariamente indisponível. Para análise do caso concreto, marque consulta.';
       stage = 'done';
       lockInput('Para continuar, marque consulta.');
       console.error(err);
     }
-
-    chatMessages.scrollTop = chatMessages.scrollHeight;
   }
 
-  // ===== Eventos =====
   searchForm?.addEventListener('submit', (e) => {
     e.preventDefault();
-    handleQuestion(searchInput.value);
-    searchInput.value = '';
+    handleSubmit(searchInput?.value);
+    if (searchInput) searchInput.value = '';
   });
 
+  // ===== WhatsApp links =====
   function buildWhatsAppUrl() {
     const base = 'https://wa.me/' + WHATSAPP_NUMBER;
+
     const msg =
-      'Olá. Gostaria de marcar consulta.\n\n' +
-      'Questão (resumo): ' + (lastUserQuestion || '[não preenchida]') + '\n\n' +
-      'Preferência de contacto: (WhatsApp/telefone/email)\n' +
-      'Melhor horário: (manhã/tarde/noite)\n';
+      'Olá. Gostaria de marcar consulta (Direito Empresarial).\n\n' +
+      'Resumo da questão: ' + (lastUserQuestion || '[não preenchido]') + '\n\n' +
+      'Melhor horário: \n' +
+      'Preferência de contacto (WhatsApp/telefone/email): \n';
+
     return base + '?text=' + encodeURIComponent(msg);
   }
 
-  whatsappBtn?.addEventListener('click', (e) => {
-    e.preventDefault();
-    const url = buildWhatsAppUrl();
-    window.open(url, '_blank', 'noopener,noreferrer');
-  });
-
-  // Modal consentimento
-  consentChecks.forEach((c) => {
-    c.addEventListener('change', updateConsentButton);
-    c.addEventListener('click', updateConsentButton);
-  });
-
-  consentClose?.addEventListener('click', () => {
-    pendingAfterConsent = null;
-    closeConsentModal();
-  });
-
-  consentCancel?.addEventListener('click', () => {
-    pendingAfterConsent = null;
-    closeConsentModal();
-  });
-
-  consentAccept?.addEventListener('click', async () => {
-    const allChecked = consentChecks.length > 0 && consentChecks.every((c) => c.checked);
-    if (!allChecked) {
-      updateConsentButton();
-      return;
-    }
-    localStorage.setItem(CONSENT_KEY, 'true');
-    closeConsentModal();
-    if (pendingAfterConsent) {
-      const q = pendingAfterConsent;
-      pendingAfterConsent = null;
-      await handleQuestion(q);
-    }
-  });
-
-  consentModal?.addEventListener('click', (e) => {
-    if (e.target === consentModal) {
-      pendingAfterConsent = null;
-      closeConsentModal();
-    }
-  });
-
-  document.getElementById('consentModalCard')?.addEventListener('click', (e) => {
-    e.stopPropagation();
-  });
-
-  const consentForm = document.getElementById('consentForm');
-  consentForm?.addEventListener('submit', (e) => {
-    e.preventDefault();
-    const allChecked = consentChecks.length > 0 && consentChecks.every((c) => c.checked);
-    if (!allChecked) return;
-    localStorage.setItem(CONSENT_KEY, 'true');
-    closeConsentModal();
-    if (pendingAfterConsent) {
-      const q = pendingAfterConsent;
-      pendingAfterConsent = null;
-      handleQuestion(q);
-    }
-  });
-
-  // =============================
-  // CONSENT MODAL — FIX DEFINITIVO
-  // =============================
-  (function consentFix() {
-    const KEY = CONSENT_KEY || 'cc_ai_consent_v1';
-
-    function allCheckedNow() {
-      const checks = Array.from(document.querySelectorAll('input[data-consent-check]'));
-      return checks.length > 0 && checks.every((c) => c.checked);
-    }
-
-    document.addEventListener('click', async (e) => {
-      const btn = e.target?.closest?.('#consentAccept');
-      if (!btn) return;
-
+  function attachWhatsApp(el) {
+    if (!el) return;
+    el.addEventListener('click', (e) => {
       e.preventDefault();
-      e.stopPropagation();
-
-      console.log('[Consent] Clique em consentAccept. disabled=', btn.disabled);
-
-      if (btn.disabled) return;
-
-      if (!allCheckedNow()) {
-        console.warn('[Consent] Ainda faltam checkboxes.');
-        try { updateConsentButton?.(); } catch {}
-        return;
-      }
-
-      localStorage.setItem(KEY, 'true');
-      console.log('[Consent] Gravado em localStorage:', localStorage.getItem(KEY));
-
-      const modal = document.getElementById('consentModal');
-      if (modal) {
-        modal.hidden = true;
-        modal.style.display = 'none';
-        document.body.classList.remove('modal-open');
-        modal.setAttribute('aria-hidden', 'true');
-      }
-
-      if (typeof pendingAfterConsent !== 'undefined' && pendingAfterConsent) {
-        const q = pendingAfterConsent;
-        pendingAfterConsent = null;
-        console.log('[Consent] A processar pergunta pendente...');
-        await handleQuestion(q);
-      } else {
-        console.log('[Consent] Sem pergunta pendente. Modal fechado.');
-      }
-    });
-
-    document.addEventListener('change', (e) => {
-      if (!e.target?.matches?.('input[data-consent-check]')) return;
-      const btn = document.getElementById('consentAccept');
-      if (!btn) return;
-      btn.disabled = !allCheckedNow();
-      console.log('[Consent] Checks alterados. btn.disabled=', btn.disabled);
-    });
-  })();
-
-  // Newsletter
-  const newsletterForm = document.querySelector('.contactos .newsletter-form');
-  if (newsletterForm) {
-    newsletterForm.addEventListener('submit', (e) => {
-      e.preventDefault();
-      const email = newsletterForm.querySelector('input[type="email"]').value;
-      if (email) {
-        alert('Obrigado! Receberá as nossas atualizações em ' + email);
-        newsletterForm.reset();
-      }
+      window.open(buildWhatsAppUrl(), '_blank', 'noopener,noreferrer');
     });
   }
+
+  attachWhatsApp(whatsappHeader);
+  attachWhatsApp(whatsappBtn);
+  attachWhatsApp(whatsappContact);
 });

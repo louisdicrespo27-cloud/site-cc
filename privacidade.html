@@ -1,32 +1,85 @@
 <!DOCTYPE html>
-<html lang="pt">
+<html lang="pt-PT">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Política de Privacidade | Correia Crespo - Advogados</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css">
-  <style>
-    .legal-page { padding: 6rem 1.5rem 4rem; max-width: 720px; margin: 0 auto; }
-    .legal-page h1 { font-size: 1.75rem; margin-bottom: 1.5rem; }
-    .legal-page h2 { font-size: 1.125rem; margin: 2rem 0 0.75rem; color: var(--text-secondary); }
-    .legal-page p { color: var(--text-secondary); margin-bottom: 1rem; line-height: 1.7; }
-    .legal-page a { color: var(--accent); }
-    .back-link { display: inline-block; margin-bottom: 2rem; color: var(--text-secondary); }
-    .back-link:hover { color: var(--accent); }
-  </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Política de Privacidade — Correia Crespo | Advogado</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <div class="legal-page">
-    <a href="index.html" class="back-link">← Voltar</a>
-    <h1>Política de Privacidade</h1>
-    <p>O escritório <span class="brand-stack"><span class="brand-name">Correia Crespo</span><span class="brand-sub">Advogado</span></span> respeita a sua privacidade e trata os dados pessoais em conformidade com o RGPD.</p>
-    <h2>1. Dados recolhidos</h2>
-    <p>O assistente de IA processa apenas as questões que introduz, sem armazenar dados pessoais identificativos. O consentimento é guardado localmente (localStorage) para não repetir o modal.</p>
-    <h2>2. Finalidade</h2>
-    <p>Os dados são utilizados exclusivamente para fornecer orientação jurídica geral e melhorar o serviço.</p>
-    <h2>3. Contacto</h2>
-    <p>Para exercer os seus direitos ou esclarecimentos: <a href="mailto:correiacrespo-67709L@adv.oa.pt">correiacrespo-67709L@adv.oa.pt</a>.</p>
-  </div>
+  <header class="header">
+    <div class="container header-inner">
+      <a class="brand" href="index.html#topo" aria-label="Início">
+        <span class="brand-stack">
+          <span class="brand-name">CORREIA CRESPO</span>
+          <span class="brand-sub">ADVOGADO</span>
+        </span>
+      </a>
+      <nav class="nav" aria-label="Navegação">
+        <div class="nav-links">
+          <a href="index.html#servicos">Serviços</a>
+          <a href="index.html#triagem">Triagem</a>
+          <a href="index.html#contactos">Contactos</a>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <main class="section">
+    <div class="container">
+      <div class="section-head">
+        <h2>Política de Privacidade</h2>
+        <p>Informação essencial sobre dados e utilização do website.</p>
+      </div>
+
+      <article class="card" style="max-width: 920px;">
+        <h3>1) Princípios</h3>
+        <p>Aplicamos o princípio da minimização: a triagem destina-se a questões gerais e não deve incluir dados pessoais identificativos.</p>
+
+        <h3>2) Dados tratados</h3>
+        <p>Podemos tratar dados técnicos de navegação (ex.: IP, registos de servidor) para segurança e funcionamento do serviço. As mensagens enviadas na triagem devem ser gerais e sem dados pessoais.</p>
+
+        <h3>3) Finalidades</h3>
+        <ul class="mini-list">
+          <li>Funcionamento do website e segurança.</li>
+          <li>Resposta automática de triagem (informação geral).</li>
+          <li>Gestão de contactos e marcação de consulta quando solicitada.</li>
+        </ul>
+
+        <h3>4) Partilhas</h3>
+        <p>Quando a triagem automática está ativa, a mensagem (geral) pode ser processada por um fornecedor tecnológico para gerar a resposta. Não utilize dados pessoais no campo de triagem.</p>
+
+        <h3>5) Conservação</h3>
+        <p>Os períodos de conservação dependem da finalidade e de obrigações legais. Sempre que possível, reduzimos a retenção ao mínimo necessário.</p>
+
+        <h3>6) Direitos</h3>
+        <p>O titular tem direito de acesso, retificação, apagamento, limitação e oposição, nos termos aplicáveis. Para exercer direitos, utilize os contactos do website.</p>
+      </article>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer-inner">
+      <div class="footer-brand">
+        <span class="brand-stack">
+          <span class="brand-name">CORREIA CRESPO</span>
+          <span class="brand-sub">ADVOGADO</span>
+        </span>
+        <span class="footer-note">Direito empresarial • Portugal</span>
+      </div>
+      <div class="footer-links">
+        <a href="termos.html">Termos</a>
+        <a href="privacidade.html">Política de Privacidade</a>
+      </div>
+      <div class="footer-copy">© <span id="year"></span> Correia Crespo — Advogado</div>
+    </div>
+  </footer>
+
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
 </body>
 </html>
