@@ -61,9 +61,13 @@
             <input 
               type="text" 
               id="searchInput" 
+              name="q"
               class="search-input" 
               placeholder="Descreva a sua situação (sem dados pessoais)..."
               autocomplete="off"
+              autocapitalize="sentences"
+              spellcheck="true"
+              inputmode="text"
             />
             <button type="submit" class="search-btn" aria-label="Obter orientação geral">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -78,12 +82,16 @@
       <div class="chat-panel" id="chatPanel" hidden>
         <div class="chat-messages" id="chatMessages"></div>
         <form class="chat-form" id="chatForm">
-          <input 
-            type="text" 
+          <textarea 
             id="chatInput" 
+            name="message"
             class="chat-input" 
             placeholder="Faça uma pergunta de seguimento..."
-          />
+            autocomplete="off"
+            autocapitalize="sentences"
+            spellcheck="true"
+            rows="1"
+          ></textarea>
           <button type="submit" class="chat-send">Enviar</button>
         </form>
         <p class="disclaimer">
@@ -211,7 +219,15 @@
         <div class="contactos-form">
           <p class="form-title">Receba notícias e atualizações sobre Correia Crespo - Advogados.</p>
           <form class="newsletter-form" action="#" method="post">
-            <input type="email" name="email" placeholder="Email" required>
+            <input 
+              type="email" 
+              id="newsletterEmail" 
+              name="email" 
+              autocomplete="email" 
+              inputmode="email" 
+              placeholder="O seu email" 
+              required
+            />
             <button type="submit" class="btn btn-accent">Assinar</button>
           </form>
         </div>

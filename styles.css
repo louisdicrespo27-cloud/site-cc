@@ -354,6 +354,7 @@ ul {
 
 .chat-input {
   flex: 1;
+  min-height: 44px;
   padding: 0.625rem 1rem;
   font-family: var(--font-main);
   font-size: 0.9375rem;
@@ -362,6 +363,7 @@ ul {
   border-radius: var(--radius-xl);
   color: var(--text-primary);
   outline: none;
+  resize: none;
 }
 
 .chat-input:focus {
