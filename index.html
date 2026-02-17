@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt">
+<html lang="pt-PT">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -80,7 +80,7 @@
       </div>
 
       <div class="chat-panel" id="chatPanel" hidden>
-        <div class="chat-messages" id="chatMessages"></div>
+        <div class="chat-messages" id="chatMessages" role="log" aria-live="polite" aria-relevant="additions text"></div>
         <form class="chat-form" id="chatForm">
           <textarea 
             id="chatInput" 
@@ -239,7 +239,7 @@
     <div class="container">
       <div class="footer-content">
         <p class="footer-brand">Correia Crespo · Advogados</p>
-        <p class="footer-copy">© 2035 por Correia Crespo. Orgulhosamente criado com profissionalismo.</p>
+        <p class="footer-copy">© 2026 por Correia Crespo. Orgulhosamente criado com profissionalismo.</p>
         <div class="footer-legal">
           <a href="privacidade.html">Política de Privacidade</a>
           <span class="footer-sep">·</span>
@@ -256,12 +256,12 @@
   </footer>
 
   <!-- Modal de consentimento (obrigatório antes da 1.ª questão) -->
-  <div id="consentModal" class="modal modal-backdrop" hidden role="dialog" aria-modal="true" aria-labelledby="consentTitle">
+  <div id="consentModal" class="modal modal-backdrop" hidden role="dialog" aria-modal="true" aria-labelledby="consentTitle" aria-describedby="consentDesc">
     <div class="modal-card" id="consentModalCard">
       <button class="modal-close" id="consentClose" aria-label="Fechar" type="button">×</button>
 
       <h2 class="modal-title" id="consentTitle">Antes de começar</h2>
-      <p class="modal-subtitle">
+      <p class="modal-subtitle" id="consentDesc">
         Este assistente fornece <strong>orientação jurídica geral</strong>. Não substitui consulta com advogado.
       </p>
 
@@ -283,7 +283,7 @@
 
         <div class="modal-actions">
           <button class="btn btn-secondary" id="consentCancel" type="button">Cancelar</button>
-          <button class="btn btn-primary" id="consentAccept" type="submit">Aceitar e continuar</button>
+          <button class="btn btn-primary" id="consentAccept" type="submit" disabled>Aceitar e continuar</button>
         </div>
       </form>
 

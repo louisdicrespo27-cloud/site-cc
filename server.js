@@ -1,6 +1,6 @@
 /**
  * Correia Crespo - Servidor
- * Serve o site estático e a API de chat com IA para pareceres jurídicos
+ * Serve o site estático e a API de chat com IA para orientação jurídica (limitada)
  */
 
 const path = require('path');
@@ -10,6 +10,7 @@ const OpenAI = require('openai');
 const rateLimit = require('express-rate-limit');
 
 const app = express();
+app.disable('x-powered-by');
 const PORT = process.env.PORT || 3000;
 
 // Chave da API OpenAI (definir em OPENAI_API_KEY)
@@ -20,11 +21,22 @@ const openai = process.env.OPENAI_API_KEY
 // Middleware
 app.use(express.json({ limit: '32kb' }));
 
+// Headers básicos de segurança
+app.use((req, res, next) => {
+  res.setHeader('X-Content-Type-Options', 'nosniff');
+  res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
+  res.setHeader('X-Frame-Options', 'DENY');
+  res.setHeader('Permissions-Policy', 'camera=(), microphone=(), geolocation=()');
+  next();
+});
+
 // Rotas explícitas para a página principal (antes do static)
 app.get('/', (req, res) => {
+  res.setHeader('Cache-Control', 'no-store');
   res.sendFile(path.join(__dirname, 'index.html'));
 });
 app.get('/index.html', (req, res) => {
+  res.setHeader('Cache-Control', 'no-store');
   res.sendFile(path.join(__dirname, 'index.html'));
 });
 
@@ -159,7 +171,8 @@ app.post('/api/chat', chatLimiter, async (req, res) => {
 // SPA fallback
 app.get('*', (req, res) => {
   if (!req.path.startsWith('/api')) {
-    res.sendFile(path.join(__dirname, 'index.html'));
+    res.setHeader('Cache-Control', 'no-store');
+  res.sendFile(path.join(__dirname, 'index.html'));
   }
 });
 

@@ -32,6 +32,24 @@ document.addEventListener('DOMContentLoaded', () => {
   const chatInput = document.getElementById('chatInput');
   const topicSelect = document.getElementById('topicSelect');
 
+
+
+  // UX: enviar com Enter (Shift+Enter para nova linha) + auto-resize
+  if (chatInput) {
+    const resize = () => {
+      chatInput.style.height = 'auto';
+      chatInput.style.height = Math.min(chatInput.scrollHeight, 160) + 'px';
+    };
+    chatInput.addEventListener('input', resize);
+    resize();
+
+    chatInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        chatForm?.requestSubmit();
+      }
+    });
+  }
   // Modal consentimento
   const consentModal = document.getElementById('consentModal');
   const consentClose = document.getElementById('consentClose');
@@ -44,6 +62,8 @@ document.addEventListener('DOMContentLoaded', () => {
   // ===== Estado =====
   let messageHistory = []; // histórico local (sem system)
   let pendingQuestion = null;
+  let lastActiveElement = null;
+  let isModalOpen = false;
 
   // ===== Utilitários =====
   function hasConsent() {
@@ -52,20 +72,36 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function openConsentModal() {
     if (!consentModal) return;
+    lastActiveElement = document.activeElement;
+    isModalOpen = true;
+
     consentModal.hidden = false;
     document.body.classList.add('modal-open');
-    consentChecks.forEach((c) => { c.checked = false; });
+
+    // reset checks
+    consentChecks.forEach((c) => {
+      c.checked = false;
+    });
     updateConsentButton();
 
+    // focus first checkbox
     const first = consentModal.querySelector('input[data-consent-check]');
     first?.focus();
+
+    document.addEventListener('keydown', onModalKeydown, true);
   }
 
   function closeConsentModal() {
     if (!consentModal) return;
 
-    const focusTarget = document.getElementById('searchInput') || document.getElementById('chatInput');
-    focusTarget?.focus();
+    isModalOpen = false;
+    document.removeEventListener('keydown', onModalKeydown, true);
+
+    // mover foco para fora do modal ANTES de o esconder
+    const fallback = document.getElementById('searchInput') || document.getElementById('chatInput');
+    (lastActiveElement && typeof lastActiveElement.focus === 'function'
+      ? lastActiveElement
+      : fallback)?.focus();
 
     consentModal.hidden = true;
     document.body.classList.remove('modal-open');
@@ -74,11 +110,51 @@ document.addEventListener('DOMContentLoaded', () => {
   function updateConsentButton() {
     if (!consentAccept) return;
     const allChecked = consentChecks.length > 0 && consentChecks.every((c) => c.checked);
+    consentAccept.disabled = !allChecked;
     consentAccept.classList.toggle('consent-ready', allChecked);
     consentAccept.classList.toggle('consent-disabled', !allChecked);
   }
 
-  function detectPII(text) {
+  
+  function getFocusableInModal() {
+    if (!consentModal) return [];
+    const nodes = consentModal.querySelectorAll(
+      'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+    );
+    return Array.from(nodes).filter((el) => !el.disabled && el.offsetParent !== null);
+  }
+
+  function onModalKeydown(e) {
+    if (!isModalOpen) return;
+
+    // ESC fecha
+    if (e.key === 'Escape') {
+      e.preventDefault();
+      pendingQuestion = null;
+      closeConsentModal();
+      return;
+    }
+
+    // Trap de TAB no modal
+    if (e.key === 'Tab') {
+      const focusables = getFocusableInModal();
+      if (focusables.length === 0) return;
+
+      const first = focusables[0];
+      const last = focusables[focusables.length - 1];
+      const active = document.activeElement;
+
+      if (e.shiftKey && active === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && active === last) {
+        e.preventDefault();
+        first.focus();
+      }
+    }
+  }
+
+function detectPII(text) {
     const t = String(text || '');
     const email = /\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b/i;
     const phone = /\b(?:\+351\s*)?(?:9\d{2}|2\d{2})\s?\d{3}\s?\d{3}\b/;
@@ -113,11 +189,15 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   async function getLegalOpinion(outgoingMessages) {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 20000);
+
     const response = await fetch(`${API_BASE}/api/chat`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ messages: outgoingMessages }),
-    });
+      signal: controller.signal,
+    }).finally(() => clearTimeout(timeout));
 
     if (!response.ok) {
       const err = await response.json().catch(() => ({}));
@@ -177,10 +257,16 @@ document.addEventListener('DOMContentLoaded', () => {
       loadingBubble.classList.remove('loading');
       loadingBubble.textContent = reply;
     } catch (err) {
+      const msg = (err && err.name === 'AbortError')
+        ? 'O pedido demorou demasiado tempo. Tente novamente.'
+        : (err?.message || 'Não foi possível obter uma resposta automática.');
+
       loadingBubble.classList.remove('loading');
       loadingBubble.innerHTML =
-        'Não foi possível obter uma resposta automática. Por favor, contacte-nos diretamente: ' +
+        `⚠️ ${msg} <br><br>` +
+        'Se preferir, contacte-nos diretamente: ' +
         '<a href="mailto:correiacrespo-67709L@adv.oa.pt">correiacrespo-67709L@adv.oa.pt</a> ou telefone 914 376 903.';
+
       loadingBubble
         .querySelector('a')
         ?.addEventListener('click', (e) => e.stopPropagation());
