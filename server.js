@@ -1,5 +1,5 @@
 /**
- * Corporate-law landing (Correia Crespo) - Node/Express server
+ * Corporate-law landing (Correia & Crespo) - Node/Express server
  * - Serves static site
  * - Provides /api/chat with strict, limited "triage" responses
  */
@@ -47,7 +47,7 @@ const chatLimiter = rateLimit({
 });
 
 // Strict system prompt: corporate-law triage, no templates, no steps, no conversation
-const SYSTEM_PROMPT = `És um assistente de TRIAGEM JURÍDICA do escritório Correia Crespo (Portugal), focado em Direito Empresarial.
+const SYSTEM_PROMPT = `És um assistente de TRIAGEM JURÍDICA do escritório Correia & Crespo (Portugal), focado em Direito Empresarial.
 O utilizador procura orientação geral para decidir se deve marcar consulta.
 
 OBJETIVO:

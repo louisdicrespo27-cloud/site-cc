@@ -9,6 +9,7 @@
 
   /* Bordeaux (premium) */
   --accent: #7A0C1B;
+  --cc-accent: #7A0C1B;
   --accent-hover: #5F0914;
   --accent-active: #4A070F;
   --accent-soft: rgba(122, 12, 27, 0.25);
@@ -67,6 +68,17 @@ a:hover{ opacity: 0.95; }
 }
 
 /* ========== Brand ========== */
+.brand{
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+.brand-mark{
+  width: 28px;
+  height: 28px;
+  flex-shrink: 0;
+  color: var(--accent);
+}
 .brand-stack{
   display: inline-flex;
   flex-direction: column;
@@ -78,7 +90,7 @@ a:hover{ opacity: 0.95; }
   text-transform: uppercase;
 }
 .brand-stack .brand-sub{
-  font-size: 0.62em;
+  font-size: 0.55em;
   font-weight: 600;
   opacity: 0.75;
   letter-spacing: 0.16em;
@@ -571,6 +583,23 @@ a:hover{ opacity: 0.95; }
   justify-content:space-between;
   gap: 16px;
   flex-wrap: wrap;
+}
+.footer-brand{
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.footer-brand .brand-mark{
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+  color: var(--accent);
+}
+.footer-brand .footer-note{
+  flex-basis: 100%;
+  margin-left: 34px;
+  margin-top: 4px;
 }
 .footer-note{
   display:block;
