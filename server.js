@@ -19,6 +19,20 @@ const openai = process.env.OPENAI_API_KEY
 
 // Middleware
 app.use(express.json({ limit: '32kb' }));
+
+// Rotas explícitas para a página principal (antes do static)
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'index.html'));
+});
+app.get('/index.html', (req, res) => {
+  res.sendFile(path.join(__dirname, 'index.html'));
+});
+
+// Bloquear acesso a .env
+app.use((req, res, next) => {
+  if (req.path.includes('.env')) return res.status(404).end();
+  next();
+});
 app.use(express.static(path.join(__dirname)));
 
 // Rate-limit (anti abuso / controlo de custos)
