@@ -198,15 +198,27 @@ a:hover{ opacity: 0.95; }
   gap: 36px;
   align-items: center;
 }
-.badge{
-  display:inline-flex;
-  padding: 8px 12px;
+.hero-badge{
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  padding: 10px 14px;
   border-radius: 999px;
-  border: 1px solid rgba(255,255,255,0.10);
-  background: rgba(255,255,255,0.04);
-  color: rgba(255,255,255,0.80);
-  font-weight: 600;
-  font-size: 0.9rem;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.12);
+  backdrop-filter: blur(10px);
+  font-size: 0.95rem;
+  letter-spacing: 0.02em;
+  color: rgba(255,255,255,0.86);
+}
+.hero-badge .sep{
+  opacity: 0.45;
+}
+.hero-badge--two{
+  max-width: 720px;
+  justify-content: center;
+  text-align: center;
 }
 .hero h1{
   margin: 14px 0 10px;
