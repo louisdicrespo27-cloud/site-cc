@@ -69,14 +69,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function closeConsentModal() {
     if (!consentModal) return;
-    const toFocus = focusBeforeModal || searchInput || document.body;
-    if (toFocus && typeof toFocus.focus === 'function') {
+    const toFocus = focusBeforeModal || searchInput || document.querySelector('a, button');
+    if (toFocus && toFocus !== consentModal && typeof toFocus.focus === 'function') {
       toFocus.focus();
     }
-    consentModal.hidden = true;
-    consentModal.setAttribute('aria-hidden', 'true');
-    document.body.classList.remove('modal-open');
-    focusBeforeModal = null;
+    setTimeout(() => {
+      consentModal.hidden = true;
+      consentModal.setAttribute('aria-hidden', 'true');
+      document.body.classList.remove('modal-open');
+      focusBeforeModal = null;
+    }, 0);
   }
 
   function updateConsentButton() {
