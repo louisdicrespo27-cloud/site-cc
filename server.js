@@ -7,6 +7,7 @@ require('dotenv').config();
 const express = require('express');
 const path = require('path');
 const OpenAI = require('openai');
+const rateLimit = require('express-rate-limit');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -17,29 +18,79 @@ const openai = process.env.OPENAI_API_KEY
   : null;
 
 // Middleware
-app.use(express.json());
+app.use(express.json({ limit: '32kb' }));
 app.use(express.static(path.join(__dirname)));
 
-// Sistema de prompts para parecer jurídico limitado e generalizado
+// Rate-limit (anti abuso / controlo de custos)
+const chatLimiter = rateLimit({
+  windowMs: 5 * 60 * 1000, // 5 min
+  limit: 10, // 10 pedidos / 5 min / IP
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+
+// Sistema de prompts para orientação jurídica limitada e generalizada
 const SYSTEM_PROMPT = `Tu és um assistente jurídico do escritório Correia Crespo - Advogados, em Portugal.
-O teu papel é fornecer respostas LIMITADAS e GENERALIZADAS. Cada resposta DEVE seguir EXATAMENTE esta estrutura:
+O teu papel é fornecer respostas LIMITADAS e GENERALIZADAS (triagem/orientação geral).
 
-1. **Intervenção de advogado:** Indica, de forma generalizada, se a situação apresentada carece ou não da intervenção de um advogado (sim/não/talvez, com breve justificação genérica).
-
-2. **Direitos lesados:** Enumera, de forma GENERALIZADA, os possíveis direitos que possam estar em causa ou lesados, sem entrar em pormenores do caso concreto.
-
-3. **Soluções previstas:** Indica, de forma GENERALIZADA e SEM COMPROMISSO, as soluções ou vias jurídicas que, em termos gerais, possam estar previstas na lei (ex.: ação judicial, reclamação, mediação), sem garantir qualquer resultado.
+FORMATO OBRIGATÓRIO (3 blocos, 1–3 frases cada):
+1. **Intervenção de advogado:** (sim/não/talvez) com breve justificação genérica.
+2. **Direitos lesados:** possíveis direitos/interesses em causa (generalizado).
+3. **Soluções previstas:** vias típicas e gerais (judicial/extrajudicial), sem prometer resultados.
 
 REGRAS OBRIGATÓRIAS:
-- Mantém TODAS as respostas generalizadas e limitadas. Nunca dês aconselhamento específico nem conclusões definitivas.
-- Declara claramente que a informação é meramente orientativa e NÃO constitui parecer jurídico vinculativo.
-- Recomenda sempre uma consulta com advogado para análise do caso concreto.
+- Nunca dês aconselhamento específico, nem passos personalizados, nem conclusões definitivas.
+- Se faltarem dados essenciais, faz NO MÁXIMO 1 pergunta de clarificação (sem pedir dados identificativos).
+- Não peças, nem repitas, nem uses dados pessoais (nomes, moradas, NIF, emails, telefones, detalhes identificativos).
+- Inclui SEMPRE um aviso final: "Informação geral e não vinculativa; não constitui parecer jurídico. Para análise do caso concreto, marque consulta com advogado."
 - Responde em português de Portugal.
-- Sê conciso. Cada secção deve ter 1-3 frases no máximo.
-- Foca-te em direito português (Família, Imobiliário, RGPD, Insolvências, Processo Executivo).`;
+- Foca-te em direito português (Família, Imobiliário/Arrendamento, RGPD, Insolvências, Processo Executivo).`;
+
+// Limites de contexto enviados ao modelo
+const MAX_MESSAGES = 16; // ~8 interações (user+assistant)
+const MAX_CHARS_PER_MESSAGE = 1800;
+
+function truncateStr(s, max) {
+  if (!s) return '';
+  const t = String(s).trim();
+  return t.length > max ? t.slice(0, max) + '…' : t;
+}
+
+function sanitizeMessages(messages) {
+  const cleaned = [];
+  for (const m of messages) {
+    if (!m || typeof m !== 'object') continue;
+    const role = m.role;
+    if (role !== 'user' && role !== 'assistant') continue;
+    const content = truncateStr(m.content, MAX_CHARS_PER_MESSAGE);
+    if (!content) continue;
+    cleaned.push({ role, content });
+  }
+  // manter apenas as últimas mensagens
+  return cleaned.slice(-MAX_MESSAGES);
+}
+
+function looksLikePII(text) {
+  const t = String(text || '');
+  const email = /\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b/i;
+  const phone = /\b(?:\+351\s*)?(?:9\d{2}|2\d{2})\s?\d{3}\s?\d{3}\b/;
+  const nif = /\b\d{9}\b/; // heurístico
+  const iban = /\bPT\d{23}\b/i;
+  return email.test(t) || phone.test(t) || nif.test(t) || iban.test(t);
+}
+
+function ensureDisclaimer(text) {
+  const t = String(text || '').trim();
+  const has = /não constitui\s+(parecer|aconselhamento)|meramente\s+informativ|não\s+vinculativ/i.test(t);
+  if (has) return t;
+  return (
+    t +
+    '\n\n—\nℹ️ Informação geral e não vinculativa; não constitui parecer jurídico. Para análise do caso concreto, marque consulta com advogado.'
+  );
+}
 
 // API: Chat com IA
-app.post('/api/chat', async (req, res) => {
+app.post('/api/chat', chatLimiter, async (req, res) => {
   const { messages } = req.body;
 
   if (!openai) {
@@ -53,20 +104,35 @@ app.post('/api/chat', async (req, res) => {
     return res.status(400).json({ error: 'Mensagens em falta.' });
   }
 
+  const cleaned = sanitizeMessages(messages);
+  if (cleaned.length === 0) {
+    return res.status(400).json({ error: 'Mensagens inválidas.' });
+  }
+
+  // Bloqueio simples de dados pessoais (reduz risco RGPD e evita mandato implícito)
+  const anyPII = cleaned.some((m) => m.role === 'user' && looksLikePII(m.content));
+  if (anyPII) {
+    return res.status(400).json({
+      error:
+        'Por favor, remova dados pessoais identificativos (ex.: nomes, moradas, NIF, email, telefone) e reformule a questão de forma geral.',
+    });
+  }
+
   try {
     const completion = await openai.chat.completions.create({
       model: 'gpt-4o-mini',
-      messages: [{ role: 'system', content: SYSTEM_PROMPT }, ...messages],
+      messages: [{ role: 'system', content: SYSTEM_PROMPT }, ...cleaned],
       max_tokens: 1024,
-      temperature: 0.5,
+      temperature: 0.3,
     });
 
-    const reply = completion.choices[0]?.message?.content;
+    const replyRaw = completion.choices[0]?.message?.content;
 
-    if (!reply) {
+    if (!replyRaw) {
       return res.status(500).json({ error: 'Resposta vazia da IA.' });
     }
 
+    const reply = ensureDisclaimer(replyRaw);
     res.json({ reply });
   } catch (err) {
     console.error('Erro OpenAI:', err.message);

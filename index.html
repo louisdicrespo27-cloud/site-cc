@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Correia Crespo - Advogados. Coloque a sua questão jurídica e obtenha um parecer preliminar em segundos. Soluções à distância de um clique.">
+  <meta name="description" content="Correia Crespo - Advogados. Coloque a sua questão jurídica e obtenha orientação jurídica geral (triagem) em segundos. Informação limitada e não vinculativa.">
   <title>Correia Crespo | Advogados</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -11,7 +11,6 @@
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <!-- Navegação minimalista (estilo Google) -->
   <header class="header header-minimal">
     <nav class="nav container">
       <a href="#" class="logo">Correia Crespo</a>
@@ -28,15 +27,13 @@
     </nav>
   </header>
 
-  <!-- Homepage estilo Google -->
   <main id="inicio" class="homepage">
     <div class="homepage-inner">
       <div class="branding">
         <h1 class="brand-logo">Correia Crespo</h1>
-        <p class="brand-tagline">Advogados · Parecer jurídico com IA</p>
+        <p class="brand-tagline">Advogados · Orientação jurídica geral com IA</p>
       </div>
 
-      <!-- Barra de pesquisa = IA Jurídica -->
       <div class="search-section">
         <form class="search-form" id="searchForm">
           <div class="search-box">
@@ -48,20 +45,31 @@
               type="text" 
               id="searchInput" 
               class="search-input" 
-              placeholder="Coloque a sua questão jurídica aqui..."
+              placeholder="Descreva a sua situação (sem dados pessoais)..."
               autocomplete="off"
             />
-            <button type="submit" class="search-btn" aria-label="Obter parecer">
+            <button type="submit" class="search-btn" aria-label="Obter orientação geral">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <path d="M5 12h14M12 5l7 7-7 7"/>
               </svg>
             </button>
           </div>
         </form>
+        <div class="search-controls">
+          <label class="topic-label" for="topicSelect">Área</label>
+          <select id="topicSelect" class="topic-select" aria-label="Selecionar área jurídica">
+            <option>Sem categoria</option>
+            <option>Família</option>
+            <option>Arrendamento / Imobiliário</option>
+            <option>RGPD</option>
+            <option>Insolvência / Execução</option>
+            <option>Outra</option>
+          </select>
+          <span class="privacy-hint">⚠️ Não inclua dados pessoais (nomes, moradas, NIF, email, telefone).</span>
+        </div>
         <p class="search-hint">Ex: "O meu senhorio quer despejar-me. Quais são os meus direitos?" ou "Como funciona o divórcio em Portugal?"</p>
       </div>
 
-      <!-- Painel de chat (aparece após primeira questão) -->
       <div class="chat-panel" id="chatPanel" hidden>
         <div class="chat-messages" id="chatMessages"></div>
         <form class="chat-form" id="chatForm">
@@ -74,7 +82,7 @@
           <button type="submit" class="chat-send">Enviar</button>
         </form>
         <p class="disclaimer">
-          ℹ️ O parecer é meramente informativo. Para consultoria personalizada, contacte-nos em 
+          ℹ️ Informação geral e não vinculativa; não constitui parecer jurídico. Para análise do caso concreto, contacte-nos em 
           <a href="mailto:correiacrespo-67709L@adv.oa.pt">correiacrespo-67709L@adv.oa.pt</a>
         </p>
       </div>
@@ -88,13 +96,12 @@
     </div>
   </main>
 
-  <!-- Resto do site – layout e cores do Wix original -->
   <section class="consulta wix-section">
     <div class="container">
       <div class="consulta-grid">
         <div class="consulta-content">
           <h2>Consulta Jurídica</h2>
-          <p>Coloca as tuas questões numa consulta jurídica <strong>online</strong>, que terá lugar em menos de 24h. Protege os teus direitos ou faz progredir os teus projetos, tomando ações informadas e conscientes, assim como as suas vantagens e riscos.</p>
+          <p>Coloca as tuas questões numa consulta jurídica <strong>online</strong>. Protege os teus direitos ou faz progredir os teus projetos, tomando decisões informadas e conscientes, assim como as suas vantagens e riscos.</p>
           <a href="mailto:correiacrespo-67709L@adv.oa.pt?subject=Pedido%20de%20Consulta%20Jurídica" class="btn btn-primary">Agendar Consulta</a>
         </div>
         <div class="consulta-visual"></div>
@@ -212,6 +219,11 @@
       <div class="footer-content">
         <p class="footer-brand">Correia Crespo · Advogados</p>
         <p class="footer-copy">© 2035 por Correia Crespo. Orgulhosamente criado com profissionalismo.</p>
+        <div class="footer-legal">
+          <a href="privacidade.html">Política de Privacidade</a>
+          <span class="footer-sep">·</span>
+          <a href="termos.html">Termos de Utilização</a>
+        </div>
         <div class="footer-social">
           <a href="#" aria-label="LinkedIn">LinkedIn</a>
           <a href="#" aria-label="Facebook">Facebook</a>
@@ -221,6 +233,40 @@
       </div>
     </div>
   </footer>
+
+  <div class="modal-backdrop" id="consentModal" hidden aria-hidden="true" role="dialog" aria-modal="true">
+    <div class="modal" role="document">
+      <div class="modal-header">
+        <h3 class="modal-title">Antes de começar</h3>
+        <button class="modal-close" id="consentClose" aria-label="Fechar">×</button>
+      </div>
+      <p class="modal-text">
+        Este assistente fornece <strong>orientação jurídica geral</strong> (triagem) e tem limites.
+        Para proteger a sua privacidade e evitar erros, confirme o seguinte:
+      </p>
+      <div class="modal-checks">
+        <label class="check-row">
+          <input type="checkbox" data-consent-check />
+          <span>Não vou inserir dados pessoais identificativos (nomes, moradas, NIF, email, telefone, etc.).</span>
+        </label>
+        <label class="check-row">
+          <input type="checkbox" data-consent-check />
+          <span>Compreendo que a resposta é <strong>informação geral</strong> e <strong>não vinculativa</strong>.</span>
+        </label>
+        <label class="check-row">
+          <input type="checkbox" data-consent-check />
+          <span>Compreendo que isto <strong>não cria relação advogado‑cliente</strong> nem substitui consulta.</span>
+        </label>
+      </div>
+      <p class="modal-links">
+        Ao continuar, aceita os <a href="termos.html">Termos</a> e a <a href="privacidade.html">Política de Privacidade</a>.
+      </p>
+      <div class="modal-actions">
+        <button class="btn btn-secondary" type="button" id="consentCancel">Cancelar</button>
+        <button class="btn btn-primary" type="button" id="consentAccept" disabled>Continuar</button>
+      </div>
+    </div>
+  </div>
 
   <script src="script.js"></script>
 </body>

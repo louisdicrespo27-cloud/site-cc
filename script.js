@@ -1,8 +1,8 @@
 // Correia Crespo - Advogados
-// Homepage estilo Google + Assistente de IA para pareceres jurídicos
+// Homepage estilo Google + Assistente de IA para triagem/orientação jurídica (limitada)
 
 document.addEventListener('DOMContentLoaded', () => {
-  // Menu mobile
+  // ===== Menu mobile =====
   const navToggle = document.querySelector('.nav-toggle');
   const navMenu = document.querySelector('.nav-menu');
   if (navToggle && navMenu) {
@@ -18,41 +18,98 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // API base URL (usa o mesmo host em produção, ou localhost:3000 em dev)
+  // ===== Config =====
   const API_BASE = window.location.origin;
+  const MAX_HISTORY = 10; // mensagens (user+assistant) enviadas ao servidor
+  const CONSENT_KEY = 'cc_ai_consent_v1';
 
-  // Elementos
+  // ===== Elementos =====
   const searchForm = document.getElementById('searchForm');
   const searchInput = document.getElementById('searchInput');
   const chatPanel = document.getElementById('chatPanel');
   const chatMessages = document.getElementById('chatMessages');
   const chatForm = document.getElementById('chatForm');
   const chatInput = document.getElementById('chatInput');
+  const topicSelect = document.getElementById('topicSelect');
 
-  // Histórico de mensagens para contexto da IA
-  let messageHistory = [];
+  // Modal consentimento
+  const consentModal = document.getElementById('consentModal');
+  const consentClose = document.getElementById('consentClose');
+  const consentCancel = document.getElementById('consentCancel');
+  const consentAccept = document.getElementById('consentAccept');
+  const consentChecks = Array.from(
+    document.querySelectorAll('input[data-consent-check]')
+  );
 
-  // Adicionar mensagem ao chat
+  // ===== Estado =====
+  let messageHistory = []; // histórico local (sem system)
+  let pendingQuestion = null;
+
+  // ===== Utilitários =====
+  function hasConsent() {
+    return localStorage.getItem(CONSENT_KEY) === 'true';
+  }
+
+  function openConsentModal() {
+    if (!consentModal) return;
+    consentModal.hidden = false;
+    consentModal.setAttribute('aria-hidden', 'false');
+    document.body.classList.add('modal-open');
+    updateConsentButton();
+  }
+
+  function closeConsentModal() {
+    if (!consentModal) return;
+    consentModal.hidden = true;
+    consentModal.setAttribute('aria-hidden', 'true');
+    document.body.classList.remove('modal-open');
+  }
+
+  function updateConsentButton() {
+    if (!consentAccept) return;
+    const allChecked = consentChecks.every((c) => c.checked);
+    consentAccept.disabled = !allChecked;
+  }
+
+  function detectPII(text) {
+    const t = String(text || '');
+    const email = /\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b/i;
+    const phone = /\b(?:\+351\s*)?(?:9\d{2}|2\d{2})\s?\d{3}\s?\d{3}\b/;
+    const nif = /\b\d{9}\b/; // heurístico
+    const iban = /\bPT\d{23}\b/i;
+    return email.test(t) || phone.test(t) || nif.test(t) || iban.test(t);
+  }
+
+  function getTopicPrefix() {
+    const t = topicSelect?.value?.trim();
+    if (!t || t === 'Sem categoria') return '';
+    return `[Área: ${t}] `;
+  }
+
+  function getTrimmedHistory() {
+    return messageHistory.slice(-MAX_HISTORY);
+  }
+
+  // ===== UI Chat =====
   function addMessage(role, content, isLoading = false) {
     const div = document.createElement('div');
     div.className = `chat-msg ${role}`;
+
     const bubble = document.createElement('div');
     bubble.className = 'chat-msg-bubble' + (isLoading ? ' loading' : '');
     bubble.textContent = content;
+
     div.appendChild(bubble);
     chatMessages.appendChild(div);
     chatMessages.scrollTop = chatMessages.scrollHeight;
     return bubble;
   }
 
-  // Chamar API da IA
-  async function getLegalOpinion(question) {
+  async function getLegalOpinion(outgoingMessages) {
     const response = await fetch(`${API_BASE}/api/chat`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        messages: messageHistory.concat([{ role: 'user', content: question }]),
-      }),
+      body: JSON.stringify({ messages: outgoingMessages }),
     });
 
     if (!response.ok) {
@@ -64,59 +121,111 @@ document.addEventListener('DOMContentLoaded', () => {
     return data.reply;
   }
 
-  // Processar questão e mostrar resposta
   async function handleQuestion(question) {
-    question = question.trim();
-    if (!question) return;
+    const clean = String(question || '').trim();
+    if (!clean) return;
 
-    // Adicionar mensagem do utilizador
-    addMessage('user', question);
-    messageHistory.push({ role: 'user', content: question });
+    if (!hasConsent()) {
+      pendingQuestion = clean;
+      openConsentModal();
+      return;
+    }
 
-    // Mostrar loading
-    const loadingBubble = addMessage('assistant', 'A analisar a sua questão...', true);
+    if (detectPII(clean)) {
+      addMessage(
+        'assistant',
+        '⚠️ Por favor, remova dados pessoais identificativos (ex.: nomes, moradas, NIF, email, telefone) e reformule a questão de forma geral.'
+      );
+      return;
+    }
+
+    // Mostrar painel de chat
+    chatPanel.hidden = false;
+
+    // UI: mensagem do utilizador
+    addMessage('user', clean);
+
+    const loadingBubble = addMessage(
+      'assistant',
+      'A analisar a sua questão (orientação geral)…',
+      true
+    );
+
+    const prefixedQuestion = getTopicPrefix() + clean;
+    const outgoing = getTrimmedHistory().concat([
+      { role: 'user', content: prefixedQuestion },
+    ]);
 
     try {
-      const reply = await getLegalOpinion(question);
+      const reply = await getLegalOpinion(outgoing);
+
+      // Atualizar histórico local APÓS sucesso
+      messageHistory.push({ role: 'user', content: prefixedQuestion });
       messageHistory.push({ role: 'assistant', content: reply });
+
       loadingBubble.classList.remove('loading');
       loadingBubble.textContent = reply;
     } catch (err) {
       loadingBubble.classList.remove('loading');
-      loadingBubble.innerHTML = `Não foi possível obter um parecer automático. Por favor, contacte-nos diretamente: <a href="mailto:correiacrespo-67709L@adv.oa.pt">correiacrespo-67709L@adv.oa.pt</a> ou telefone 914 376 903.`;
-      loadingBubble.querySelector('a').addEventListener('click', (e) => e.stopPropagation());
+      loadingBubble.innerHTML =
+        'Não foi possível obter uma resposta automática. Por favor, contacte-nos diretamente: ' +
+        '<a href="mailto:correiacrespo-67709L@adv.oa.pt">correiacrespo-67709L@adv.oa.pt</a> ou telefone 914 376 903.';
+      loadingBubble
+        .querySelector('a')
+        ?.addEventListener('click', (e) => e.stopPropagation());
+      console.error(err);
     }
 
     chatMessages.scrollTop = chatMessages.scrollHeight;
   }
 
-  // Mostrar painel de chat e processar primeira questão
-  function showChatAndProcess(question) {
-    chatPanel.hidden = false;
-    searchInput.value = '';
-    handleQuestion(question);
-  }
-
-  // Formulário de pesquisa (barra principal)
+  // ===== Eventos =====
   if (searchForm && searchInput) {
     searchForm.addEventListener('submit', (e) => {
       e.preventDefault();
-      const question = searchInput.value.trim();
-      if (question) showChatAndProcess(question);
+      handleQuestion(searchInput.value);
+      searchInput.value = '';
     });
   }
 
-  // Formulário de chat (perguntas de seguimento)
   if (chatForm && chatInput) {
     chatForm.addEventListener('submit', (e) => {
       e.preventDefault();
-      const question = chatInput.value.trim();
-      if (question) {
-        chatInput.value = '';
-        handleQuestion(question);
-      }
+      handleQuestion(chatInput.value);
+      chatInput.value = '';
     });
   }
+
+  // Modal consentimento
+  consentChecks.forEach((c) => c.addEventListener('change', updateConsentButton));
+
+  consentClose?.addEventListener('click', () => {
+    pendingQuestion = null;
+    closeConsentModal();
+  });
+
+  consentCancel?.addEventListener('click', () => {
+    pendingQuestion = null;
+    closeConsentModal();
+  });
+
+  consentModal?.addEventListener('click', (e) => {
+    // clicar fora fecha
+    if (e.target === consentModal) {
+      pendingQuestion = null;
+      closeConsentModal();
+    }
+  });
+
+  consentAccept?.addEventListener('click', async () => {
+    localStorage.setItem(CONSENT_KEY, 'true');
+    closeConsentModal();
+    if (pendingQuestion) {
+      const q = pendingQuestion;
+      pendingQuestion = null;
+      await handleQuestion(q);
+    }
+  });
 
   // Newsletter
   const newsletterForm = document.querySelector('.contactos .newsletter-form');
