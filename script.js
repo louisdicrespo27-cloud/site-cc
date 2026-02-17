@@ -44,6 +44,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // ===== Estado =====
   let messageHistory = []; // histórico local (sem system)
   let pendingQuestion = null;
+  let focusBeforeModal = null;
 
   // ===== Utilitários =====
   function hasConsent() {
@@ -52,17 +53,28 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function openConsentModal() {
     if (!consentModal) return;
+    focusBeforeModal = document.activeElement;
     consentModal.hidden = false;
     consentModal.setAttribute('aria-hidden', 'false');
     document.body.classList.add('modal-open');
     updateConsentButton();
+    setTimeout(() => {
+      const firstCheck = consentChecks[0];
+      if (firstCheck) firstCheck.focus();
+      else consentClose?.focus();
+    }, 0);
   }
 
   function closeConsentModal() {
     if (!consentModal) return;
+    const toFocus = focusBeforeModal || searchInput || document.body;
+    if (toFocus && typeof toFocus.focus === 'function') {
+      toFocus.focus();
+    }
     consentModal.hidden = true;
     consentModal.setAttribute('aria-hidden', 'true');
     document.body.classList.remove('modal-open');
+    focusBeforeModal = null;
   }
 
   function updateConsentButton() {
