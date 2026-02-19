@@ -934,18 +934,20 @@ body.modal-open{ overflow:hidden; }
   background: var(--panel);
   box-shadow: 0 24px 80px rgba(10,10,12,0.2);
   transform: translateZ(0);
+  min-height: 420px;
 }
 
-.inspire-svg{
+.inspire-img{
   width: 100%;
-  height: auto;
+  height: 100%;
+  min-height: 360px;
+  object-fit: cover;
   display: block;
-  transform: scale(1.02);
   transition: transform 900ms cubic-bezier(.2,.8,.2,1);
 }
 
-.inspire-art:hover .inspire-svg{
-  transform: scale(1.05);
+.inspire-art:hover .inspire-img{
+  transform: scale(1.02);
 }
 
 @media (max-width: 960px){
