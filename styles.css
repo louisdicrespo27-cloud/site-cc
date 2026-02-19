@@ -271,10 +271,12 @@ a:hover{ opacity: 0.9; color: var(--accent-hover); }
   overflow: hidden;
   min-height: 420px;
 }
-.hero-svg{
+.hero-panel-img{
   width: 100%;
   height: 100%;
-  display:block;
+  min-height: 420px;
+  object-fit: cover;
+  display: block;
 }
 .hero-glow{
   position:absolute;
