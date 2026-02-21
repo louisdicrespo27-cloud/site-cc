@@ -21,6 +21,22 @@ const openai = process.env.OPENAI_API_KEY
 
 app.use(express.json({ limit: '32kb' }));
 
+// Redirects canónicos (produção): HTTP→HTTPS, www→não-www
+const canonicalHost = process.env.CANONICAL_HOST || 'correiaecrespo.pt';
+app.use((req, res, next) => {
+  if (process.env.NODE_ENV !== 'production') return next();
+  const proto = req.get('X-Forwarded-Proto');
+  const host = req.get('host') || '';
+  let target = null;
+  if (proto === 'http') {
+    target = 'https://' + (host.toLowerCase().startsWith('www.') ? canonicalHost : host) + req.url;
+  } else if (host.toLowerCase().startsWith('www.')) {
+    target = 'https://' + canonicalHost + req.url;
+  }
+  if (target) return res.redirect(301, target);
+  next();
+});
+
 // Security headers (mínimo útil)
 app.use((req, res, next) => {
   res.setHeader('X-Content-Type-Options', 'nosniff');
@@ -202,11 +218,11 @@ app.post('/api/chat', chatLimiter, async (req, res) => {
   }
 });
 
-// Fallback 200→index para rotas inexistentes (importante para SPA/SEO)
+// 404 real para rotas inexistentes (evitar Soft 404; Google recomenda 404 quando a página não existe)
 app.get('*', (req, res) => {
   if (req.path.startsWith('/api')) return res.status(404).json({ error: 'Not found' });
   res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate');
-  res.status(200).sendFile(path.join(__dirname, 'index.html'));
+  res.status(404).sendFile(path.join(__dirname, '404.html'));
 });
 
 app.listen(PORT, () => {
