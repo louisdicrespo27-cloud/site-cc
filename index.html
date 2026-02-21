@@ -35,6 +35,29 @@
   "@type": "LegalService",
   "name": "Correia & Crespo — Advogados",
   "url": "https://correiaecrespo.pt/",
+  "logo": "https://correiaecrespo.pt/assets/logo-mark.png",
+  "image": "https://correiaecrespo.pt/assets/og.jpg",
+  "telephone": "+351 914 376 903",
+  "email": "correiacrespo-67709L@adv.oa.pt",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "Urbanização do Vale Vite",
+    "addressLocality": "Lourinhã",
+    "postalCode": "2530-804",
+    "addressCountry": "PT"
+  },
+  "geo": {
+    "@type": "GeoCoordinates",
+    "latitude": 39.240264,
+    "longitude": -9.270885
+  },
+  "openingHoursSpecification": {
+    "@type": "OpeningHoursSpecification",
+    "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+    "opens": "09:00",
+    "closes": "18:00",
+    "description": "Atendimento por marcação"
+  },
   "areaServed": [
     { "@type": "AdministrativeArea", "name": "Torres Vedras" },
     { "@type": "AdministrativeArea", "name": "Lourinhã" },
@@ -54,9 +77,14 @@
     "Compliance",
     "Branqueamento de capitais",
     "MiCA"
-  ],
-  "telephone": "+351 914 376 903",
-  "email": "correiacrespo-67709L@adv.oa.pt"
+  ]
+}
+  </script>
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [{ "@type": "ListItem", "position": 1, "name": "Início", "item": "https://correiaecrespo.pt/" }]
 }
   </script>
 
@@ -89,7 +117,7 @@
 }
   </script>
 </head>
-<body>
+<body data-ga-id="">
   <a class="skip-link" href="#conteudo">Saltar para o conteúdo</a>
 
   <!-- Top bar -->
@@ -97,7 +125,7 @@
     <div class="container header-inner">
       <a class="brand" href="index.html#topo" aria-label="Início">
         <span class="brand-mark" aria-hidden="true">
-          <img src="assets/logo-mark.png" alt="" loading="lazy" decoding="async" />
+          <img src="assets/logo-mark.png" alt="" width="34" height="34" loading="lazy" decoding="async" />
         </span>
         <span class="brand-stack">
           <span class="brand-name">CORREIA & CRESPO</span>
@@ -189,7 +217,7 @@
         </div>
 
         <div class="hero-visual" aria-hidden="true">
-          <img src="/assets/hero-panel.png?v=3" alt="" class="hero-panel-img" loading="lazy" decoding="async" />
+          <img src="/assets/hero-panel.png?v=3" alt="" class="hero-panel-img" width="720" height="405" loading="lazy" decoding="async" />
         </div>
       </div>
       <div class="hero-glow" aria-hidden="true"></div>
@@ -362,7 +390,7 @@
         </div>
 
         <div class="inspire-art" aria-hidden="true">
-          <img src="assets/inspire-office.jpg" alt="Equipa a trabalhar em escritório com boa luz natural" class="inspire-img" loading="lazy" decoding="async" />
+          <img src="assets/inspire-office.jpg" alt="Equipa a trabalhar em escritório com boa luz natural" class="inspire-img" width="980" height="653" loading="lazy" decoding="async" />
         </div>
       </div>
     </section>
@@ -418,7 +446,7 @@
     <div class="container footer-inner">
       <div class="footer-brand">
         <span class="brand-mark" aria-hidden="true">
-          <img src="assets/logo-mark.png" alt="" loading="eager" decoding="async" />
+          <img src="assets/logo-mark.png" alt="" width="24" height="24" loading="eager" decoding="async" />
         </span>
         <span class="brand-stack">
           <span class="brand-name">CORREIA & CRESPO</span>
@@ -461,6 +489,10 @@
         <label class="check">
           <input type="checkbox" data-consent-check />
           Compreendo que não se estabelece relação advogado-cliente através desta triagem.
+        </label>
+        <label class="check">
+          <input type="checkbox" data-consent-analytics id="consentAnalytics" />
+          Aceito a utilização de cookies de análise (ex.: Google Analytics) para melhorar o site. Pode revogar na <a href="privacidade.html">Política de Privacidade</a>.
         </label>
       </div>
 

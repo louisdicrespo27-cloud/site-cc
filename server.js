@@ -39,8 +39,8 @@ app.use((req, res, next) => {
       "img-src 'self' data: https:",
       "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
       "font-src 'self' https://fonts.gstatic.com",
-      "script-src 'self' 'unsafe-inline'",
-      "connect-src 'self'",
+      "script-src 'self' 'unsafe-inline' https://www.googletagmanager.com",
+      "connect-src 'self' https://www.google-analytics.com https://www.googletagmanager.com",
       "frame-src https://www.google.com https://maps.google.com"
     ].join('; ')
   );
@@ -48,9 +48,9 @@ app.use((req, res, next) => {
   next();
 });
 
-// Avoid caching index during development
+// Raiz: no-store em produção para sempre servir HTML atualizado
 app.get('/', (req, res, next) => {
-  res.setHeader('Cache-Control', 'no-store');
+  res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate');
   next();
 });
 
@@ -202,11 +202,11 @@ app.post('/api/chat', chatLimiter, async (req, res) => {
   }
 });
 
-// SPA fallback
+// Fallback 200→index para rotas inexistentes (importante para SPA/SEO)
 app.get('*', (req, res) => {
-  if (!req.path.startsWith('/api')) {
-    res.sendFile(path.join(__dirname, 'index.html'));
-  }
+  if (req.path.startsWith('/api')) return res.status(404).json({ error: 'Not found' });
+  res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate');
+  res.status(200).sendFile(path.join(__dirname, 'index.html'));
 });
 
 app.listen(PORT, () => {

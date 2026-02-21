@@ -184,11 +184,16 @@ document.addEventListener('DOMContentLoaded', () => {
     if (e.target === consentModal) closeConsentModal();
   });
 
+  const ANALYTICS_CONSENT_KEY = 'cc_analytics_consent';
+  const consentAnalyticsEl = document.getElementById('consentAnalytics');
+
   consentAccept?.addEventListener('click', () => {
     if (consentAccept.disabled) return;
     localStorage.setItem(CONSENT_KEY, 'true');
+    if (consentAnalyticsEl?.checked) localStorage.setItem(ANALYTICS_CONSENT_KEY, 'true');
+    else localStorage.removeItem(ANALYTICS_CONSENT_KEY);
     closeConsentModal();
-    // after consent, if user already typed something, they can submit again (no auto-submit)
+    if (consentAnalyticsEl?.checked) loadAnalytics();
     searchInput?.focus();
   });
 
@@ -336,10 +341,16 @@ document.addEventListener('DOMContentLoaded', () => {
     return base + '?text=' + encodeURIComponent(msg);
   }
 
+  function trackConversion(action, label) {
+    if (typeof window.gtag !== 'function') return;
+    window.gtag('event', action, { event_category: 'engagement', event_label: label || '' });
+  }
+
   function attachWhatsApp(el) {
     if (!el) return;
     el.addEventListener('click', (e) => {
       e.preventDefault();
+      trackConversion('contact_whatsapp', 'whatsapp_click');
       window.open(buildWhatsAppUrl(), '_blank', 'noopener,noreferrer');
     });
   }
@@ -348,4 +359,27 @@ document.addEventListener('DOMContentLoaded', () => {
   attachWhatsApp(whatsappBtn);
   attachWhatsApp(whatsappBtn2);
   attachWhatsApp(whatsappContact);
+
+  // Contact links (email/tel) — conversões
+  document.querySelectorAll('a[href^="mailto:"], a[href^="tel:"]').forEach((a) => {
+    a.addEventListener('click', () => {
+      const type = a.getAttribute('href').startsWith('mailto:') ? 'email' : 'tel';
+      trackConversion('contact_click', type);
+    });
+  });
+
+  // ===== Analytics (RGPD: só carrega com consentimento) =====
+  function loadAnalytics() {
+    const gaId = document.body.getAttribute('data-ga-id')?.trim();
+    if (!gaId) return;
+    window.dataLayer = window.dataLayer || [];
+    window.gtag = function () { window.dataLayer.push(arguments); };
+    window.gtag('js', new Date());
+    window.gtag('config', gaId, { anonymize_ip: true });
+    const s = document.createElement('script');
+    s.async = true;
+    s.src = 'https://www.googletagmanager.com/gtag/js?id=' + gaId;
+    document.head.appendChild(s);
+  }
+  if (localStorage.getItem('cc_analytics_consent') === 'true') loadAnalytics();
 });

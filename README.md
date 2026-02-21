@@ -47,6 +47,21 @@ Aceda a **http://localhost:3000**. A barra de pesquisa processa questões juríd
 - `script.js` – Lógica do chat e integração com a API
 - `server.js` – Servidor Express com endpoint `/api/chat`
 
+## Analytics (RGPD)
+
+O site suporta Google Analytics 4 **apenas com consentimento**. Para ativar:
+
+1. No `index.html`, no `<body>`, defina o ID de medição: `data-ga-id="G-XXXXXXXXXX"`.
+2. O utilizador tem de aceitar a opção "Aceito a utilização de cookies de análise" no modal de consentimento.
+3. Conversões (cliques em WhatsApp, email, telefone) são enviadas como eventos quando o consentimento está ativo.
+
+## Otimização de imagens
+
+As imagens têm `width` e `height` para evitar layout shift. Para WebP/AVIF (melhor desempenho):
+
+- Gere versões WebP/AVIF das imagens em `assets/` (ex.: com [sharp](https://www.npmjs.com/package/sharp) ou ferramentas online).
+- Pode usar `<picture>` com `<source type="image/avif">` e `<source type="image/webp">` e `<img>` como fallback.
+
 ## Aviso
 
 O parecer da IA é meramente informativo e não substitui consultoria jurídica profissional. O site inclui avisos nesse sentido.
