@@ -401,29 +401,43 @@ document.addEventListener('touchend', (e) => {
   if (!input.contains(e.target)) blurChatInput();
 }, { passive: true });
 
-(function chatNoticeInit(){
-  const KEY = "cc_chat_notice_ack_v1";
+// --- Chat Notice: abrir só quando o utilizador interage com o input ---
+(function chatNoticeInit() {
+  const KEY = "cc_chat_notice_ack_v2";
   const notice = document.getElementById("chatNotice");
   const backdrop = document.getElementById("chatNoticeBackdrop");
   const okBtn = document.getElementById("chatNoticeOk");
+  const input = document.querySelector("#chatInput, input[type='text'], textarea");
 
-  if (!notice || !backdrop || !okBtn) return;
+  if (!notice || !backdrop || !okBtn || !input) return;
 
-  function openNotice(){
+  function openNotice() {
     backdrop.hidden = false;
     notice.hidden = false;
   }
 
-  function closeNotice(){
+  function closeNotice() {
     backdrop.hidden = true;
     notice.hidden = true;
     try { localStorage.setItem(KEY, "1"); } catch (_) {}
   }
 
-  let seen = false;
-  try { seen = localStorage.getItem(KEY) === "1"; } catch (_) {}
+  function alreadySeen() {
+    try { return localStorage.getItem(KEY) === "1"; } catch (_) { return false; }
+  }
 
-  if (!seen) openNotice();
+  // Só abre quando o utilizador clicar/tocar no campo, e só 1x
+  function maybeOpenOnFirstInteraction() {
+    if (alreadySeen()) return;
+    openNotice();
+    input.removeEventListener("focus", maybeOpenOnFirstInteraction);
+    input.removeEventListener("touchstart", maybeOpenOnFirstInteraction);
+    input.removeEventListener("click", maybeOpenOnFirstInteraction);
+  }
+
+  input.addEventListener("focus", maybeOpenOnFirstInteraction, { passive: true });
+  input.addEventListener("touchstart", maybeOpenOnFirstInteraction, { passive: true });
+  input.addEventListener("click", maybeOpenOnFirstInteraction, { passive: true });
 
   okBtn.addEventListener("click", closeNotice);
   backdrop.addEventListener("click", closeNotice);
