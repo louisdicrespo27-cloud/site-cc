@@ -402,23 +402,27 @@ document.addEventListener('touchend', (e) => {
 }, { passive: true });
 
 // --- Chat Notice: abrir só quando o utilizador interage com o input ---
-(function chatNoticeInit() {
+function initChatNotice() {
   const KEY = "cc_chat_notice_ack_v2";
   const notice = document.getElementById("chatNotice");
   const backdrop = document.getElementById("chatNoticeBackdrop");
   const okBtn = document.getElementById("chatNoticeOk");
-  const input = document.querySelector("#chatInput, input[type='text'], textarea");
+  const input = document.getElementById("searchInput") || document.querySelector("input[type='text'], textarea");
 
   if (!notice || !backdrop || !okBtn || !input) return;
 
   function openNotice() {
     backdrop.hidden = false;
     notice.hidden = false;
+    backdrop.style.display = "";
+    notice.style.display = "";
   }
 
   function closeNotice() {
     backdrop.hidden = true;
     notice.hidden = true;
+    backdrop.style.display = "none";
+    notice.style.display = "none";
     try { localStorage.setItem(KEY, "1"); } catch (_) {}
   }
 
@@ -426,7 +430,6 @@ document.addEventListener('touchend', (e) => {
     try { return localStorage.getItem(KEY) === "1"; } catch (_) { return false; }
   }
 
-  // Só abre quando o utilizador clicar/tocar no campo, e só 1x
   function maybeOpenOnFirstInteraction() {
     if (alreadySeen()) return;
     openNotice();
@@ -441,4 +444,10 @@ document.addEventListener('touchend', (e) => {
 
   okBtn.addEventListener("click", closeNotice);
   backdrop.addEventListener("click", closeNotice);
-})();
+}
+
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", initChatNotice);
+} else {
+  initChatNotice();
+}
