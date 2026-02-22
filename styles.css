@@ -20,9 +20,14 @@
 }
 
 *{ box-sizing: border-box; }
+html{
+  width: 100%;
+  overflow-x: hidden;
+}
 html, body{ height: 100%; }
 body{
   margin: 0;
+  width: 100%;
   font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
   color: var(--text);
   background:
@@ -31,12 +36,25 @@ body{
     var(--bg);
   overflow-x: hidden;
 }
+img, video{
+  max-width: 100%;
+  height: auto;
+}
+iframe{
+  max-width: 100%;
+}
+.map-embed iframe{
+  width: 100%;
+  height: 100%;
+  min-height: 200px;
+}
 
 a{ color: var(--accent); text-decoration: none; }
 a:hover{ opacity: 0.9; color: var(--accent-hover); }
 
 .container{
   width: min(var(--max), calc(100% - 40px));
+  max-width: 100%;
   margin: 0 auto;
 }
 
@@ -501,7 +519,9 @@ a:hover{ opacity: 0.9; color: var(--accent-hover); }
   flex-wrap: wrap;
 }
 .triage-form input{
-  flex: 1 1 420px;
+  flex: 1 1 0;
+  min-width: 0;
+  max-width: 100%;
   height: 52px;
   border-radius: 999px;
   border: 1px solid var(--stroke);
@@ -697,6 +717,12 @@ a:hover{ opacity: 0.9; color: var(--accent-hover); }
 @media (max-width: 768px) {
   .footer-right{ align-items: flex-start; }
   .footer-disclaimer{ text-align: left; max-width: none; }
+  .triage-form{ flex-direction: column; align-items: stretch; }
+  .triage-form input{ width: 100%; }
+  .cta-strip{ flex-direction: column; text-align: center; }
+  .cta-row{ flex-direction: column; }
+  .cta-row .btn{ width: 100%; max-width: 100%; justify-content: center; }
+  input, textarea, button{ max-width: 100%; }
 }
 
 /* ========== Modal ========== */
