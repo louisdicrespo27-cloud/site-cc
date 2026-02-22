@@ -400,3 +400,31 @@ document.addEventListener('touchend', (e) => {
   if (!input) return;
   if (!input.contains(e.target)) blurChatInput();
 }, { passive: true });
+
+(function chatNoticeInit(){
+  const KEY = "cc_chat_notice_ack_v1";
+  const notice = document.getElementById("chatNotice");
+  const backdrop = document.getElementById("chatNoticeBackdrop");
+  const okBtn = document.getElementById("chatNoticeOk");
+
+  if (!notice || !backdrop || !okBtn) return;
+
+  function openNotice(){
+    backdrop.hidden = false;
+    notice.hidden = false;
+  }
+
+  function closeNotice(){
+    backdrop.hidden = true;
+    notice.hidden = true;
+    try { localStorage.setItem(KEY, "1"); } catch (_) {}
+  }
+
+  let seen = false;
+  try { seen = localStorage.getItem(KEY) === "1"; } catch (_) {}
+
+  if (!seen) openNotice();
+
+  okBtn.addEventListener("click", closeNotice);
+  backdrop.addEventListener("click", closeNotice);
+})();

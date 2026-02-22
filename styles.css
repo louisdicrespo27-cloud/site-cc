@@ -1021,3 +1021,50 @@ body.modal-open{ overflow:hidden; }
 input, textarea, select {
   font-size: 16px;
 }
+
+.chat-notice-backdrop{
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.45);
+  z-index: 9998;
+}
+
+.chat-notice{
+  position: fixed;
+  left: 50%;
+  bottom: 16px;
+  transform: translateX(-50%);
+  width: min(560px, calc(100vw - 24px));
+  background: #fff;
+  border: 1px solid rgba(0,0,0,0.15);
+  border-radius: 14px;
+  padding: 14px 14px 12px;
+  z-index: 9999;
+  box-shadow: 0 12px 30px rgba(0,0,0,0.22);
+}
+
+.chat-notice h3{
+  margin: 0 0 8px;
+  font-size: 16px;
+}
+
+.chat-notice ul{
+  margin: 0 0 12px;
+  padding-left: 18px;
+  font-size: 14px;
+  line-height: 1.35;
+}
+
+.chat-notice-actions{
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+#chatNoticeOk{
+  padding: 10px 12px;
+  border-radius: 12px;
+  border: 1px solid rgba(0,0,0,0.15);
+  background: #fff;
+  cursor: pointer;
+}
