@@ -49,6 +49,11 @@ iframe{
   min-height: 200px;
 }
 
+/* Evita o zoom automático no iPhone ao focar inputs (font-size < 16px dispara zoom) */
+input, textarea, select{
+  font-size: 16px;
+}
+
 a{ color: var(--accent); text-decoration: none; }
 a:hover{ opacity: 0.9; color: var(--accent-hover); }
 
@@ -723,6 +728,13 @@ a:hover{ opacity: 0.9; color: var(--accent-hover); }
   .cta-row{ flex-direction: column; }
   .cta-row .btn{ width: 100%; max-width: 100%; justify-content: center; }
   input, textarea, button{ max-width: 100%; }
+  /* Evitar position: fixed no chat em mobile (teclado) */
+  .chat-panel, .triage{ position: static; }
+  /* Safari: transform em pais do input causa comportamentos estranhos com foco/teclado */
+  .landing, .landing::before, .triage, .chat-panel, .hero, .inspire-art{ transform: none !important; }
+  .inspire-art:hover .inspire-img{ transform: none !important; }
+  /* Altura dinâmica com teclado (evita saltos no iPhone) */
+  .section.landing{ min-height: 100dvh; }
 }
 
 /* ========== Modal ========== */
