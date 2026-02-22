@@ -326,6 +326,7 @@ document.addEventListener('DOMContentLoaded', () => {
     e.preventDefault();
     handleSubmit(searchInput?.value);
     if (searchInput) searchInput.value = '';
+    blurChatInput();
   });
 
   // ===== WhatsApp links =====
@@ -383,3 +384,19 @@ document.addEventListener('DOMContentLoaded', () => {
   }
   if (localStorage.getItem('cc_analytics_consent') === 'true') loadAnalytics();
 });
+
+// --- Mobile fix: desfazer zoom ao terminar/enviar ---
+function blurChatInput() {
+  const el = document.querySelector('#chatInput, input[type="text"], textarea');
+  if (el) el.blur();
+  if (document.activeElement && typeof document.activeElement.blur === 'function') {
+    document.activeElement.blur();
+  }
+}
+
+// desfoca quando o utilizador toca fora do input (ajuda a "voltar ao normal")
+document.addEventListener('touchend', (e) => {
+  const input = document.querySelector('#chatInput, input[type="text"], textarea');
+  if (!input) return;
+  if (!input.contains(e.target)) blurChatInput();
+}, { passive: true });

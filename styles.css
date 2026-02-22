@@ -1016,3 +1016,8 @@ body.modal-open{ overflow:hidden; }
     order: -1;
   }
 }
+
+/* Mobile: evita zoom estranho ao focar o campo */
+input, textarea, select {
+  font-size: 16px;
+}
