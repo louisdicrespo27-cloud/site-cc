@@ -30,12 +30,18 @@ jobs:
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
           path: '.'
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
 
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
