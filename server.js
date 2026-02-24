@@ -231,3 +231,4 @@ app.listen(PORT, () => {
     console.log('  AVISO: OPENAI_API_KEY não definida. O chat não funcionará.\n');
   }
 });
+
