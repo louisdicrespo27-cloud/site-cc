@@ -65,7 +65,7 @@ As imagens têm `width` e `height` para evitar layout shift. Para WebP/AVIF (mel
 ## Produção (SEO e canónicos)
 
 - **404 real:** Rotas inexistentes devolvem HTTP 404 e a página `404.html` (evita Soft 404 para o Google).
-- **Redirects canónicos:** Com `NODE_ENV=production`, o servidor redireciona HTTP→HTTPS e www→não-www (301). Defina `CANONICAL_HOST=correiaecrespo.pt` se usar outro domínio.
+- **Redirects canónicos:** Com `NODE_ENV=production`, o servidor redireciona HTTP→HTTPS e www→não-www (301). Defina `CANONICAL_HOST=www.correiacrespo-advogados.pt` se usar outro domínio.
 - **llms.txt:** O ficheiro `/llms.txt` lista as páginas principais e dados de contacto para assistentes/LLMs.
 
 ## Aviso

@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://correiaecrespo.pt/sitemap.xml
+Sitemap: https://www.correiacrespo-advogados.pt/sitemap.xml

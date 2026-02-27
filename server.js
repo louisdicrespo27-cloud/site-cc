@@ -22,7 +22,7 @@ const openai = process.env.OPENAI_API_KEY
 app.use(express.json({ limit: '32kb' }));
 
 // Redirects canónicos (produção): HTTP→HTTPS, www→não-www
-const canonicalHost = process.env.CANONICAL_HOST || 'correiaecrespo.pt';
+const canonicalHost = process.env.CANONICAL_HOST || 'www.correiacrespo-advogados.pt';
 app.use((req, res, next) => {
   if (process.env.NODE_ENV !== 'production') return next();
   const proto = req.get('X-Forwarded-Proto');
