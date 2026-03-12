@@ -193,6 +193,19 @@
         <section id="chatPanel" class="chat-panel" hidden aria-label="Resposta">
           <div id="chatMessages" class="chat-messages" aria-live="polite"></div>
 
+          <form class="chat-input" id="chatForm" autocomplete="off">
+            <label class="sr-only" for="chatInput">Continuar a conversa</label>
+            <input
+              id="chatInput"
+              name="qChat"
+              type="text"
+              autocomplete="off"
+              spellcheck="true"
+              placeholder="Escreva aqui para continuar a conversa…"
+            />
+            <button class="btn primary" type="submit">Enviar</button>
+          </form>
+
           <div class="chat-cta">
             <a class="btn primary" href="agendar-consulta.html">Marcar consulta</a>
             <a class="btn secondary" id="whatsappBtn" href="#" rel="noopener">Enviar WhatsApp</a>

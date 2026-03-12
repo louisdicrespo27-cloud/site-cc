@@ -119,6 +119,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const searchInput = document.getElementById('searchInput');
   const chatPanel = document.getElementById('chatPanel');
   const chatMessages = document.getElementById('chatMessages');
+  const chatForm = document.getElementById('chatForm');
+  const chatInput = document.getElementById('chatInput');
 
   const whatsappHeader = document.getElementById('whatsappHeader');
   const whatsappBtn = document.getElementById('whatsappBtn');
@@ -231,19 +233,29 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function lockInput(message) {
-    if (!searchInput) return;
-    searchInput.disabled = true;
-    searchInput.value = '';
-    searchInput.placeholder = message || 'Para continuar, marque consulta.';
+    if (searchInput) {
+      searchInput.disabled = true;
+      searchInput.value = '';
+      searchInput.placeholder = message || 'Para continuar, marque consulta.';
+    }
+    if (chatInput) {
+      chatInput.disabled = true;
+      chatInput.value = '';
+      chatInput.placeholder = message || 'Para continuar, marque consulta.';
+    }
   }
 
   function unlockInput(message) {
-    if (!searchInput) return;
-    searchInput.disabled = false;
-    searchInput.placeholder = message || 'Descreva a questão (sem dados pessoais)…';
-    searchInput.focus();
+    const target =
+      chatPanel && !chatPanel.hidden && chatInput
+        ? chatInput
+        : searchInput;
+    if (!target) return;
+    target.disabled = false;
+    target.placeholder = message || 'Descreva a questão (sem dados pessoais)…';
+    target.focus();
     try {
-      searchInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      target.scrollIntoView({ behavior: 'smooth', block: 'center' });
     } catch (_) {
       // scrollIntoView not critical; ignore errors
     }
@@ -403,6 +415,13 @@ document.addEventListener('DOMContentLoaded', () => {
     e.preventDefault();
     handleSubmit(searchInput?.value);
     if (searchInput) searchInput.value = '';
+    blurChatInput();
+  });
+
+  chatForm?.addEventListener('submit', (e) => {
+    e.preventDefault();
+    handleSubmit(chatInput?.value);
+    if (chatInput) chatInput.value = '';
     blurChatInput();
   });
 
