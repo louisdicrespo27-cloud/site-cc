@@ -242,6 +242,11 @@ document.addEventListener('DOMContentLoaded', () => {
     searchInput.disabled = false;
     searchInput.placeholder = message || 'Descreva a questão (sem dados pessoais)…';
     searchInput.focus();
+    try {
+      searchInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    } catch (_) {
+      // scrollIntoView not critical; ignore errors
+    }
   }
 
   async function getReply(messages) {
@@ -291,7 +296,7 @@ document.addEventListener('DOMContentLoaded', () => {
         'Partilha de bens e eventual pensão de alimentos.',
         'Proteção do interesse superior da criança e segurança jurídica.'
       );
-    } else if (q.includes('insolven') || q.includes('dívida') || q.includes('recuperação de crédito')) {
+    } else if (q.includes('insolven') || q.includes('dívida') || q.includes('recuperação de crédito') || q.includes('injunç')) {
       risco = 'Sim — situações de incumprimento podem exigir uma estratégia jurídica cuidada.';
       bullets.push(
         'Verificação de títulos, prazos e meios de cobrança.',
@@ -299,11 +304,20 @@ document.addEventListener('DOMContentLoaded', () => {
         'Possibilidade de planos de pagamento, injunções ou ações executivas.'
       );
     } else {
-      bullets.push(
-        'Enquadrar a questão na área de direito aplicável.',
-        'Perceber quais os documentos relevantes e quais os riscos.',
-        'Avaliar se é necessário atuar de imediato para não perder direitos.'
-      );
+      // Pergunta não parece ter ligação clara ao direito: não inventar problemas
+      const disclaimer =
+        'Informação geral e não vinculativa; não constitui parecer jurídico. Para análise do caso concreto, marque consulta.';
+
+      return [
+        '**Isto pode exigir advogado?** Pela forma como a pergunta está colocada, não parece descrever uma questão jurídica.',
+        '**O que pode estar em causa:**',
+        '- Se houver um contrato, um prejuízo concreto, uma dívida ou um processo associado, então já pode existir relevância jurídica.',
+        '- Caso contrário, trata-se apenas de uma situação de vida corrente, sem enquadramento legal óbvio.',
+        '',
+        'Se houver algum elemento jurídico (contrato assinado, carta de tribunal, injunção, dívida, conflito com entidade pública ou empresa), descreva isso de forma geral, sem dados pessoais.',
+        '',
+        `—\nℹ️ ${disclaimer}`,
+      ].join('\n');
     }
 
     const disclaimer =

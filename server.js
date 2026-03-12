@@ -167,6 +167,38 @@ function enforceNoTemplates(text) {
   return t;
 }
 
+function looksClearlyNonLegal(messages) {
+  const LEGAL_KEYWORDS = [
+    'contrato',
+    'cláusula',
+    'processo',
+    'tribunal',
+    'audiencia',
+    'injunç',
+    'divórcio',
+    'herança',
+    'dívida',
+    'penhora',
+    'arrendamento',
+    'senhorio',
+    'inquilino',
+    'responsabilidades parentais',
+    'guarda',
+    'empresa',
+    'socied',
+    'quotas',
+    'ações',
+    'insolven',
+  ];
+
+  const text = messages
+    .filter((m) => m.role === 'user')
+    .map((m) => String(m.content || '').toLowerCase())
+    .join(' ');
+
+  return !LEGAL_KEYWORDS.some((kw) => text.includes(kw));
+}
+
 // Chat endpoint
 app.post('/api/chat', chatLimiter, async (req, res) => {
   if (!openai) {
@@ -183,6 +215,19 @@ app.post('/api/chat', chatLimiter, async (req, res) => {
   const cleaned = sanitizeMessages(messages);
   if (cleaned.length === 0) {
     return res.status(400).json({ error: 'Mensagens inválidas.' });
+  }
+
+  // Se o texto não parece descrever um problema jurídico, não inventar questões legais
+  if (looksClearlyNonLegal(cleaned)) {
+    return res.json({
+      reply:
+        '**Isto pode exigir advogado?** Pela forma como a questão está colocada, não parece descrever uma situação jurídica.\n' +
+        '**O que pode estar em causa:**\n' +
+        '- Se não há contrato, prejuízo relevante, dívida, processo, conflito com entidade pública ou empresa, em princípio não há aqui um enquadramento legal óbvio.\n' +
+        '- Se existir algum desses elementos (por exemplo: contrato assinado, carta de tribunal, injunção, dívida, litígio com fornecedor ou cliente), então já pode haver relevância jurídica.\n\n' +
+        'Se houver algum desses pontos, descreva isso de forma geral, sem dados pessoais (sem nomes, moradas, NIF, emails ou telefones).\n\n' +
+        '—\nℹ️ Informação geral e não vinculativa; não constitui parecer jurídico. Para análise do caso concreto, marque consulta.',
+    });
   }
 
   const anyPII = cleaned.some((m) => m.role === 'user' && looksLikePII(m.content));
