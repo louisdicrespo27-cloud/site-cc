@@ -80,33 +80,28 @@ const chatLimiter = rateLimit({
   legacyHeaders: false,
 });
 
-// System prompt: corporate-law triage, com explicação clara e alguma conversa limitada
-const SYSTEM_PROMPT = `És um assistente de TRIAGEM JURÍDICA do escritório Correia & Crespo (Portugal), com foco em Direito Empresarial, societário, contratos, insolvências e matérias de família ligadas à atividade económica.
-O utilizador procura orientação geral para perceber melhor a sua situação e decidir se deve marcar consulta.
+// System prompt: explicação jurídica clara para leigos, com limites deontológicos
+const SYSTEM_PROMPT = `És um advogado virtual do escritório Correia & Crespo (Portugal).
+Responde SEMPRE em português de Portugal, de forma simples, clara e objetiva, como se estivesses a explicar a situação a alguém leigo em direito.
 
-OBJETIVO:
-- Explicar, em linguagem simples e clara, o enquadramento jurídico geral da situação descrita.
-- Identificar os principais riscos e pontos de atenção.
-- Sugerir, de forma sintética, opções possíveis e próximos passos.
-- Incentivar marcação de consulta para análise documental e definição da estratégia concreta.
+OBJETIVO
+- Ajudar o utilizador a perceber melhor a situação jurídica que descreve.
+- Explicar, em linguagem corrente, o que está em causa em termos gerais e quais os principais riscos.
+- Indicar, de forma sintética, opções ou caminhos possíveis (por exemplo: negociar, pedir esclarecimentos, ponderar ação judicial, etc.).
+- Incentivar a marcação de consulta para análise concreta de documentos e prazos.
 
-FORMATO RECOMENDADO (não é obrigatório, mas preferível):
-1) **Isto pode exigir advogado?** (sim/talvez) – 1 frase.
-2) **O que está em causa (de forma geral)** – 2–4 bullets, explicando a situação em termos acessíveis.
-3) **Opções possíveis / caminhos usuais** – 2–4 bullets, com soluções em termos gerais (sem minutas nem instruções detalhadas).
-4) **Próximo passo recomendado** – 1 frase a sugerir consulta para analisar documentos e prazos.
+CONVERSA
+- Podes conversar livremente dentro do tema jurídico apresentado.
+- Podes fazer perguntas de clarificação sempre que forem úteis para perceber melhor o caso.
+- Mantém as respostas focadas no problema trazido pelo utilizador.
 
-CONVERSA:
-- Podes fazer até **2 perguntas de clarificação**, se forem mesmo necessárias para enquadrar melhor a situação.
-- As perguntas devem ser curtas, objetivas e em linguagem simples.
-- Depois de obteres as respostas, apresenta uma síntese clara e os caminhos possíveis.
-
-REGRAS ABSOLUTAS:
-- NÃO redigir minutas/modelos/cartas/requerimentos.
-- NÃO fornecer listas de passos operacionais detalhados (tutoriais); foca-te em opções e decisões a considerar.
-- NÃO pedir dados pessoais (nome, morada, NIF, email, telefone).
-- Responder SEMPRE em português de Portugal.
-- Incluir SEMPRE no final: "Informação geral e não vinculativa; não constitui parecer jurídico. Para análise do caso concreto, marque consulta."`;
+REGRAS DEONTOLOGIA / LIMITES
+- NÃO peças nem utilizes dados pessoais identificáveis: nomes próprios, moradas completas, NIF, emails, telefones, números de processo, IBAN, etc.
+- NÃO redijas minutas/modelos completos de contratos, cartas, petições ou requerimentos.
+- Evita dar instruções passo-a-passo detalhadas como um "manual". Em vez disso, descreve opções e riscos em termos gerais.
+- Quando usares termos jurídicos técnicos (por exemplo "responsabilidade civil", "insolvência", "injunção"), explica-os em linguagem simples logo a seguir.
+- No fim de cada resposta inclui SEMPRE a frase:
+"Informação geral e não vinculativa; não constitui parecer jurídico. Para análise do caso concreto, marque consulta."`;
 
 const MAX_MESSAGES = 6; // keep context minimal
 const MAX_CHARS_PER_MESSAGE = 900;
@@ -149,56 +144,6 @@ function ensureDisclaimer(text) {
   );
 }
 
-function enforceNoTemplates(text) {
-  const t = String(text || '');
-  const banned = /(minuta|modelo de|template|carta|requerimento|peti[cç][aã]o|cl[áa]usula|redija|copie e cole)/i;
-  // Bloqueia apenas instruções em formato de "manual de passos"
-  const steps = /(passo\s*\d+|1\)|2\)|3\)|4\)|primeiro\s+passo|segundo\s+passo|terceiro\s+passo)/i;
-  if (banned.test(t) || steps.test(t)) {
-    return (
-      `**Isto pode exigir advogado?** Talvez – depende dos factos e documentos.\n` +
-      `**O que pode estar em causa (muito geral):**\n` +
-      `- Enquadramento contratual/societário a determinar.\n` +
-      `- Risco e obrigações a validar em documentos.\n` +
-      `- Eventual impacto em registos e compliance.\n` +
-      `**Próximo passo recomendado:** Marcar consulta para avaliação do caso concreto.`
-    );
-  }
-  return t;
-}
-
-function looksClearlyNonLegal(messages) {
-  const LEGAL_KEYWORDS = [
-    'contrato',
-    'cláusula',
-    'processo',
-    'tribunal',
-    'audiencia',
-    'injunç',
-    'divórcio',
-    'herança',
-    'dívida',
-    'penhora',
-    'arrendamento',
-    'senhorio',
-    'inquilino',
-    'responsabilidades parentais',
-    'guarda',
-    'empresa',
-    'socied',
-    'quotas',
-    'ações',
-    'insolven',
-  ];
-
-  const text = messages
-    .filter((m) => m.role === 'user')
-    .map((m) => String(m.content || '').toLowerCase())
-    .join(' ');
-
-  return !LEGAL_KEYWORDS.some((kw) => text.includes(kw));
-}
-
 // Chat endpoint
 app.post('/api/chat', chatLimiter, async (req, res) => {
   if (!openai) {
@@ -217,19 +162,6 @@ app.post('/api/chat', chatLimiter, async (req, res) => {
     return res.status(400).json({ error: 'Mensagens inválidas.' });
   }
 
-  // Se o texto não parece descrever um problema jurídico, não inventar questões legais
-  if (looksClearlyNonLegal(cleaned)) {
-    return res.json({
-      reply:
-        '**Isto pode exigir advogado?** Pela forma como a questão está colocada, não parece descrever uma situação jurídica.\n' +
-        '**O que pode estar em causa:**\n' +
-        '- Se não há contrato, prejuízo relevante, dívida, processo, conflito com entidade pública ou empresa, em princípio não há aqui um enquadramento legal óbvio.\n' +
-        '- Se existir algum desses elementos (por exemplo: contrato assinado, carta de tribunal, injunção, dívida, litígio com fornecedor ou cliente), então já pode haver relevância jurídica.\n\n' +
-        'Se houver algum desses pontos, descreva isso de forma geral, sem dados pessoais (sem nomes, moradas, NIF, emails ou telefones).\n\n' +
-        '—\nℹ️ Informação geral e não vinculativa; não constitui parecer jurídico. Para análise do caso concreto, marque consulta.',
-    });
-  }
-
   const anyPII = cleaned.some((m) => m.role === 'user' && looksLikePII(m.content));
   if (anyPII) {
     return res.status(400).json({
@@ -245,13 +177,10 @@ app.post('/api/chat', chatLimiter, async (req, res) => {
       temperature: 0.2,
     });
 
-    const replyRaw = completion.choices[0]?.message?.content;
-    if (!replyRaw) return res.status(500).json({ error: 'Resposta vazia da IA.' });
+    const replyRaw = completion.choices[0]?.message?.content || '';
+    if (!replyRaw.trim()) return res.status(500).json({ error: 'Resposta vazia da IA.' });
 
     let reply = ensureDisclaimer(replyRaw);
-    reply = enforceNoTemplates(reply);
-    reply = ensureDisclaimer(reply);
-
     res.json({ reply });
   } catch (err) {
     const msg = err?.message || 'Erro ao processar o pedido.';

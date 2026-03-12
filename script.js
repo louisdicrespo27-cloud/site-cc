@@ -139,7 +139,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const WHATSAPP_NUMBER = '351914376903';
 
   // Flow control: pequena conversa com limite de interações
-  const MAX_TURNS = 6; // número máximo de mensagens do utilizador por sessão
+  const MAX_TURNS = 5; // número máximo de mensagens do utilizador por sessão
   let turnCount = 0;
   let conversation = []; // { role: 'user' | 'assistant', content: string }
   let lastUserQuestion = '';
