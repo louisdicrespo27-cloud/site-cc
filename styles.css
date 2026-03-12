@@ -201,6 +201,11 @@ a:hover{ color: var(--accent-hover); }
   opacity: 0.6;
 }
 
+/* Badge fixa de atendimento em mobile (logo abaixo do cabeçalho) */
+.header-appointment-mobile{
+  display: none;
+}
+
 .nav-toggle{
   display: none;
   width: 48px;
@@ -1387,6 +1392,19 @@ body.modal-open{ overflow: hidden; }
     width: 100%;
   }
   .header-by-appointment::before{ content: none; }
+
+  /* Mostrar aviso de atendimento fixo logo sob o header em mobile */
+  .header-appointment-mobile{
+    display: block;
+    padding: 8px 16px 10px;
+    font-size: 0.85rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    text-align: center;
+    color: var(--muted);
+    background: rgba(250, 248, 246, 0.96);
+    border-bottom: 1px solid var(--stroke);
+  }
 }
 
 /* ========== Mobile — prioridade máxima (hiper apelativo) ========== */
