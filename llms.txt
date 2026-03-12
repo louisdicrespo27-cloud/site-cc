@@ -20,6 +20,15 @@ Escritório de advogados em Portugal, focado em Direito Empresarial e Societári
 - MiCA e Criptoativos: https://www.correiacrespo-advogados.pt/mica-criptoativos.html
 - Honorários: https://www.correiacrespo-advogados.pt/honorarios.html
 
+## Artigos jurídicos (linguagem simples)
+
+- Contratos de prestação de serviços: https://www.correiacrespo-advogados.pt/artigos/contratos-prestacao-servicos.html
+- Evitar litígios entre sócios: https://www.correiacrespo-advogados.pt/artigos/evitar-litigios-socios.html
+- Injunção e recuperação de dívida: https://www.correiacrespo-advogados.pt/artigos/injuncao-recuperar-divida.html
+- Divórcio em Portugal: https://www.correiacrespo-advogados.pt/artigos/divorcio-portugal-guia-simples.html
+- Regulação das responsabilidades parentais: https://www.correiacrespo-advogados.pt/artigos/regulacao-responsabilidades-parentais.html
+- Empresa e obrigações AML: https://www.correiacrespo-advogados.pt/artigos/empresa-precisa-aml-guia-simples.html
+
 ## Informação institucional
 
 - Termos e Condições: https://www.correiacrespo-advogados.pt/termos.html
