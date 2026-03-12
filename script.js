@@ -137,8 +137,10 @@ document.addEventListener('DOMContentLoaded', () => {
   const WHATSAPP_NUMBER = '351914376903';
 
   // Flow control:
-  // initial -> awaiting_clarification -> done
+  // initial -> awaiting_clarification, com limite de interações
   let stage = 'initial';
+  const MAX_TURNS = 5;
+  let turnCount = 0;
   let firstQuestion = '';
   let lastUserQuestion = '';
 
@@ -339,8 +341,8 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
 
-    // Do not allow conversation beyond one clarifying turn
-    if (stage === 'done') {
+    // Limite de trocas para manter a triagem curta
+    if (turnCount >= MAX_TURNS) {
       chatPanel.hidden = false;
       addMessage('assistant', 'Para continuar, é necessária consulta com advogado. Clique em “Marcar consulta” ou envie WhatsApp.');
       lockInput('Para continuar, marque consulta.');
@@ -358,8 +360,12 @@ document.addEventListener('DOMContentLoaded', () => {
       const reply = buildStaticTriageReply(clean);
       loading.classList.remove('loading');
       loading.textContent = reply;
-      stage = 'done';
-      lockInput('Para continuar, marque consulta.');
+      turnCount += 1;
+      if (turnCount >= MAX_TURNS) {
+        lockInput('Para continuar, marque consulta.');
+      } else {
+        unlockInput('Pode colocar outra questão geral (sem dados pessoais)…');
+      }
       return;
     }
 
@@ -386,12 +392,15 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
       }
 
-      stage = 'done';
-      lockInput('Para continuar, marque consulta.');
+      turnCount += 1;
+      if (turnCount >= MAX_TURNS) {
+        lockInput('Para continuar, marque consulta.');
+      } else {
+        unlockInput('Pode colocar outra questão geral (sem dados pessoais)…');
+      }
     } catch (err) {
       loading.classList.remove('loading');
       loading.textContent = 'Serviço temporariamente indisponível. Para análise do caso concreto, marque consulta.';
-      stage = 'done';
       lockInput('Para continuar, marque consulta.');
       console.error(err);
     }
