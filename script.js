@@ -1,5 +1,8 @@
 // Corporate-law landing + limited triage assistant
 document.addEventListener('DOMContentLoaded', () => {
+  const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+  const apiBaseAttr = document.body.getAttribute('data-api-base')?.trim() || '';
+  const API_BASE = apiBaseAttr || (isLocalhost ? window.location.origin : '');
   // ===== Year =====
   const yearEl = document.getElementById('year');
   if (yearEl) yearEl.textContent = String(new Date().getFullYear());
@@ -248,7 +251,12 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   async function getReply(messages) {
-    const res = await fetch(`${window.location.origin}/api/chat`, {
+    const base = API_BASE;
+    if (!base) {
+      throw new Error('Assistente indisponível neste ambiente.');
+    }
+
+    const res = await fetch(`${base.replace(/\/$/, '')}/api/chat`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ messages }),
@@ -271,6 +279,18 @@ document.addEventListener('DOMContentLoaded', () => {
     if (detectPII(clean)) {
       chatPanel.hidden = false;
       addMessage('assistant', '⚠️ Remova dados pessoais (nome, morada, NIF, email, telefone) e reformule de forma geral.');
+      return;
+    }
+
+    // Se não houver backend configurado (ex.: GitHub Pages), não tentar chamar /api/chat
+    if (!API_BASE) {
+      chatPanel.hidden = false;
+      addMessage(
+        'assistant',
+        'O assistente de triagem não está disponível nesta versão do site. Para análise do caso concreto, marque consulta ou utilize os contactos.'
+      );
+      stage = 'done';
+      lockInput('Para continuar, marque consulta.');
       return;
     }
 
