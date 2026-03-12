@@ -1831,7 +1831,10 @@ body.modal-open{ overflow: hidden; }
 }
 
 @media (max-width: 768px){
-  .inspire--mini{
+  .inspire--mini .inspire-grid{
+    grid-template-columns: 1fr;
+  }
+  .inspire--mini .inspire-art{
     display: none;
   }
 }
