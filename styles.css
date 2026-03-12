@@ -677,17 +677,36 @@ a:hover{ color: var(--accent-hover); }
 
 /* ========== Triage / chat ========== */
 .triage{
-  border: 1px solid var(--stroke);
-  background: var(--surface);
-  border-radius: var(--radius-lg);
+  position: relative;
+  border-radius: var(--radius-xl);
   padding: 24px;
-  box-shadow: var(--shadow);
+  border: 1px solid rgba(255,255,255,0.4);
+  background:
+    radial-gradient(circle at 0% 0%, rgba(92, 24, 41, 0.15), transparent 55%),
+    radial-gradient(circle at 100% 100%, rgba(28, 26, 24, 0.18), transparent 55%),
+    rgba(250, 248, 246, 0.92);
+  box-shadow: var(--shadow-soft);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
 }
 .triage-form{
   display: flex;
   gap: 14px;
   align-items: center;
   flex-wrap: wrap;
+}
+.triage-form--futuristic{
+  position: relative;
+}
+.triage-form--futuristic::before{
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: var(--radius-pill);
+  background: linear-gradient(90deg, rgba(92,24,41,0.35), rgba(28,26,24,0.25));
+  opacity: 0.55;
+  pointer-events: none;
+  filter: blur(1px);
 }
 .triage-form input{
   flex: 1 1 0;
