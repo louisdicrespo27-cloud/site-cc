@@ -267,6 +267,63 @@ document.addEventListener('DOMContentLoaded', () => {
     return data.reply;
   }
 
+  function buildStaticTriageReply(question) {
+    const q = (question || '').toLowerCase();
+
+    const blocks = [];
+    let titulo = 'Isto pode exigir advogado?';
+    let risco = 'Talvez — depende dos factos e documentos envolvidos.';
+    const bullets = [];
+    let proximo = 'Próximo passo recomendado: marcar consulta para análise detalhada da situação e dos documentos.';
+
+    if (q.includes('contrato') || q.includes('cláusula') || q.includes('prestação de serviços')) {
+      risco = 'Sim — contratos podem criar obrigações e riscos relevantes para a empresa ou para si.';
+      bullets.push(
+        'Tipo de contrato, partes envolvidas e equilíbrio das cláusulas.',
+        'Riscos de incumprimento, penalizações e prazos.',
+        'Necessidade de ajustar ou negociar termos antes de assinar.'
+      );
+    } else if (q.includes('socied') || q.includes('sócio') || q.includes('quotas') || q.includes('ações')) {
+      risco = 'Sim — questões societárias impactam a governação e os direitos dos sócios.';
+      bullets.push(
+        'Direitos e deveres de cada sócio, e forma de decisão.',
+        'Registo de alterações (quotas, administração, sede, objeto).',
+        'Prevenção de conflitos futuros entre sócios.'
+      );
+    } else if (q.includes('divórcio') || q.includes('guarda') || q.includes('regula') || q.includes('responsabilidades parentais')) {
+      risco = 'Sim — matérias de família têm impacto duradouro em pessoas e património.';
+      bullets.push(
+        'Regime de responsabilidades parentais e convivência com os filhos.',
+        'Partilha de bens e eventual pensão de alimentos.',
+        'Proteção do interesse superior da criança e segurança jurídica.'
+      );
+    } else if (q.includes('insolven') || q.includes('dívida') || q.includes('recuperação de crédito')) {
+      risco = 'Sim — situações de incumprimento podem exigir uma estratégia jurídica cuidada.';
+      bullets.push(
+        'Verificação de títulos, prazos e meios de cobrança.',
+        'Avaliação de vias amigáveis versus processo judicial.',
+        'Possibilidade de planos de pagamento, injunções ou ações executivas.'
+      );
+    } else {
+      bullets.push(
+        'Enquadrar a questão na área de direito aplicável.',
+        'Perceber quais os documentos relevantes e quais os riscos.',
+        'Avaliar se é necessário atuar de imediato para não perder direitos.'
+      );
+    }
+
+    const disclaimer =
+      'Informação geral e não vinculativa; não constitui parecer jurídico. Para análise do caso concreto, marque consulta.';
+
+    blocks.push(`**${titulo}** ${risco}`);
+    blocks.push('**O que pode estar em causa (de forma geral):**');
+    bullets.forEach((b) => blocks.push(`- ${b}`));
+    blocks.push(`**${proximo}**`);
+    blocks.push(`\n—\nℹ️ ${disclaimer}`);
+
+    return blocks.join('\n');
+  }
+
   async function handleSubmit(raw) {
     const clean = String(raw || '').trim();
     if (!clean) return;
@@ -279,18 +336,6 @@ document.addEventListener('DOMContentLoaded', () => {
     if (detectPII(clean)) {
       chatPanel.hidden = false;
       addMessage('assistant', '⚠️ Remova dados pessoais (nome, morada, NIF, email, telefone) e reformule de forma geral.');
-      return;
-    }
-
-    // Se não houver backend configurado (ex.: GitHub Pages), não tentar chamar /api/chat
-    if (!API_BASE) {
-      chatPanel.hidden = false;
-      addMessage(
-        'assistant',
-        'O assistente de triagem não está disponível nesta versão do site. Para análise do caso concreto, marque consulta ou utilize os contactos.'
-      );
-      stage = 'done';
-      lockInput('Para continuar, marque consulta.');
       return;
     }
 
@@ -307,6 +352,16 @@ document.addEventListener('DOMContentLoaded', () => {
     chatPanel.hidden = false;
     addMessage('user', clean);
     const loading = addMessage('assistant', 'A analisar (informação geral)…', true);
+
+    // Se não houver backend configurado (ex.: GitHub Pages), usar triagem estática no frontend
+    if (!API_BASE) {
+      const reply = buildStaticTriageReply(clean);
+      loading.classList.remove('loading');
+      loading.textContent = reply;
+      stage = 'done';
+      lockInput('Para continuar, marque consulta.');
+      return;
+    }
 
     // Minimal message set to keep costs low and avoid back-and-forth
     let outgoing = [];
