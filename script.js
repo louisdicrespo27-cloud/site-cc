@@ -136,12 +136,10 @@ document.addEventListener('DOMContentLoaded', () => {
   // WhatsApp number (international format, no +)
   const WHATSAPP_NUMBER = '351914376903';
 
-  // Flow control:
-  // initial -> awaiting_clarification, com limite de interações
-  let stage = 'initial';
-  const MAX_TURNS = 5;
+  // Flow control: pequena conversa com limite de interações
+  const MAX_TURNS = 6; // número máximo de mensagens do utilizador por sessão
   let turnCount = 0;
-  let firstQuestion = '';
+  let conversation = []; // { role: 'user' | 'assistant', content: string }
   let lastUserQuestion = '';
 
   function hasConsent() {
@@ -244,12 +242,6 @@ document.addEventListener('DOMContentLoaded', () => {
     searchInput.disabled = false;
     searchInput.placeholder = message || 'Descreva a questão (sem dados pessoais)…';
     searchInput.focus();
-  }
-
-  function isClarificationQuestion(text) {
-    const s = String(text || '').trim();
-    // If it looks like a single clarifying question (ends with ? and is not too long)
-    return /\?\s*$/.test(s) && s.length < 220;
   }
 
   async function getReply(messages) {
@@ -355,11 +347,15 @@ document.addEventListener('DOMContentLoaded', () => {
     addMessage('user', clean);
     const loading = addMessage('assistant', 'A analisar (informação geral)…', true);
 
+    // Regista pergunta do utilizador na conversa
+    conversation.push({ role: 'user', content: clean });
+
     // Se não houver backend configurado (ex.: GitHub Pages), usar triagem estática no frontend
     if (!API_BASE) {
       const reply = buildStaticTriageReply(clean);
       loading.classList.remove('loading');
       loading.textContent = reply;
+      conversation.push({ role: 'assistant', content: reply });
       turnCount += 1;
       if (turnCount >= MAX_TURNS) {
         lockInput('Para continuar, marque consulta.');
@@ -369,28 +365,11 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
 
-    // Minimal message set to keep costs low and avoid back-and-forth
-    let outgoing = [];
-    if (stage === 'initial') {
-      outgoing = [{ role: 'user', content: clean }];
-    } else if (stage === 'awaiting_clarification') {
-      outgoing = [
-        { role: 'user', content: firstQuestion },
-        { role: 'user', content: `Resposta à clarificação: ${clean}` },
-      ];
-    }
-
     try {
-      const reply = await getReply(outgoing);
+      const reply = await getReply(conversation);
       loading.classList.remove('loading');
       loading.textContent = reply;
-
-      if (stage === 'initial' && isClarificationQuestion(reply)) {
-        stage = 'awaiting_clarification';
-        firstQuestion = clean;
-        unlockInput('Responda apenas à pergunta de clarificação (sem dados pessoais)…');
-        return;
-      }
+      conversation.push({ role: 'assistant', content: reply });
 
       turnCount += 1;
       if (turnCount >= MAX_TURNS) {
