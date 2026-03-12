@@ -735,6 +735,44 @@ a:hover{ color: var(--accent-hover); }
   line-height: 1.5;
 }
 
+/* Chat input (continuar conversa) */
+.chat-input{
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 18px;
+  padding: 10px 12px;
+  border-radius: 999px;
+  background:
+    radial-gradient(circle at 0% 0%, rgba(92,24,41,0.12), transparent 55%),
+    rgba(250,248,246,0.96);
+  border: 1px solid rgba(28,26,24,0.12);
+  box-shadow: 0 10px 30px rgba(28,26,24,0.08);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+.chat-input input{
+  flex: 1 1 auto;
+  min-width: 0;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  padding: 8px 4px;
+  color: var(--text);
+}
+.chat-input input::placeholder{
+  color: var(--muted);
+}
+.chat-input .btn.primary{
+  min-height: 40px;
+  padding: 0 18px;
+  font-size: 0.9rem;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+
 .chat-panel{
   margin-top: 20px;
   border: 1px solid var(--stroke);
