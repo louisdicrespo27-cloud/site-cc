@@ -185,6 +185,27 @@ a:hover{ color: var(--accent-hover); }
 }
 .nav-links a:hover{ color: var(--text); background: var(--panel); }
 
+.lang-switcher{
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  margin-right: 4px;
+  padding: 4px 6px;
+  border-radius: var(--radius-sm);
+  background: var(--panel);
+  border: 1px solid var(--stroke);
+}
+.lang-switcher .lang-link{
+  padding: 4px 8px;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--muted);
+  text-decoration: none;
+}
+.lang-switcher .lang-link:hover{ color: var(--text); background: transparent; }
+.lang-switcher .lang-link.is-active{ color: var(--accent); }
+
 .header-by-appointment{
   font-size: 0.8125rem;
   color: var(--muted);
