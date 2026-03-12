@@ -465,15 +465,16 @@ a:hover{ color: var(--accent-hover); }
 .card:hover::before{ opacity: 1; }
 
 .card-icon{
-  font-size: 1.5rem;
-  width: 48px;
-  height: 48px;
+  font-size: 2.25rem;
+  width: 64px;
+  height: 64px;
   display: grid;
   place-items: center;
   border-radius: var(--radius);
   background: var(--panel);
   border: 1px solid var(--stroke);
-  margin-bottom: 16px;
+  margin-bottom: 18px;
+  line-height: 1;
 }
 .card h3{
   margin: 0 0 10px;
@@ -483,7 +484,7 @@ a:hover{ color: var(--accent-hover); }
   color: var(--text);
   line-height: 1.35;
 }
-.card p{ margin: 0 0 14px; color: var(--muted); line-height: 1.6; font-size: 0.9375rem; }
+.card p{ margin: 0 0 12px; color: var(--muted); line-height: 1.55; font-size: 0.9375rem; }
 .card ul{ list-style: none; padding: 0; margin: 0; }
 .card ul li{
   position: relative;
@@ -1441,8 +1442,9 @@ body.modal-open{ overflow: hidden; }
     border-radius: var(--radius-lg);
   }
   .card-icon{
-    width: 52px;
-    height: 52px;
+    width: 58px;
+    height: 58px;
+    font-size: 2rem;
     font-size: 1.6rem;
     margin-bottom: 16px;
   }
