@@ -547,6 +547,7 @@ a:hover{ color: var(--accent-hover); }
 .practice-card .mini-list{ margin: 12px 0; }
 .practice-card p:has(.card-cta){ border-top: 1px solid var(--stroke); padding-top: 12px; margin-top: 14px; margin-bottom: 0; }
 .practice-card .card-cta{ font-weight: 600; }
+.practice-fecho{ margin-top: 32px; margin-bottom: 20px; color: var(--muted); line-height: 1.65; max-width: 65ch; }
 
 .articles-listing{ margin-top: 40px; }
 .articles-listing .section-title{ margin-bottom: 12px; }
