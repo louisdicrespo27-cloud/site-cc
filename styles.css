@@ -514,6 +514,47 @@ a:hover{ color: var(--accent-hover); }
   color: var(--accent);
   opacity: 0.7;
 }
+.card-cta{
+  margin: 14px 0 0;
+  padding-top: 12px;
+  border-top: 1px solid var(--stroke);
+  font-size: 0.9375rem;
+}
+.card-cta a{ font-weight: 600; }
+.residentes-fora-block{
+  max-width: 720px;
+  margin: 0 auto;
+  text-align: center;
+}
+.residentes-fora-block .section-subtitle{ margin-bottom: 24px; }
+
+.practice-block{ margin-top: 40px; }
+.practice-block:first-of-type{ margin-top: 32px; }
+.practice-block-title{
+  margin: 0 0 20px;
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--text);
+  letter-spacing: -0.02em;
+}
+.practice-cards{
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+}
+.practice-card.card{ padding: 24px; }
+.practice-card .mini-list{ margin: 12px 0; }
+.practice-card p:has(.card-cta){ border-top: 1px solid var(--stroke); padding-top: 12px; margin-top: 14px; margin-bottom: 0; }
+.practice-card .card-cta{ font-weight: 600; }
+
+.articles-listing{ margin-top: 40px; }
+.articles-listing .section-title{ margin-bottom: 12px; }
+.articles-listing .section-subtitle{ margin: 0 0 16px; color: var(--muted); font-size: 1rem; }
+.articles-listing .articles-grid{ margin-top: 16px; }
+.section-cta{ margin: 16px 0 0; font-size: 0.9375rem; }
+.section-cta a{ font-weight: 600; }
+
 .mini-list{
   list-style: none;
   padding: 0;
@@ -1844,6 +1885,28 @@ body.modal-open{ overflow: hidden; }
   margin-bottom: 8px;
 }
 .inspire-list li::before{
+  content: "•";
+  position: absolute;
+  left: 0;
+  color: var(--accent);
+  font-weight: 700;
+}
+
+.trust-list{
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  max-width: 52ch;
+  color: var(--muted);
+  font-size: 1rem;
+  line-height: 1.7;
+}
+.trust-list li{
+  position: relative;
+  padding-left: 1.4em;
+  margin-bottom: 10px;
+}
+.trust-list li::before{
   content: "•";
   position: absolute;
   left: 0;
