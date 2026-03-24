@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://www.correiacrespo-advogados.pt/sitemap.xmlpobres. 
+Sitemap: https://www.correiacrespo-advogados.pt/sitemap.xml

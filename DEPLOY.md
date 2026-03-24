@@ -1,23 +1,26 @@
-# Deploy — Pacote de produção
+# Deploy — site estático (produção)
 
-O site é estático (HTML, CSS, JS e recursos). Para deploy, use apenas os ficheiros necessários à produção.
+O site é servido como ficheiros estáticos (HTML, CSS, JS, `partials/`, imagens). O workflow **GitHub Actions** (`.github/workflows/deploy-pages.yml`) publica o conteúdo da raiz do repositório na branch `main`.
 
-## O que NÃO incluir no pacote público / servidor
+## Estrutura publicada
 
-- `.env` e ficheiros `.env.*` (credenciais e variáveis sensíveis)
-- `.git/` (histórico do repositório)
-- `node_modules/` (se existir)
-- Ficheiros `*.zip` auxiliares
-- Ficheiros de teste ou debug
-- `.DS_Store`, `*.log`, pastas `.cache/`, `dist/`, `build/`
+- **Páginas PT (raiz):** `index.html`, `sobre.html`, `consulta-juridica.html`, `familia-menores.html`, `imobiliario-arrendamento.html`, `execucoes-insolvencia.html`, `residentes-no-estrangeiro.html`, `contactos.html`, `politica-de-privacidade.html`, `aviso-legal.html`, `404.html`.
+- **Partilhado:** `partials/`, `assets/css/main.css`, `assets/js/main.js`, `assets/img/`, `assets/icons/`, `robots.txt`, `sitemap.xml`, `CNAME` (se aplicável).
 
-O `.gitignore` já está configurado para excluir estes itens do repositório. Em deploy por clone (ex.: Git no servidor), não faça upload de `.env`; use variáveis de ambiente do painel de alojamento quando necessário.
+## O que não enviar para o servidor público
 
-## Pacote limpo a partir da pasta do projeto
+- `.git/`, `.env`, `node_modules/`, ficheiros `*.zip`, `__MACOSX/`, `.DS_Store`.
 
-Copiar para o servidor apenas o conteúdo necessário (por exemplo, todas as pastas e ficheiros visíveis, exceto `.git`, `.env`, `node_modules`). Se usar FTP ou painel de ficheiros, envie apenas:
+## Sitemap
 
-- Raiz: `index.html`, `artigos.html`, `contactos.html`, `agendar-consulta.html`, `areas-de-pratica.html`, `direito-imobiliario.html`, `residentes-fora-de-portugal.html`, `termos.html`, `privacidade.html`, `styles.css`, `script.js`, `sitemap.xml`, etc.
-- Pastas: `artigos/`, `assets/`, `en/`, `fr/` (conforme a estrutura do site).
+Após alterar páginas HTML, executar localmente:
 
-Não inclua `.env` nem a pasta `.git` no upload.
+```bash
+npm run seo
+```
+
+Isto regista `sitemap.xml` com as URLs indexáveis (exclui `404.html` por `noindex`).
+
+## Pré-visualização
+
+Para testar sem alterar produção, use um servidor HTTP local sobre a pasta do projeto (por exemplo `npx serve .`) ou um ambiente de preview do fornecedor de alojamento (ex.: Cloudflare Pages com branch de teste).
