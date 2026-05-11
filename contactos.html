@@ -119,14 +119,26 @@
 
       <section class="contact-card" aria-labelledby="localizacao-titulo">
         <h2 id="localizacao-titulo">Localização</h2>
-        <div class="map-embed">
-          <iframe
-            title="Localização do escritório — Urbanização do Vale Vite, Lourinhã"
-            src="https://www.google.com/maps?q=Urbaniza%C3%A7%C3%A3o+do+Vale+Vite%2C+2530-804+Lourinh%C3%A3+Portugal&amp;output=embed"
-            loading="lazy"
-            referrerpolicy="no-referrer-when-downgrade"
-            allowfullscreen=""
-          ></iframe>
+        <div class="map-static" role="region" aria-label="Localização do escritório">
+          <div class="map-static__pin" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+              <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/>
+              <circle cx="12" cy="9" r="2.5"/>
+            </svg>
+          </div>
+          <div class="map-static__body">
+            <p class="map-static__address">
+              Urbanização do Vale Vite<br />
+              2530-804 Lourinhã<br />
+              Portugal
+            </p>
+            <a
+              class="btn secondary map-static__cta"
+              href="https://www.google.com/maps/search/?api=1&query=Urbaniza%C3%A7%C3%A3o+do+Vale+Vite%2C+2530-804+Lourinh%C3%A3%2C+Portugal"
+              target="_blank"
+              rel="noopener noreferrer"
+            >Ver no Google Maps</a>
+          </div>
         </div>
         <p class="note">Urbanização do Vale Vite, 2530-804 Lourinhã, Portugal</p>
       </section>

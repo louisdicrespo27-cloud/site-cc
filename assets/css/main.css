@@ -1483,3 +1483,35 @@ summary:focus-visible{
 .btn.is-loading::after {
   content: ' …';
 }
+
+/* Localização estática (substitui iframe Maps) */
+.map-static {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  padding: 1.5rem;
+  background: var(--bg-warm);
+  border: 1px solid var(--stroke);
+  border-radius: var(--radius);
+  min-height: 160px;
+}
+.map-static__pin {
+  color: var(--accent);
+  flex-shrink: 0;
+  margin-top: 0.15rem;
+}
+.map-static__body {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.map-static__address {
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  line-height: 1.7;
+  color: var(--text);
+  margin: 0;
+}
+.map-static__cta {
+  align-self: flex-start;
+}
