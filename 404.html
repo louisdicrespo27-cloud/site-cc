@@ -16,7 +16,34 @@
 <body class="site-page" data-site-base="">
   <a class="skip-link" href="#conteudo">Saltar para o conteúdo</a>
 
-  <div id="site-header-mount"></div>
+  <header class="header">
+    <div class="container header-inner">
+      <a class="brand" href="index.html" aria-label="Início — Correia Crespo Advogados">
+        <span class="brand-mark" aria-hidden="true">
+          <img src="assets/img/logo-mark.svg" alt="" width="34" height="34" loading="eager" decoding="async" />
+        </span>
+        <span class="brand-stack">
+          <span class="brand-name">CORREIA CRESPO</span>
+          <span class="brand-sub">ADVOGADOS</span>
+        </span>
+      </a>
+
+      <nav class="nav" aria-label="Navegação principal">
+        <button class="nav-toggle" type="button" aria-label="Abrir menu" aria-expanded="false" aria-controls="menu-principal" aria-haspopup="true">
+          <span></span><span></span><span></span>
+        </button>
+        <div class="nav-links" id="menu-principal">
+          <a href="sobre.html" data-nav="sobre">Sobre</a>
+          <a href="familia-menores.html" data-nav="familia">Família e menores</a>
+          <a href="imobiliario-arrendamento.html" data-nav="imobiliario">Imobiliário e arrendamento</a>
+          <a href="execucoes-insolvencia.html" data-nav="execucoes">Execuções e insolvência</a>
+          <a href="residentes-no-estrangeiro.html" data-nav="residentes">Residentes no estrangeiro</a>
+          <a href="contactos.html" data-nav="contactos">Contactos</a>
+          <a class="btn primary small" href="consulta-juridica.html#pedido-consulta">Consulta jurídica</a>
+        </div>
+      </nav>
+    </div>
+  </header>
 
   <main id="conteudo" class="container page">
     <h1>Página não encontrada</h1>
@@ -27,7 +54,36 @@
     </nav>
   </main>
 
-  <div id="site-footer-mount"></div>
+  <footer class="footer">
+    <div class="container footer-inner">
+      <div class="footer-brand">
+        <span class="brand-mark" aria-hidden="true">
+          <img src="assets/img/logo-mark.svg" alt="" width="24" height="24" loading="lazy" decoding="async" />
+        </span>
+        <span class="brand-stack">
+          <span class="brand-name">CORREIA CRESPO</span>
+          <span class="brand-sub">ADVOGADOS</span>
+        </span>
+        <span class="footer-note">Lourinhã, Litoral Oeste • Atendimento por marcação</span>
+      </div>
+      <div class="footer-right">
+        <div class="footer-links">
+          <a href="sobre.html">Sobre</a>
+          <a href="familia-menores.html">Família e menores</a>
+          <a href="imobiliario-arrendamento.html">Imobiliário e arrendamento</a>
+          <a href="execucoes-insolvencia.html">Execuções e insolvência</a>
+          <a href="residentes-no-estrangeiro.html">Residentes no estrangeiro</a>
+          <a href="contactos.html">Contactos</a>
+          <a href="consulta-juridica.html#pedido-consulta">Consulta jurídica</a>
+          <a href="politica-de-privacidade.html">Política de privacidade</a>
+          <a href="aviso-legal.html">Aviso legal</a>
+        </div>
+        <p class="footer-disclaimer">O conteúdo deste sítio tem natureza meramente informativa e não constitui aconselhamento jurídico nem publicidade capaz de comprometer o dever de independência e de prudência próprio da profissão.</p>
+        <p class="footer-copy">© <span id="year"></span> Correia Crespo — Advogados. Todos os direitos reservados.</p>
+      </div>
+    </div>
+  </footer>
+
   <script src="assets/js/main.js"></script>
 </body>
 </html>

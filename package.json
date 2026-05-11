@@ -4,6 +4,7 @@
   "private": true,
   "description": "Site estático — Correia Crespo Advogados (PT)",
   "scripts": {
+    "build": "node scripts/build.mjs",
     "seo": "node scripts/normalize-seo.mjs"
   }
 }

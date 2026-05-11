@@ -1,57 +1,15 @@
 // Navegação, formulário de contacto (mailto), ano no rodapé.
+// Header e footer vêm inline no HTML (gerados por scripts/build.mjs).
 
-function applyShellTokens(html, base) {
-  return html.replaceAll('%%BASE%%', base);
-}
-
-async function loadSiteShell() {
-  const headerMount = document.getElementById('site-header-mount');
-  const footerMount = document.getElementById('site-footer-mount');
-  if (!headerMount && !footerMount) return;
-
-  const base = document.body.getAttribute('data-site-base') ?? '';
-
-  const tasks = [];
-  if (headerMount) {
-    tasks.push(
-      fetch(`${base}partials/header.html`)
-        .then((r) => {
-          if (!r.ok) throw new Error('header partial');
-          return r.text();
-        })
-        .then((t) => ({ el: headerMount, html: applyShellTokens(t, base) }))
-    );
-  }
-  if (footerMount) {
-    tasks.push(
-      fetch(`${base}partials/footer.html`)
-        .then((r) => {
-          if (!r.ok) throw new Error('footer partial');
-          return r.text();
-        })
-        .then((t) => ({ el: footerMount, html: applyShellTokens(t, base) }))
-    );
-  }
-
-  try {
-    const results = await Promise.all(tasks);
-    for (const { el, html } of results) {
-      el.outerHTML = html;
-    }
-  } catch (e) {
-    console.warn('Não foi possível carregar cabeçalho/rodapé partilhados.', e);
-    return;
-  }
-
+function applyActiveNav() {
   const current = document.body.getAttribute('data-current-nav');
-  if (current) {
-    document.querySelectorAll('.nav a[data-nav]').forEach((a) => {
-      if (a.getAttribute('data-nav') === current) {
-        a.classList.add('is-active');
-        a.setAttribute('aria-current', 'page');
-      }
-    });
-  }
+  if (!current) return;
+  document.querySelectorAll('.nav a[data-nav]').forEach((a) => {
+    if (a.getAttribute('data-nav') === current) {
+      a.classList.add('is-active');
+      a.setAttribute('aria-current', 'page');
+    }
+  });
 }
 
 function hideErr(el) {
@@ -166,8 +124,8 @@ function initContactForm() {
   });
 }
 
-document.addEventListener('DOMContentLoaded', async () => {
-  await loadSiteShell();
+document.addEventListener('DOMContentLoaded', () => {
+  applyActiveNav();
 
   const mainLandmark = document.getElementById('conteudo');
   if (mainLandmark && !mainLandmark.hasAttribute('tabindex')) {
