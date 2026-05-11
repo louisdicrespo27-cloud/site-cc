@@ -11,7 +11,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.join(__dirname, '..');
 const SITE = 'https://www.correiacrespo-advogados.pt';
 const OG_IMAGE = `${SITE}/assets/img/og.jpg`;
-const LASTMOD = '2026-03-24';
+const LASTMOD = new Date().toISOString().split('T')[0];
 
 function walkHtml(dir, acc = []) {
   for (const ent of fs.readdirSync(dir, { withFileTypes: true })) {
