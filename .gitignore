@@ -1,11 +1,27 @@
-__MACOSX/
+# macOS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+
+# Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Node
 node_modules/
+npm-debug.log*
+
+# Build / temp
+*.zip
+__MACOSX/
+dist/
+.cache/
+
+# Env / segredos
 .env
 .env.*
 !.env.example
-*.zip
-.DS_Store
-*.log
-.cache/
-dist/
-build/
