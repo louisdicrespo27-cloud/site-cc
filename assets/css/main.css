@@ -1515,3 +1515,81 @@ summary:focus-visible{
 .map-static__cta {
   align-self: flex-start;
 }
+
+/* Perfil do advogado — sobre.html */
+.lawyer-profile {
+  display: flex;
+  gap: 2.5rem;
+  align-items: flex-start;
+  margin: 2rem 0 3rem;
+  flex-wrap: wrap;
+}
+.lawyer-photo-wrap {
+  flex-shrink: 0;
+}
+.lawyer-photo {
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  object-fit: cover;
+  object-position: center top;
+  border: 3px solid var(--stroke-strong);
+  display: block;
+}
+.lawyer-info {
+  flex: 1;
+  min-width: 240px;
+}
+.lawyer-name {
+  font-family: var(--font-display);
+  font-size: clamp(1.4rem, 3vw, 1.9rem);
+  font-weight: 500;
+  color: var(--text);
+  margin: 0 0 0.25rem;
+}
+.lawyer-title {
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  color: var(--muted);
+  letter-spacing: 0.02em;
+  margin: 0 0 1.25rem;
+}
+.lawyer-bio {
+  font-size: 1rem;
+  line-height: 1.75;
+  color: var(--text-soft);
+  margin-bottom: 1rem;
+}
+.lawyer-linkedin {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--accent);
+  text-decoration: none;
+  padding: 0.4rem 0.75rem;
+  border: 1px solid var(--accent-soft);
+  border-radius: var(--radius-pill);
+  transition: background var(--duration) var(--ease),
+              border-color var(--duration) var(--ease);
+  margin-top: 0.5rem;
+}
+.lawyer-linkedin:hover {
+  background: var(--accent-soft-hover);
+  border-color: var(--accent);
+  color: var(--accent-hover);
+}
+
+@media (max-width: 600px) {
+  .lawyer-profile {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 1.5rem;
+  }
+  .lawyer-linkedin {
+    align-self: center;
+  }
+}
