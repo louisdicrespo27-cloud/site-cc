@@ -1,0 +1,15 @@
+{
+  "name": "Correia Crespo — Advogados",
+  "short_name": "Correia Crespo",
+  "description": "Sociedade de advogados na Lourinhã — família, imobiliário, cobrança e insolvência.",
+  "start_url": "/",
+  "display": "browser",
+  "lang": "pt-PT",
+  "icons": [
+    {
+      "src": "assets/img/logo-mark.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}
