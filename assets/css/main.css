@@ -1475,7 +1475,6 @@ summary:focus-visible{
 }
 .contact-form-error strong { color: #8b2020; }
 
-/* Botão em estado de loading */
 .btn.is-loading {
   opacity: 0.65;
   pointer-events: none;

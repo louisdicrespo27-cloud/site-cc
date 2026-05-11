@@ -29,20 +29,20 @@ function initContactForm() {
   const form = document.getElementById('formContacto');
   if (!form) return;
 
-  const nomeInput    = form.querySelector('#contactoNome');
-  const nomeErr      = form.querySelector('#contactoNomeError');
-  const emailInput   = form.querySelector('#contactoEmail');
-  const emailErr     = form.querySelector('#contactoEmailError');
-  const telInput     = form.querySelector('#contactoTel');
-  const telErr       = form.querySelector('#contactoTelError');
-  const assuntoEl    = form.querySelector('#contactoAssunto');
-  const assuntoErr   = form.querySelector('#contactoAssuntoError');
-  const msgEl        = form.querySelector('#contactoMensagem');
-  const msgErr       = form.querySelector('#contactoMensagemError');
-  const consentCb    = form.querySelector('#contactoPrivacidade');
-  const btnEnviar    = form.querySelector('#btnEnviar');
-  const divSucesso   = document.getElementById('formSucesso');
-  const divErro      = document.getElementById('formErro');
+  const nomeInput  = form.querySelector('#contactoNome');
+  const nomeErr    = form.querySelector('#contactoNomeError');
+  const emailInput = form.querySelector('#contactoEmail');
+  const emailErr   = form.querySelector('#contactoEmailError');
+  const telInput   = form.querySelector('#contactoTel');
+  const telErr     = form.querySelector('#contactoTelError');
+  const assuntoEl  = form.querySelector('#contactoAssunto');
+  const assuntoErr = form.querySelector('#contactoAssuntoError');
+  const msgEl      = form.querySelector('#contactoMensagem');
+  const msgErr     = form.querySelector('#contactoMensagemError');
+  const consentCb  = form.querySelector('#contactoPrivacidade');
+  const btnEnviar  = form.querySelector('#btnEnviar');
+  const divSucesso = document.getElementById('formSucesso');
+  const divErro    = document.getElementById('formErro');
 
   function clearFieldErrs() {
     [nomeErr, emailErr, telErr, assuntoErr, msgErr].forEach(hideErr);
@@ -60,7 +60,6 @@ function initContactForm() {
     e.preventDefault();
     clearFieldErrs();
 
-    /* Validação */
     if (consentCb && !consentCb.checked) {
       consentCb.focus();
       return;
@@ -99,7 +98,6 @@ function initContactForm() {
       return;
     }
 
-    /* Envio */
     if (btnEnviar) btnEnviar.classList.add('is-loading');
 
     try {
