@@ -1584,3 +1584,16 @@ summary:focus-visible{
     align-self: center;
   }
 }
+
+/* Artigos — meta de autoria e data */
+.article-meta {
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  color: var(--muted);
+  margin-bottom: 1rem;
+}
+.article-meta a {
+  color: var(--muted);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
