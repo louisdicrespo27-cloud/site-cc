@@ -135,7 +135,9 @@
     <section class="contact-form-section" aria-labelledby="formulario-contacto-titulo">
       <h2 class="contact-form-section__title" id="formulario-contacto-titulo">Formulário de contacto</h2>
       <p class="contact-form-section__lead" id="formulario-contacto-desc">
-        Preencha os campos abaixo. Ao confirmar, será aberto o programa de correio eletrónico do seu equipamento com a mensagem preparada; o envio só ocorre se concluir o envio nesse programa. Não anexe nesta fase documentação confidencial extensa.
+        Preencha os campos abaixo. Os dados são enviados de forma segura e
+        respondemos assim que possível. Não anexe documentação confidencial
+        extensa neste primeiro contacto.
       </p>
 
       <form
@@ -145,6 +147,10 @@
         novalidate
         aria-describedby="formulario-contacto-desc formulario-contacto-aviso"
       >
+        <input type="hidden" name="access_key" value="A_TUA_CHAVE_WEB3FORMS" />
+        <input type="hidden" name="subject" value="Contacto via site — Correia Crespo Advogados" />
+        <input type="hidden" name="from_name" value="Site Correia Crespo — Advogados" />
+        <input type="text" name="botcheck" style="display:none" tabindex="-1" autocomplete="off" aria-hidden="true" />
         <div class="contact-form__row">
           <label for="contactoNome">Nome completo</label>
           <input type="text" id="contactoNome" name="nome" required autocomplete="name" aria-describedby="contactoNomeError" />
@@ -191,13 +197,29 @@
         </p>
 
         <div class="contact-form__actions">
-          <button type="submit" class="btn primary">Abrir correio para enviar</button>
+          <button type="submit" class="btn primary" id="btnEnviar">Enviar mensagem</button>
           <a class="btn secondary" href="consulta-juridica.html#pedido-consulta">Pedir consulta jurídica</a>
         </div>
         <p class="contact-form__note">
           Pode também contactar por <a href="tel:+351914376903">telefone</a> ou <a href="mailto:correiacrespo-67709L@adv.oa.pt">correio eletrónico</a>, nos termos indicados acima.
         </p>
       </form>
+
+      <div id="formSucesso" hidden class="contact-form-success" role="alert" aria-live="polite">
+        <p><strong>Mensagem enviada.</strong></p>
+        <p>Recebemos o seu contacto e responderemos assim que possível, após
+        análise do pedido. Se preferir, pode também contactar por
+        <a href="tel:+351914376903">telefone</a> ou
+        <a href="https://wa.me/351914376903">WhatsApp</a>.</p>
+      </div>
+
+      <div id="formErro" hidden class="contact-form-error" role="alert" aria-live="assertive">
+        <p><strong>Não foi possível enviar a mensagem.</strong> Por favor tente
+        novamente ou contacte directamente por
+        <a href="mailto:correiacrespo-67709L@adv.oa.pt">correio eletrónico</a>
+        ou <a href="tel:+351914376903">telefone</a>.</p>
+      </div>
+
     </section>
 
     <nav class="cta-row" aria-label="Outras ações">

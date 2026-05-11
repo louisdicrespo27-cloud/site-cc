@@ -1451,3 +1451,36 @@ summary:focus-visible{
     transition-duration: 0.01ms !important;
   }
 }
+
+/* Formulário — estados de feedback */
+.contact-form-success,
+.contact-form-error {
+  margin-top: 1.5rem;
+  padding: 1.25rem 1.5rem;
+  border-radius: var(--radius);
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+.contact-form-success {
+  background: rgba(60, 120, 80, 0.08);
+  border: 1px solid rgba(60, 120, 80, 0.3);
+  color: var(--text);
+}
+.contact-form-success strong { color: #2d6a3f; }
+.contact-form-error {
+  background: rgba(180, 50, 50, 0.08);
+  border: 1px solid rgba(180, 50, 50, 0.25);
+  color: var(--text);
+}
+.contact-form-error strong { color: #8b2020; }
+
+/* Botão em estado de loading */
+.btn.is-loading {
+  opacity: 0.65;
+  pointer-events: none;
+  cursor: not-allowed;
+}
+.btn.is-loading::after {
+  content: ' …';
+}

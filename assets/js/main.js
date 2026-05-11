@@ -1,4 +1,4 @@
-// Navegação, formulário de contacto (mailto), ano no rodapé.
+// Navegação, formulário de contacto (Web3Forms), ano no rodapé.
 // Header e footer vêm inline no HTML (gerados por scripts/build.mjs).
 
 function applyActiveNav() {
@@ -28,27 +28,26 @@ function showErr(el, text) {
 function initContactForm() {
   const form = document.getElementById('formContacto');
   if (!form) return;
-  const to = 'correiacrespo-67709L@adv.oa.pt';
 
-  const nomeInput = form.querySelector('#contactoNome');
-  const nomeErr = form.querySelector('#contactoNomeError');
-  const emailInput = form.querySelector('#contactoEmail');
-  const emailErr = document.getElementById('contactoEmailError');
-  const telInput = form.querySelector('#contactoTel');
-  const telErr = form.querySelector('#contactoTelError');
-  const assuntoEl = form.querySelector('#contactoAssunto');
-  const assuntoErr = form.querySelector('#contactoAssuntoError');
-  const msgEl = form.querySelector('#contactoMensagem');
-  const msgErr = form.querySelector('#contactoMensagemError');
-  const consentCb = form.querySelector('#contactoPrivacidade');
+  const nomeInput    = form.querySelector('#contactoNome');
+  const nomeErr      = form.querySelector('#contactoNomeError');
+  const emailInput   = form.querySelector('#contactoEmail');
+  const emailErr     = form.querySelector('#contactoEmailError');
+  const telInput     = form.querySelector('#contactoTel');
+  const telErr       = form.querySelector('#contactoTelError');
+  const assuntoEl    = form.querySelector('#contactoAssunto');
+  const assuntoErr   = form.querySelector('#contactoAssuntoError');
+  const msgEl        = form.querySelector('#contactoMensagem');
+  const msgErr       = form.querySelector('#contactoMensagemError');
+  const consentCb    = form.querySelector('#contactoPrivacidade');
+  const btnEnviar    = form.querySelector('#btnEnviar');
+  const divSucesso   = document.getElementById('formSucesso');
+  const divErro      = document.getElementById('formErro');
 
   function clearFieldErrs() {
-    hideErr(nomeErr);
+    [nomeErr, emailErr, telErr, assuntoErr, msgErr].forEach(hideErr);
     if (emailInput) emailInput.removeAttribute('aria-invalid');
-    hideErr(emailErr);
-    hideErr(telErr);
-    hideErr(assuntoErr);
-    hideErr(msgErr);
+    if (divErro)    divErro.hidden = true;
   }
 
   [nomeInput, emailInput, telInput, assuntoEl, msgEl].forEach((el) => {
@@ -57,21 +56,20 @@ function initContactForm() {
     el.addEventListener('focus', clearFieldErrs);
   });
 
-  form.addEventListener('submit', (e) => {
+  form.addEventListener('submit', async (e) => {
     e.preventDefault();
     clearFieldErrs();
 
+    /* Validação */
     if (consentCb && !consentCb.checked) {
       consentCb.focus();
       return;
     }
-
     if (!nomeInput || !String(nomeInput.value || '').trim()) {
       showErr(nomeErr, 'Indique o seu nome.');
       if (nomeInput) nomeInput.focus();
       return;
     }
-
     if (!emailInput || !emailInput.value.trim()) {
       emailInput.setAttribute('aria-invalid', 'true');
       showErr(emailErr, 'Indique o seu email.');
@@ -84,43 +82,47 @@ function initContactForm() {
       emailInput.focus();
       return;
     }
-
     if (!telInput || !String(telInput.value || '').trim()) {
       showErr(telErr, 'Indique um contacto telefónico.');
       telInput.focus();
       return;
     }
-
     const assuntoVal = assuntoEl ? String(assuntoEl.value || '').trim() : '';
     if (assuntoVal.length < 3) {
-      showErr(assuntoErr, 'Indique um assunto (mínimo de 3 caracteres).');
+      showErr(assuntoErr, 'Indique um assunto (mínimo 3 caracteres).');
       if (assuntoEl) assuntoEl.focus();
       return;
     }
-
     if (!msgEl || String(msgEl.value || '').trim().length < 10) {
-      showErr(msgErr, 'Escreva uma mensagem (mínimo de 10 caracteres).');
+      showErr(msgErr, 'Escreva uma mensagem (mínimo 10 caracteres).');
       if (msgEl) msgEl.focus();
       return;
     }
 
-    const nome = String(nomeInput.value || '').trim();
-    const tel = String(telInput.value || '').trim();
-    const msg = String(msgEl.value || '').trim();
-    const lines = [
-      'Contacto — formulário do sítio',
-      '',
-      'Nome: ' + nome,
-      'Email: ' + emailInput.value.trim(),
-      'Telefone: ' + tel,
-      'Assunto: ' + assuntoVal,
-      '',
-      'Mensagem:',
-      msg,
-    ];
-    const subj = encodeURIComponent('Contacto via sítio — ' + assuntoVal);
-    const body = encodeURIComponent(lines.join('\n'));
-    window.location.href = 'mailto:' + to + '?subject=' + subj + '&body=' + body;
+    /* Envio */
+    if (btnEnviar) btnEnviar.classList.add('is-loading');
+
+    try {
+      const data = new FormData(form);
+      const res  = await fetch('https://api.web3forms.com/submit', {
+        method: 'POST',
+        body:   data,
+      });
+      const json = await res.json();
+
+      if (res.ok && json.success) {
+        form.hidden = true;
+        if (divSucesso) divSucesso.hidden = false;
+        if (divErro)    divErro.hidden    = true;
+      } else {
+        throw new Error(json.message || 'Erro desconhecido');
+      }
+    } catch (err) {
+      console.error('Formulário:', err);
+      if (divErro) divErro.hidden = false;
+    } finally {
+      if (btnEnviar) btnEnviar.classList.remove('is-loading');
+    }
   });
 }
 
