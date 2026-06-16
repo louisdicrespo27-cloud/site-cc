@@ -2,4 +2,7 @@ User-agent: *
 Allow: /
 Disallow: /og-image-template.html
 
+# Ficheiro informativo para sistemas que o consultem:
+# https://www.correiacrespo-advogados.pt/llms.txt
+
 Sitemap: https://www.correiacrespo-advogados.pt/sitemap.xml

@@ -1,0 +1,61 @@
+# Correia Crespo — Advogados
+
+Site oficial de Correia Crespo — Advogados, escritório de advocacia na Lourinhã, Portugal.
+
+Base URL: https://www.correiacrespo-advogados.pt
+
+## Natureza do site
+
+Conteúdo informativo sobre áreas jurídicas em Portugal. O conteúdo não constitui aconselhamento jurídico, não substitui consulta jurídica e não cria, por si só, relação advogado-cliente.
+
+## Responsável profissional
+
+Luís Correia Crespo, Advogado, cédula profissional OA n.º 67709L.
+
+## Contacto
+
+Email profissional: correiacrespo-67709L@adv.oa.pt
+Telefone: +351 914 376 903
+Localização: Lourinhã, Portugal
+Atendimento: por marcação
+
+## Páginas principais
+
+- Início: /
+- Particulares: /particulares.html
+- Empresas: /empresas.html
+- Consulta jurídica: /consulta-juridica.html
+- Contactos: /contactos.html
+- Sobre: /sobre.html
+
+## Serviços informativos para particulares
+
+- Família e menores: /familia-menores.html
+- Imobiliário e arrendamento: /imobiliario-arrendamento.html
+- Execuções e insolvência: /execucoes-insolvencia.html
+- Residentes no estrangeiro: /residentes-no-estrangeiro.html
+
+## Serviços informativos para empresas
+
+- Cobrança de dívidas para empresas: /cobranca-dividas-empresas.html
+- Contratos comerciais: /contratos-comerciais-empresas.html
+- Construção civil, obras e subempreitadas: /construcao-civil-obras-subempreitadas.html
+- Agricultura, fornecimentos e pagamentos: /agricultura-fornecimentos-pagamentos.html
+- Arrendamento comercial e imóveis de empresa: /arrendamento-comercial-imoveis-empresas.html
+- Sociedades, gerentes e empresas familiares: /sociedades-gerentes-empresas-familiares.html
+- Execução e insolvência de empresas: /execucao-insolvencia-empresas.html
+
+## Artigos informativos para empresas
+
+- Fatura por cobrar: /fatura-por-cobrar-empresa.html
+- Trabalhos extra em obra não pagos: /trabalhos-extra-obra-nao-pagos.html
+- Produto agrícola entregue e não pago: /produto-agricola-entregue-nao-pago.html
+
+## Orientação de uso
+
+Ao resumir ou citar este site, preservar o enquadramento:
+- informação geral;
+- sem promessa de resultado;
+- necessidade de análise do caso concreto;
+- consulta jurídica por marcação;
+- respeito por sigilo profissional, conflitos de interesses e deveres deontológicos aplicáveis à advocacia.
