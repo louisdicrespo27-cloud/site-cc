@@ -37,6 +37,18 @@ const ROOT_STATIC_FILES = [
 
 const EXCLUDED_HTML = new Set(['og-image-template.html']);
 
+/** Pastas de topo que nunca são publicadas como subpastas de idioma. */
+const SKIP_TOP_LEVEL_DIRS = new Set([
+  'assets',
+  'dist',
+  'node_modules',
+  'scripts',
+  'partials',
+  'docs',
+  'templates',
+  '.git',
+]);
+
 function shouldSkipEntry(name) {
   return SKIP_NAMES.has(name) || name.endsWith('.zip');
 }
@@ -76,6 +88,36 @@ function copyRootHtml() {
   return count;
 }
 
+function countHtmlInDir(dir) {
+  let count = 0;
+  for (const ent of fs.readdirSync(dir, { withFileTypes: true })) {
+    if (shouldSkipEntry(ent.name)) continue;
+    const p = path.join(dir, ent.name);
+    if (ent.isDirectory()) count += countHtmlInDir(p);
+    else if (ent.isFile() && ent.name.endsWith('.html') && !EXCLUDED_HTML.has(ent.name)) count++;
+  }
+  return count;
+}
+
+function dirContainsHtml(dir) {
+  return countHtmlInDir(dir) > 0;
+}
+
+/** Copia subpastas de topo com HTML (ex.: en/, fr/) para dist/, recursivamente. */
+function copyLanguageSubdirs() {
+  let total = 0;
+  for (const ent of fs.readdirSync(ROOT, { withFileTypes: true })) {
+    if (!ent.isDirectory() || SKIP_TOP_LEVEL_DIRS.has(ent.name) || shouldSkipEntry(ent.name)) continue;
+    const srcDir = path.join(ROOT, ent.name);
+    if (!dirContainsHtml(srcDir)) continue;
+    copyDirRecursive(srcDir, path.join(DIST, ent.name));
+    const count = countHtmlInDir(path.join(DIST, ent.name));
+    console.log(`${ent.name}/: ${count} ficheiro(s) HTML copiado(s).`);
+    total += count;
+  }
+  return total;
+}
+
 function copyIfExists(relPath) {
   const src = path.join(ROOT, relPath);
   if (!fs.existsSync(src)) return false;
@@ -91,6 +133,11 @@ function main() {
 
   const htmlCount = copyRootHtml();
   console.log(`HTML: ${htmlCount} ficheiro(s) copiado(s).`);
+
+  const localeHtmlCount = copyLanguageSubdirs();
+  if (localeHtmlCount > 0) {
+    console.log(`HTML (subpastas de idioma): ${localeHtmlCount} ficheiro(s) no total.`);
+  }
 
   const assetsSrc = path.join(ROOT, 'assets');
   if (!fs.existsSync(assetsSrc)) {
