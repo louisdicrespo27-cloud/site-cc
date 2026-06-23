@@ -1,5 +1,63 @@
-// Navegação, formulário de contacto (Web3Forms), ano no rodapé.
+// Navegação, formulário de contacto (Web3Forms), ano no rodapé, consentimento e analítica.
 // Header e footer vêm inline no HTML (gerados por scripts/build.mjs).
+
+const CONSENT_KEY = 'cc_analytics_consent';
+
+function loadAnalytics() {
+  const gaId = document.body.getAttribute('data-ga-id')?.trim();
+  if (!gaId || typeof window.gtag === 'function') return;
+  window.dataLayer = window.dataLayer || [];
+  window.gtag = function () {
+    window.dataLayer.push(arguments);
+  };
+  window.gtag('js', new Date());
+  window.gtag('config', gaId, { anonymize_ip: true });
+  const s = document.createElement('script');
+  s.async = true;
+  s.src = 'https://www.googletagmanager.com/gtag/js?id=' + gaId;
+  document.head.appendChild(s);
+}
+
+function trackConversion(action, label, category) {
+  if (typeof window.gtag !== 'function') return;
+  window.gtag('event', action, {
+    event_category: category || 'engagement',
+    event_label: label || '',
+  });
+}
+
+function initCookieConsent() {
+  const banner = document.getElementById('cookie-consent');
+  const stored = localStorage.getItem(CONSENT_KEY);
+
+  if (stored === 'true') {
+    loadAnalytics();
+    return;
+  }
+  if (stored === 'false' || !banner) return;
+
+  const acceptBtn = banner.querySelector('[data-cookie-accept]');
+  const rejectBtn = banner.querySelector('[data-cookie-reject]');
+
+  function closeBanner(consent) {
+    localStorage.setItem(CONSENT_KEY, consent);
+    banner.hidden = true;
+  }
+
+  banner.hidden = false;
+
+  if (acceptBtn) {
+    acceptBtn.addEventListener('click', () => {
+      closeBanner('true');
+      loadAnalytics();
+    });
+  }
+  if (rejectBtn) {
+    rejectBtn.addEventListener('click', () => {
+      closeBanner('false');
+    });
+  }
+}
 
 function applyActiveNav() {
   const current = document.body.getAttribute('data-current-nav');
@@ -112,6 +170,7 @@ function initContactForm() {
         form.hidden = true;
         if (divSucesso) divSucesso.hidden = false;
         if (divErro)    divErro.hidden    = true;
+        trackConversion('generate_lead', 'formulario', 'contacto');
       } else {
         throw new Error(json.message || 'Erro desconhecido');
       }
@@ -252,11 +311,7 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   initContactForm();
-
-  function trackConversion(action, label) {
-    if (typeof window.gtag !== 'function') return;
-    window.gtag('event', action, { event_category: 'engagement', event_label: label || '' });
-  }
+  initCookieConsent();
 
   document.querySelectorAll('a[href^="mailto:"], a[href^="tel:"]').forEach((a) => {
     a.addEventListener('click', () => {
@@ -265,19 +320,9 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  function loadAnalytics() {
-    const gaId = document.body.getAttribute('data-ga-id')?.trim();
-    if (!gaId) return;
-    window.dataLayer = window.dataLayer || [];
-    window.gtag = function () {
-      window.dataLayer.push(arguments);
-    };
-    window.gtag('js', new Date());
-    window.gtag('config', gaId, { anonymize_ip: true });
-    const s = document.createElement('script');
-    s.async = true;
-    s.src = 'https://www.googletagmanager.com/gtag/js?id=' + gaId;
-    document.head.appendChild(s);
-  }
-  if (localStorage.getItem('cc_analytics_consent') === 'true') loadAnalytics();
+  document.querySelectorAll('a[href*="wa.me"]').forEach((a) => {
+    a.addEventListener('click', () => {
+      trackConversion('contact_click', 'whatsapp');
+    });
+  });
 });
