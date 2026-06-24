@@ -34,6 +34,8 @@ Atendimento: por marcação
 - Imobiliário e arrendamento: /imobiliario-arrendamento.html
 - Execuções e insolvência: /execucoes-insolvencia.html
 - Residentes no estrangeiro: /residentes-no-estrangeiro.html
+- Herança em Portugal para não residentes: /heranca-portugal-nao-residentes.html
+- Imóvel em Portugal para não residentes: /imovel-portugal-nao-residentes.html
 
 ## Serviços informativos para empresas
 
