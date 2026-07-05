@@ -72,8 +72,6 @@ function injectOrReplace(html, headerHtml, footerHtml, { replaceHeader = true } 
   const headerMount = /[\t ]*<div\s+id="site-header-mount"\s*>\s*<\/div>(?:\r?\n)+/;
   const footerMount = /[\t ]*<div\s+id="site-footer-mount"\s*>\s*<\/div>(?:\r?\n)+/;
   const headerBlock = /[\t ]*<header\b[^>]*class="header"[^>]*>[\s\S]*?<\/header>(?:\r?\n)+/i;
-  const footerWithCookieBlock =
-    /[\t ]*<footer\b[^>]*class="footer"[^>]*>[\s\S]*?<\/footer>(?:\r?\n)+(?:[\t ]*<div\s+id="cookie-consent"[\s\S]*?<\/div>(?:\r?\n)+)?/i;
 
   if (replaceHeader) {
     if (headerMount.test(out)) {
@@ -86,10 +84,30 @@ function injectOrReplace(html, headerHtml, footerHtml, { replaceHeader = true } 
   if (footerMount.test(out)) {
     out = out.replace(footerMount, `${footerHtml}\n\n`);
   } else {
-    out = out.replace(footerWithCookieBlock, `${footerHtml}\n\n`);
+    out = replaceBuiltFooterRegion(out, footerHtml);
   }
 
   return out;
+}
+
+/**
+ * Substitui a região já construída desde <footer class="footer"> até <script (exclusive).
+ * Consumir o intervalo completo torna a injeção idempotente e elimina lixo residual
+ * (ex.: </div> órfãos deixados por regex parcial no cookie-consent).
+ */
+function replaceBuiltFooterRegion(html, footerHtml) {
+  const footerMatch = html.match(/[\t ]*<footer\b[^>]*class="footer"[^>]*>/i);
+  if (!footerMatch || footerMatch.index === undefined) return html;
+
+  const footerStart = footerMatch.index;
+  const tail = html.slice(footerStart);
+  const scriptMatch = tail.match(/[\t ]*<script\b/i);
+  if (!scriptMatch || scriptMatch.index === undefined) return html;
+
+  const scriptStart = footerStart + scriptMatch.index;
+  const before = html.slice(0, footerStart);
+  const after = html.slice(scriptStart);
+  return `${before}${footerHtml}\n\n${after}`;
 }
 
 /** Páginas da raiz (header+footer) e HTML em subpastas de topo (só footer+banner). */
