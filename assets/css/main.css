@@ -36,6 +36,17 @@
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
   --duration: 220ms;
 
+  --space-xs: 8px;
+  --space-sm: 12px;
+  --space-md: 16px;
+  --space-lg: 24px;
+  --space-xl: 32px;
+  --space-2xl: 48px;
+  --space-3xl: 64px;
+  --space-section: var(--space-3xl);
+  --radius-button: var(--radius-sm);
+  --header-offset: 72px;
+
   --max: 1140px;
 }
 
@@ -46,6 +57,10 @@ html{
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  scroll-padding-top: var(--header-offset);
+}
+[id]{
+  scroll-margin-top: var(--header-offset);
 }
 html, body{ height: 100%; }
 body{
@@ -182,8 +197,8 @@ summary:focus-visible{
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 16px 0;
-  gap: 24px;
+  padding: 12px 0;
+  gap: var(--space-lg);
 }
 
 .nav-links{
@@ -195,7 +210,10 @@ summary:focus-visible{
   font-weight: 500;
   font-size: 0.9375rem;
   color: var(--muted);
-  padding: 8px 14px;
+  padding: 10px 14px;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
   border-radius: var(--radius-sm);
   transition: color var(--duration) var(--ease), background var(--duration) var(--ease);
 }
@@ -482,9 +500,9 @@ summary:focus-visible{
 .card{
   border: 1px solid var(--stroke);
   background: var(--surface);
-  border-radius: var(--radius-lg);
-  padding: 24px;
-  box-shadow: var(--shadow-sm);
+  border-radius: var(--radius);
+  padding: var(--space-lg);
+  box-shadow: none;
   transition: transform var(--duration) var(--ease-out), border-color var(--duration) var(--ease), box-shadow var(--duration) var(--ease);
   position: relative;
   overflow: hidden;
@@ -499,9 +517,9 @@ summary:focus-visible{
   pointer-events: none;
 }
 .card:hover{
-  transform: translateY(-4px);
+  transform: translateY(-2px);
   border-color: var(--stroke-strong);
-  box-shadow: var(--shadow);
+  box-shadow: var(--shadow-sm);
 }
 .card:hover::before{ opacity: 1; }
 
@@ -574,7 +592,6 @@ summary:focus-visible{
 }
 .practice-card.card{ padding: 24px; }
 .practice-card .mini-list{ margin: 12px 0; }
-.practice-card p:has(.card-cta){ border-top: 1px solid var(--stroke); padding-top: 12px; margin-top: 14px; margin-bottom: 0; }
 .practice-card .card-cta{ font-weight: 600; }
 .practice-fecho{ margin-top: 32px; margin-bottom: 20px; color: var(--muted); line-height: 1.65; max-width: 65ch; }
 
@@ -995,6 +1012,52 @@ summary:focus-visible{
   font-size: 0.875rem;
   color: #b91c1c;
   font-weight: 500;
+}
+.contact-form__error--consent {
+  margin-top: 8px;
+  margin-left: 0;
+}
+.contact-form__error-summary {
+  margin-bottom: var(--space-lg);
+  padding: var(--space-md);
+  border: 1px solid var(--stroke);
+  border-radius: var(--radius-sm);
+  background: var(--panel);
+}
+.contact-form__error-summary p {
+  margin: 0 0 var(--space-sm);
+  font-size: 0.9375rem;
+  color: var(--text);
+}
+.contact-form__error-summary ul {
+  margin: 0;
+  padding-left: 1.25rem;
+  display: grid;
+  gap: 6px;
+}
+.contact-form__error-summary a {
+  font-weight: 600;
+  color: var(--accent);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.contact-form__error-summary a:hover {
+  color: var(--accent-hover);
+}
+.contact-form__error-summary:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+.contact-form-success:focus-visible,
+.contact-form-error:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+.contact-form__actions .btn:disabled,
+.contact-form__actions .btn[aria-disabled="true"] {
+  opacity: 0.65;
+  cursor: not-allowed;
+  pointer-events: none;
 }
 .contact-form__actions {
   margin-top: 24px;
@@ -1734,4 +1797,123 @@ summary:focus-visible{
   color: var(--muted);
   text-decoration: underline;
   text-underline-offset: 3px;
+}
+
+/* Homepage — secções simplificadas */
+.service-split{
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-2xl);
+  margin-top: var(--space-lg);
+  padding-top: var(--space-lg);
+  border-top: 1px solid var(--stroke);
+}
+.service-split__title{
+  font-family: var(--font-body);
+  font-size: 1.0625rem;
+  font-weight: 600;
+  margin: 0 0 var(--space-md);
+  color: var(--text);
+}
+.service-links a{
+  font-weight: 500;
+}
+.audience-grid .entry-card{
+  box-shadow: none;
+  cursor: default;
+}
+.audience-grid .entry-card:hover{
+  transform: none;
+  border-color: var(--stroke);
+  box-shadow: none;
+}
+.audience-grid .entry-card:hover::before{
+  opacity: 0;
+}
+.lawyer-spotlight{
+  display: flex;
+  gap: var(--space-2xl);
+  align-items: flex-start;
+  flex-wrap: wrap;
+  margin-top: var(--space-lg);
+}
+.lawyer-spotlight__body{
+  flex: 1;
+  min-width: min(100%, 280px);
+}
+.lawyer-photo-wrap--center{
+  text-align: center;
+}
+.lawyer-photo--home{
+  width: 160px;
+  height: 160px;
+  margin: var(--space-xs) auto var(--space-lg);
+}
+.lawyer-spotlight .lawyer-title{
+  margin-bottom: var(--space-md);
+}
+.lawyer-spotlight .section-subtitle{
+  margin-bottom: var(--space-md);
+}
+.section--final-cta{
+  background: var(--panel);
+  border-top: 1px solid var(--stroke);
+}
+.final-cta__actions{
+  margin-bottom: var(--space-lg);
+}
+.final-cta__contact{
+  margin-bottom: var(--space-md);
+}
+.final-cta__note{
+  margin-top: var(--space-md);
+  margin-bottom: 0;
+}
+.resource-list{
+  margin-top: var(--space-lg);
+}
+.resource-list a{
+  font-weight: 500;
+}
+.timeline--compact{
+  margin-top: var(--space-lg);
+}
+
+/* Prosa longa e páginas legais */
+.page > .lead,
+.page > p:not(.contact-page__consulta-link),
+.page > section > p,
+.article-body,
+.prose{
+  max-width: 68ch;
+}
+.card--legal{
+  max-width: 920px;
+}
+.table-scroll{
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+.contact-form__honeypot{
+  display: none;
+}
+.muted-note-sm{
+  font-size: 0.85rem;
+  margin-top: 2rem;
+}
+.contact-page__consulta-link{
+  margin-top: calc(-1 * var(--space-sm));
+  margin-bottom: var(--space-xl);
+}
+
+@media (max-width: 768px){
+  .service-split{
+    grid-template-columns: 1fr;
+    gap: var(--space-xl);
+  }
+  .lawyer-spotlight{
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
 }

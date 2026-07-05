@@ -56,6 +56,11 @@ function getLinkLocation(anchor) {
   if (anchor.closest('.footer')) return 'footer';
   if (anchor.closest('#cookie-consent, .cookie-consent')) return 'banner';
   if (anchor.closest('.hero')) return 'hero';
+  if (anchor.closest('#escolha-percurso, .audience-grid')) return 'audience';
+  if (anchor.closest('#como-ajudamos, .service-split')) return 'services';
+  if (anchor.closest('#como-funciona')) return 'process';
+  if (anchor.closest('#leituras, .resource-list')) return 'resources';
+  if (anchor.closest('#cta-final, .section--final-cta')) return 'final_cta';
   if (anchor.closest('.cta-row, .consulta-booking, .consulta-booking__actions, .home-contact-line')) return 'cta';
   if (anchor.closest('main, #conteudo, .page')) return 'body';
   return 'unknown';
@@ -134,98 +139,269 @@ function initContactForm() {
   const form = document.getElementById('formContacto');
   if (!form) return;
 
-  const nomeInput  = form.querySelector('#contactoNome');
-  const nomeErr    = form.querySelector('#contactoNomeError');
-  const emailInput = form.querySelector('#contactoEmail');
-  const emailErr   = form.querySelector('#contactoEmailError');
-  const telInput   = form.querySelector('#contactoTel');
-  const telErr     = form.querySelector('#contactoTelError');
-  const assuntoEl  = form.querySelector('#contactoAssunto');
-  const assuntoErr = form.querySelector('#contactoAssuntoError');
-  const msgEl      = form.querySelector('#contactoMensagem');
-  const msgErr     = form.querySelector('#contactoMensagemError');
-  const consentCb  = form.querySelector('#contactoPrivacidade');
-  const btnEnviar  = form.querySelector('#btnEnviar');
-  const divSucesso = document.getElementById('formSucesso');
-  const divErro    = document.getElementById('formErro');
+  form.noValidate = true;
 
-  function clearFieldErrs() {
-    [nomeErr, emailErr, telErr, assuntoErr, msgErr].forEach(hideErr);
-    if (emailInput) emailInput.removeAttribute('aria-invalid');
-    if (divErro)    divErro.hidden = true;
+  const nomeInput = form.querySelector('#contactoNome');
+  const nomeErr = form.querySelector('#contactoNomeError');
+  const emailInput = form.querySelector('#contactoEmail');
+  const emailErr = form.querySelector('#contactoEmailError');
+  const telInput = form.querySelector('#contactoTel');
+  const telErr = form.querySelector('#contactoTelError');
+  const assuntoEl = form.querySelector('#contactoAssunto');
+  const assuntoErr = form.querySelector('#contactoAssuntoError');
+  const msgEl = form.querySelector('#contactoMensagem');
+  const msgErr = form.querySelector('#contactoMensagemError');
+  const consentCb = form.querySelector('#contactoPrivacidade');
+  const privacidadeErr = form.querySelector('#contactoPrivacidadeError');
+  const btnEnviar = form.querySelector('#btnEnviar');
+  const divSucesso = document.getElementById('formSucesso');
+  const divErro = document.getElementById('formErro');
+  const errorSummary = document.getElementById('formErrosResumo');
+  const errorSummaryList = errorSummary ? errorSummary.querySelector('ul') : null;
+
+  let isSubmitting = false;
+  let formStarted = false;
+  const btnOriginalText = btnEnviar ? btnEnviar.textContent : '';
+
+  const fieldMeta = {
+    nome: { input: nomeInput, err: nomeErr, label: 'Nome completo', id: 'contactoNome' },
+    email: { input: emailInput, err: emailErr, label: 'Endereço de email', id: 'contactoEmail' },
+    tel: { input: telInput, err: telErr, label: 'Telefone (opcional)', id: 'contactoTel' },
+    assunto: { input: assuntoEl, err: assuntoErr, label: 'Assunto', id: 'contactoAssunto' },
+    mensagem: { input: msgEl, err: msgErr, label: 'Mensagem', id: 'contactoMensagem' },
+    privacidade: { input: consentCb, err: privacidadeErr, label: 'Política de Privacidade', id: 'contactoPrivacidade', isCheckbox: true },
+  };
+
+  function trackFormEvent(action, extra = {}) {
+    trackConversion(action, action, 'contacto', {
+      form_name: 'contact_form',
+      link_location: 'form',
+      ...extra,
+    });
   }
 
-  [nomeInput, emailInput, telInput, assuntoEl, msgEl].forEach((el) => {
+  function markFormStart() {
+    if (formStarted) return;
+    formStarted = true;
+    trackFormEvent('form_start');
+  }
+
+  function hideFieldError(key) {
+    const field = fieldMeta[key];
+    if (!field) return;
+    hideErr(field.err);
+    if (field.input && !field.isCheckbox) {
+      field.input.removeAttribute('aria-invalid');
+    }
+    removeSummaryItem(key);
+    if (errorSummary && errorSummaryList && !errorSummaryList.children.length) {
+      errorSummary.hidden = true;
+    }
+  }
+
+  function showFieldError(key, message) {
+    const field = fieldMeta[key];
+    if (!field) return;
+    showErr(field.err, message);
+    if (field.input && !field.isCheckbox) {
+      field.input.setAttribute('aria-invalid', 'true');
+    }
+  }
+
+  function removeSummaryItem(key) {
+    if (!errorSummaryList) return;
+    const existing = errorSummaryList.querySelector(`[data-field="${key}"]`);
+    if (existing) existing.remove();
+  }
+
+  function addSummaryItem(key, label) {
+    if (!errorSummaryList) return;
+    removeSummaryItem(key);
+    const li = document.createElement('li');
+    li.setAttribute('data-field', key);
+    const link = document.createElement('a');
+    link.href = `#${fieldMeta[key].id}`;
+    link.textContent = label;
+    link.addEventListener('click', (e) => {
+      e.preventDefault();
+      const target = document.getElementById(fieldMeta[key].id);
+      if (target) target.focus();
+    });
+    li.appendChild(link);
+    errorSummaryList.appendChild(li);
+  }
+
+  function showErrorSummary(keys) {
+    if (!errorSummary || !errorSummaryList) return;
+    errorSummaryList.replaceChildren();
+    keys.forEach((key) => {
+      addSummaryItem(key, fieldMeta[key].label);
+    });
+    errorSummary.hidden = false;
+    errorSummary.focus();
+  }
+
+  function clearAllErrors() {
+    Object.keys(fieldMeta).forEach(hideFieldError);
+    if (errorSummary) errorSummary.hidden = true;
+    if (errorSummaryList) errorSummaryList.replaceChildren();
+    if (divErro) divErro.hidden = true;
+  }
+
+  function validateField(key) {
+    switch (key) {
+      case 'nome': {
+        const val = nomeInput ? String(nomeInput.value || '').trim() : '';
+        if (!val) return 'Indique o seu nome.';
+        if (val.length < 2) return 'O nome deve ter pelo menos 2 caracteres.';
+        if (val.length > 120) return 'O nome não pode exceder 120 caracteres.';
+        return null;
+      }
+      case 'email': {
+        if (!emailInput || !emailInput.value.trim()) return 'Indique o seu email.';
+        if (emailInput.value.length > 254) return 'O email não pode exceder 254 caracteres.';
+        if (!emailInput.checkValidity()) return 'Indique um endereço de email válido.';
+        return null;
+      }
+      case 'tel': {
+        const val = telInput ? String(telInput.value || '').trim() : '';
+        if (val.length > 40) return 'O telefone não pode exceder 40 caracteres.';
+        return null;
+      }
+      case 'assunto': {
+        const val = assuntoEl ? String(assuntoEl.value || '').trim() : '';
+        if (val.length < 3) return 'Indique um assunto (mínimo 3 caracteres).';
+        if (val.length > 160) return 'O assunto não pode exceder 160 caracteres.';
+        return null;
+      }
+      case 'mensagem': {
+        const val = msgEl ? String(msgEl.value || '').trim() : '';
+        if (val.length < 10) return 'Escreva uma mensagem (mínimo 10 caracteres).';
+        if (val.length > 2000) return 'A mensagem não pode exceder 2000 caracteres.';
+        return null;
+      }
+      case 'privacidade': {
+        if (!consentCb || !consentCb.checked) {
+          return 'Deve declarar que leu e compreendeu a Política de Privacidade.';
+        }
+        return null;
+      }
+      default:
+        return null;
+    }
+  }
+
+  function validateAll() {
+    const invalidKeys = [];
+    Object.keys(fieldMeta).forEach((key) => {
+      const message = validateField(key);
+      if (message) {
+        invalidKeys.push(key);
+        showFieldError(key, message);
+      } else {
+        hideFieldError(key);
+      }
+    });
+    return invalidKeys;
+  }
+
+  function setSubmittingState(active) {
+    if (btnEnviar) {
+      btnEnviar.disabled = active;
+      btnEnviar.setAttribute('aria-disabled', active ? 'true' : 'false');
+      btnEnviar.classList.toggle('is-loading', active);
+      btnEnviar.textContent = active ? 'A enviar…' : btnOriginalText;
+    }
+    if (active) {
+      form.setAttribute('aria-busy', 'true');
+    } else {
+      form.removeAttribute('aria-busy');
+    }
+  }
+
+  const fieldKeyById = {
+    contactoNome: 'nome',
+    contactoEmail: 'email',
+    contactoTel: 'tel',
+    contactoAssunto: 'assunto',
+    contactoMensagem: 'mensagem',
+  };
+
+  const startFields = [nomeInput, emailInput, telInput, assuntoEl, msgEl];
+  startFields.forEach((el) => {
     if (!el) return;
-    el.addEventListener('input', clearFieldErrs);
-    el.addEventListener('focus', clearFieldErrs);
+    el.addEventListener('input', () => {
+      markFormStart();
+      const fieldKey = fieldKeyById[el.id];
+      if (fieldKey) hideFieldError(fieldKey);
+    });
   });
+
+  if (consentCb) {
+    consentCb.addEventListener('change', () => {
+      markFormStart();
+      hideFieldError('privacidade');
+    });
+  }
 
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
-    clearFieldErrs();
+    if (isSubmitting) return;
 
-    if (consentCb && !consentCb.checked) {
-      consentCb.focus();
-      return;
-    }
-    if (!nomeInput || !String(nomeInput.value || '').trim()) {
-      showErr(nomeErr, 'Indique o seu nome.');
-      if (nomeInput) nomeInput.focus();
-      return;
-    }
-    if (!emailInput || !emailInput.value.trim()) {
-      emailInput.setAttribute('aria-invalid', 'true');
-      showErr(emailErr, 'Indique o seu email.');
-      emailInput.focus();
-      return;
-    }
-    if (!emailInput.checkValidity()) {
-      emailInput.setAttribute('aria-invalid', 'true');
-      showErr(emailErr, 'Indique um endereço de email válido.');
-      emailInput.focus();
-      return;
-    }
-    if (!telInput || !String(telInput.value || '').trim()) {
-      showErr(telErr, 'Indique um contacto telefónico.');
-      telInput.focus();
-      return;
-    }
-    const assuntoVal = assuntoEl ? String(assuntoEl.value || '').trim() : '';
-    if (assuntoVal.length < 3) {
-      showErr(assuntoErr, 'Indique um assunto (mínimo 3 caracteres).');
-      if (assuntoEl) assuntoEl.focus();
-      return;
-    }
-    if (!msgEl || String(msgEl.value || '').trim().length < 10) {
-      showErr(msgErr, 'Escreva uma mensagem (mínimo 10 caracteres).');
-      if (msgEl) msgEl.focus();
+    if (divErro) divErro.hidden = true;
+    const invalidKeys = validateAll();
+
+    if (invalidKeys.length) {
+      showErrorSummary(invalidKeys);
+      trackFormEvent('form_error', { error_type: 'validation' });
       return;
     }
 
-    if (btnEnviar) btnEnviar.classList.add('is-loading');
+    isSubmitting = true;
+    setSubmittingState(true);
+    trackFormEvent('form_submit');
 
     try {
       const data = new FormData(form);
-      const res  = await fetch('https://api.web3forms.com/submit', {
-        method: 'POST',
-        body:   data,
-      });
-      const json = await res.json();
+      data.delete('redirect');
 
-      if (res.ok && json.success) {
-        form.hidden = true;
-        if (divSucesso) divSucesso.hidden = false;
-        if (divErro)    divErro.hidden    = true;
-        trackConversion('generate_lead', 'formulario', 'contacto', { link_location: 'form' });
-      } else {
-        throw new Error(json.message || 'Erro desconhecido');
+      const res = await fetch('https://api.web3forms.com/submit', {
+        method: 'POST',
+        body: data,
+      });
+
+      let json = null;
+      const contentType = res.headers.get('content-type') || '';
+      if (contentType.includes('application/json')) {
+        try {
+          json = await res.json();
+        } catch {
+          json = null;
+        }
       }
-    } catch (err) {
-      console.error('Formulário:', err);
-      if (divErro) divErro.hidden = false;
+
+      if (res.ok && json && json.success === true) {
+        trackFormEvent('generate_lead');
+        form.reset();
+        clearAllErrors();
+        form.hidden = true;
+        if (divSucesso) {
+          divSucesso.hidden = false;
+          divSucesso.focus();
+        }
+      } else {
+        throw new Error('submission_failed');
+      }
+    } catch {
+      console.error('contact_form_submission_failed');
+      if (divErro) {
+        divErro.hidden = false;
+        divErro.focus();
+      }
+      trackFormEvent('form_error', { error_type: 'technical' });
     } finally {
-      if (btnEnviar) btnEnviar.classList.remove('is-loading');
+      isSubmitting = false;
+      setSubmittingState(false);
     }
   });
 }
@@ -245,12 +421,16 @@ document.addEventListener('DOMContentLoaded', () => {
   const navLinks = document.querySelector('.nav-links');
   const mqCompactNav = window.matchMedia('(max-width: 980px)');
 
-  function closeMobileNav() {
+  function closeMobileNav(options = {}) {
+    const { returnFocus = false } = options;
     if (!navLinks || !navToggle) return;
     navLinks.classList.remove('active');
     navToggle.setAttribute('aria-expanded', 'false');
     navToggle.setAttribute('aria-label', 'Abrir menu');
     document.body.classList.remove('nav-menu-open');
+    if (returnFocus) {
+      navToggle.focus({ preventScroll: true });
+    }
   }
 
   function openMobileNav(moveFocusToFirstLink) {
@@ -291,8 +471,17 @@ document.addEventListener('DOMContentLoaded', () => {
     document.addEventListener('keydown', (e) => {
       if (e.key !== 'Escape') return;
       if (!navLinks.classList.contains('active')) return;
+      closeMobileNav({ returnFocus: true });
+    });
+
+    document.addEventListener('pointerup', (event) => {
+      if (!mqCompactNav.matches || !navLinks.classList.contains('active')) return;
+
+      const target = event.target;
+      if (!(target instanceof Node)) return;
+      if (navLinks.contains(target) || navToggle.contains(target)) return;
+
       closeMobileNav();
-      navToggle.focus();
     });
 
     mqCompactNav.addEventListener('change', (ev) => {
