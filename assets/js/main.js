@@ -135,11 +135,111 @@ function showErr(el, text) {
   el.hidden = false;
 }
 
+function normalizeFormLang(lang) {
+  const raw = String(lang || '').toLowerCase();
+  if (raw.startsWith('pt')) return 'pt';
+  if (raw.startsWith('en')) return 'en';
+  if (raw.startsWith('fr')) return 'fr';
+  return 'pt';
+}
+
+const FORM_MESSAGES = {
+  pt: {
+    fields: {
+      nome: 'Nome completo',
+      email: 'Endereço de email',
+      tel: 'Telefone (opcional)',
+      assunto: 'Assunto',
+      mensagem: 'Mensagem',
+      privacidade: 'Política de Privacidade',
+    },
+    errors: {
+      nomeRequired: 'Indique o seu nome.',
+      nomeMin: 'O nome deve ter pelo menos 2 caracteres.',
+      nomeMax: 'O nome não pode exceder 120 caracteres.',
+      emailRequired: 'Indique o seu email.',
+      emailMax: 'O email não pode exceder 254 caracteres.',
+      emailInvalid: 'Indique um endereço de email válido.',
+      telMax: 'O telefone não pode exceder 40 caracteres.',
+      assuntoMin: 'Indique um assunto (mínimo 3 caracteres).',
+      assuntoMax: 'O assunto não pode exceder 160 caracteres.',
+      mensagemMin: 'Escreva uma mensagem (mínimo 10 caracteres).',
+      mensagemMax: 'A mensagem não pode exceder 2000 caracteres.',
+      privacidade: 'Deve declarar que leu e compreendeu a Política de Privacidade.',
+    },
+    errorSummaryTitle: 'Verifique os campos assinalados:',
+    submitting: 'A enviar…',
+  },
+  en: {
+    fields: {
+      nome: 'Full name',
+      email: 'Email address',
+      tel: 'Telephone (optional)',
+      assunto: 'Subject',
+      mensagem: 'Message',
+      privacidade: 'Privacy policy',
+    },
+    errors: {
+      nomeRequired: 'Please enter your name.',
+      nomeMin: 'Name must be at least 2 characters.',
+      nomeMax: 'Name cannot exceed 120 characters.',
+      emailRequired: 'Please enter your email address.',
+      emailMax: 'Email cannot exceed 254 characters.',
+      emailInvalid: 'Please enter a valid email address.',
+      telMax: 'Telephone cannot exceed 40 characters.',
+      assuntoMin: 'Please enter a subject (minimum 3 characters).',
+      assuntoMax: 'Subject cannot exceed 160 characters.',
+      mensagemMin: 'Please write a message (minimum 10 characters).',
+      mensagemMax: 'Message cannot exceed 2000 characters.',
+      privacidade: 'You must confirm that you have read and understood the Privacy policy.',
+    },
+    errorSummaryTitle: 'Please check the highlighted fields:',
+    submitting: 'Sending…',
+  },
+  fr: {
+    fields: {
+      nome: 'Nom complet',
+      email: 'Adresse e-mail',
+      tel: 'Téléphone (facultatif)',
+      assunto: 'Objet',
+      mensagem: 'Message',
+      privacidade: 'Politique de confidentialité',
+    },
+    errors: {
+      nomeRequired: 'Veuillez indiquer votre nom.',
+      nomeMin: 'Le nom doit comporter au moins 2 caractères.',
+      nomeMax: 'Le nom ne peut pas dépasser 120 caractères.',
+      emailRequired: 'Veuillez indiquer votre adresse e-mail.',
+      emailMax: 'L’adresse e-mail ne peut pas dépasser 254 caractères.',
+      emailInvalid: 'Veuillez indiquer une adresse e-mail valide.',
+      telMax: 'Le téléphone ne peut pas dépasser 40 caractères.',
+      assuntoMin: 'Veuillez indiquer un objet (minimum 3 caractères).',
+      assuntoMax: 'L’objet ne peut pas dépasser 160 caractères.',
+      mensagemMin: 'Veuillez rédiger un message (minimum 10 caractères).',
+      mensagemMax: 'Le message ne peut pas dépasser 2000 caractères.',
+      privacidade: 'Vous devez confirmer avoir lu et compris la politique de confidentialité.',
+    },
+    errorSummaryTitle: 'Veuillez vérifier les champs signalés :',
+    submitting: 'Envoi…',
+  },
+};
+
+const NAV_UI = {
+  pt: { open: 'Abrir menu', close: 'Fechar menu' },
+  en: { open: 'Open menu', close: 'Close menu' },
+  fr: { open: 'Ouvrir le menu', close: 'Fermer le menu' },
+};
+
+function getFormLang() {
+  return normalizeFormLang(document.documentElement.lang);
+}
+
 function initContactForm() {
   const form = document.getElementById('formContacto');
   if (!form) return;
 
   form.noValidate = true;
+  const msgs = FORM_MESSAGES[getFormLang()] || FORM_MESSAGES.pt;
 
   const nomeInput = form.querySelector('#contactoNome');
   const nomeErr = form.querySelector('#contactoNomeError');
@@ -158,18 +258,20 @@ function initContactForm() {
   const divErro = document.getElementById('formErro');
   const errorSummary = document.getElementById('formErrosResumo');
   const errorSummaryList = errorSummary ? errorSummary.querySelector('ul') : null;
+  const errorSummaryTitle = errorSummary ? errorSummary.querySelector('p strong') : null;
+  if (errorSummaryTitle) errorSummaryTitle.textContent = msgs.errorSummaryTitle;
 
   let isSubmitting = false;
   let formStarted = false;
   const btnOriginalText = btnEnviar ? btnEnviar.textContent : '';
 
   const fieldMeta = {
-    nome: { input: nomeInput, err: nomeErr, label: 'Nome completo', id: 'contactoNome' },
-    email: { input: emailInput, err: emailErr, label: 'Endereço de email', id: 'contactoEmail' },
-    tel: { input: telInput, err: telErr, label: 'Telefone (opcional)', id: 'contactoTel' },
-    assunto: { input: assuntoEl, err: assuntoErr, label: 'Assunto', id: 'contactoAssunto' },
-    mensagem: { input: msgEl, err: msgErr, label: 'Mensagem', id: 'contactoMensagem' },
-    privacidade: { input: consentCb, err: privacidadeErr, label: 'Política de Privacidade', id: 'contactoPrivacidade', isCheckbox: true },
+    nome: { input: nomeInput, err: nomeErr, label: msgs.fields.nome, id: 'contactoNome' },
+    email: { input: emailInput, err: emailErr, label: msgs.fields.email, id: 'contactoEmail' },
+    tel: { input: telInput, err: telErr, label: msgs.fields.tel, id: 'contactoTel' },
+    assunto: { input: assuntoEl, err: assuntoErr, label: msgs.fields.assunto, id: 'contactoAssunto' },
+    mensagem: { input: msgEl, err: msgErr, label: msgs.fields.mensagem, id: 'contactoMensagem' },
+    privacidade: { input: consentCb, err: privacidadeErr, label: msgs.fields.privacidade, id: 'contactoPrivacidade', isCheckbox: true },
   };
 
   function trackFormEvent(action, extra = {}) {
@@ -249,41 +351,40 @@ function initContactForm() {
   }
 
   function validateField(key) {
+    const e = msgs.errors;
     switch (key) {
       case 'nome': {
         const val = nomeInput ? String(nomeInput.value || '').trim() : '';
-        if (!val) return 'Indique o seu nome.';
-        if (val.length < 2) return 'O nome deve ter pelo menos 2 caracteres.';
-        if (val.length > 120) return 'O nome não pode exceder 120 caracteres.';
+        if (!val) return e.nomeRequired;
+        if (val.length < 2) return e.nomeMin;
+        if (val.length > 120) return e.nomeMax;
         return null;
       }
       case 'email': {
-        if (!emailInput || !emailInput.value.trim()) return 'Indique o seu email.';
-        if (emailInput.value.length > 254) return 'O email não pode exceder 254 caracteres.';
-        if (!emailInput.checkValidity()) return 'Indique um endereço de email válido.';
+        if (!emailInput || !emailInput.value.trim()) return e.emailRequired;
+        if (emailInput.value.length > 254) return e.emailMax;
+        if (!emailInput.checkValidity()) return e.emailInvalid;
         return null;
       }
       case 'tel': {
         const val = telInput ? String(telInput.value || '').trim() : '';
-        if (val.length > 40) return 'O telefone não pode exceder 40 caracteres.';
+        if (val.length > 40) return e.telMax;
         return null;
       }
       case 'assunto': {
         const val = assuntoEl ? String(assuntoEl.value || '').trim() : '';
-        if (val.length < 3) return 'Indique um assunto (mínimo 3 caracteres).';
-        if (val.length > 160) return 'O assunto não pode exceder 160 caracteres.';
+        if (val.length < 3) return e.assuntoMin;
+        if (val.length > 160) return e.assuntoMax;
         return null;
       }
       case 'mensagem': {
         const val = msgEl ? String(msgEl.value || '').trim() : '';
-        if (val.length < 10) return 'Escreva uma mensagem (mínimo 10 caracteres).';
-        if (val.length > 2000) return 'A mensagem não pode exceder 2000 caracteres.';
+        if (val.length < 10) return e.mensagemMin;
+        if (val.length > 2000) return e.mensagemMax;
         return null;
       }
       case 'privacidade': {
-        if (!consentCb || !consentCb.checked) {
-          return 'Deve declarar que leu e compreendeu a Política de Privacidade.';
-        }
+        if (!consentCb || !consentCb.checked) return e.privacidade;
         return null;
       }
       default:
@@ -310,7 +411,7 @@ function initContactForm() {
       btnEnviar.disabled = active;
       btnEnviar.setAttribute('aria-disabled', active ? 'true' : 'false');
       btnEnviar.classList.toggle('is-loading', active);
-      btnEnviar.textContent = active ? 'A enviar…' : btnOriginalText;
+      btnEnviar.textContent = active ? msgs.submitting : btnOriginalText;
     }
     if (active) {
       form.setAttribute('aria-busy', 'true');
@@ -420,13 +521,14 @@ document.addEventListener('DOMContentLoaded', () => {
   const navToggle = document.querySelector('.nav-toggle');
   const navLinks = document.querySelector('.nav-links');
   const mqCompactNav = window.matchMedia('(max-width: 980px)');
+  const navUi = NAV_UI[getFormLang()] || NAV_UI.pt;
 
   function closeMobileNav(options = {}) {
     const { returnFocus = false } = options;
     if (!navLinks || !navToggle) return;
     navLinks.classList.remove('active');
     navToggle.setAttribute('aria-expanded', 'false');
-    navToggle.setAttribute('aria-label', 'Abrir menu');
+    navToggle.setAttribute('aria-label', navUi.open);
     document.body.classList.remove('nav-menu-open');
     if (returnFocus) {
       navToggle.focus({ preventScroll: true });
@@ -437,7 +539,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!navLinks || !navToggle) return;
     navLinks.classList.add('active');
     navToggle.setAttribute('aria-expanded', 'true');
-    navToggle.setAttribute('aria-label', 'Fechar menu');
+    navToggle.setAttribute('aria-label', navUi.close);
     document.body.classList.add('nav-menu-open');
     if (moveFocusToFirstLink) {
       const first = navLinks.querySelector('a');

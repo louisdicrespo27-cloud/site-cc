@@ -1,0 +1,64 @@
+{
+  "siteOrigin": "https://www.correiacrespo-advogados.pt",
+  "hubs": {
+    "pt": "/",
+    "en": "/en/index.html",
+    "fr": "/fr/index.html"
+  },
+  "clusters": [
+    {
+      "key": "index",
+      "pt": "/",
+      "en": "/en/index.html",
+      "fr": "/fr/index.html",
+      "xDefault": "/"
+    },
+    {
+      "key": "about",
+      "pt": "/sobre.html",
+      "en": "/en/about.html",
+      "fr": "/fr/a-propos.html"
+    },
+    {
+      "key": "contact",
+      "pt": "/contactos.html",
+      "en": "/en/contact.html",
+      "fr": "/fr/contact.html"
+    },
+    {
+      "key": "consultation",
+      "pt": "/consulta-juridica.html",
+      "en": "/en/legal-consultation.html",
+      "fr": "/fr/consultation-juridique.html"
+    },
+    {
+      "key": "privacy",
+      "pt": "/politica-de-privacidade.html",
+      "en": "/en/privacy.html",
+      "fr": "/fr/confidentialite.html"
+    },
+    {
+      "key": "legal-notice",
+      "pt": "/aviso-legal.html",
+      "en": "/en/legal-notice.html",
+      "fr": "/fr/mentions-legales.html"
+    },
+    {
+      "key": "property",
+      "pt": "/imovel-portugal-nao-residentes.html",
+      "en": "/en/imovel-portugal-nao-residentes.html",
+      "fr": "/fr/imovel-portugal-nao-residentes.html"
+    },
+    {
+      "key": "inheritance",
+      "pt": "/heranca-portugal-nao-residentes.html",
+      "en": "/en/heranca-portugal-nao-residentes.html",
+      "fr": "/fr/heranca-portugal-nao-residentes.html"
+    }
+  ],
+  "noindex": [
+    "/pedido-recebido.html",
+    "/en/request-received.html",
+    "/fr/demande-recue.html"
+  ]
+}

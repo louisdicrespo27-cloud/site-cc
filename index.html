@@ -37,28 +37,11 @@
   "@context": "https://schema.org",
   "@graph": [
     {
-      "@type": "Organization",
-      "@id": "https://www.correiacrespo-advogados.pt/#organization",
-      "name": "Correia Crespo — Advogados",
-      "url": "https://www.correiacrespo-advogados.pt/",
-      "logo": "https://www.correiacrespo-advogados.pt/assets/img/logo-mark.svg",
-      "email": "correiacrespo-67709L@adv.oa.pt",
-      "telephone": "+351 914 376 903",
-      "address": {
-        "@type": "PostalAddress",
-        "streetAddress": "Rua do Sol Nascente 2",
-        "addressLocality": "Lourinhã",
-        "postalCode": "2530-804",
-        "addressCountry": "PT"
-      }
-    },
-    {
       "@type": "LegalService",
       "@id": "https://www.correiacrespo-advogados.pt/#legal-service",
       "name": "Correia Crespo — Advogados",
       "url": "https://www.correiacrespo-advogados.pt/",
       "image": "https://www.correiacrespo-advogados.pt/assets/img/og.jpg",
-      "parentOrganization": { "@id": "https://www.correiacrespo-advogados.pt/#organization" },
       "telephone": "+351 914 376 903",
       "email": "correiacrespo-67709L@adv.oa.pt",
       "address": {
@@ -75,15 +58,30 @@
       },
       "openingHoursSpecification": {
         "@type": "OpeningHoursSpecification",
-        "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+        "dayOfWeek": [
+          "Monday",
+          "Tuesday",
+          "Wednesday",
+          "Thursday",
+          "Friday"
+        ],
         "opens": "09:00",
         "closes": "18:00",
         "description": "Atendimento por marcação"
       },
       "areaServed": [
-        { "@type": "City", "name": "Lourinhã" },
-        { "@type": "AdministrativeArea", "name": "Litoral Oeste" },
-        { "@type": "Country", "name": "Portugal" }
+        {
+          "@type": "City",
+          "name": "Lourinhã"
+        },
+        {
+          "@type": "AdministrativeArea",
+          "name": "Litoral Oeste"
+        },
+        {
+          "@type": "Country",
+          "name": "Portugal"
+        }
       ],
       "hasOfferCatalog": {
         "@type": "OfferCatalog",
@@ -93,25 +91,118 @@
             "@type": "OfferCatalog",
             "name": "Serviços jurídicos para particulares",
             "itemListElement": [
-              { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Família e menores", "provider": { "@id": "https://www.correiacrespo-advogados.pt/#legal-service" } } },
-              { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Imobiliário e arrendamento", "provider": { "@id": "https://www.correiacrespo-advogados.pt/#legal-service" } } },
-              { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Execuções e insolvência", "provider": { "@id": "https://www.correiacrespo-advogados.pt/#legal-service" } } },
-              { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Residentes no estrangeiro", "provider": { "@id": "https://www.correiacrespo-advogados.pt/#legal-service" } } }
+              {
+                "@type": "Offer",
+                "itemOffered": {
+                  "@type": "Service",
+                  "name": "Família e menores",
+                  "provider": {
+                    "@id": "https://www.correiacrespo-advogados.pt/#legal-service"
+                  }
+                }
+              },
+              {
+                "@type": "Offer",
+                "itemOffered": {
+                  "@type": "Service",
+                  "name": "Imobiliário e arrendamento",
+                  "provider": {
+                    "@id": "https://www.correiacrespo-advogados.pt/#legal-service"
+                  }
+                }
+              },
+              {
+                "@type": "Offer",
+                "itemOffered": {
+                  "@type": "Service",
+                  "name": "Execuções e insolvência",
+                  "provider": {
+                    "@id": "https://www.correiacrespo-advogados.pt/#legal-service"
+                  }
+                }
+              },
+              {
+                "@type": "Offer",
+                "itemOffered": {
+                  "@type": "Service",
+                  "name": "Residentes no estrangeiro",
+                  "provider": {
+                    "@id": "https://www.correiacrespo-advogados.pt/#legal-service"
+                  }
+                }
+              }
             ]
           },
           {
             "@type": "OfferCatalog",
             "name": "Serviços jurídicos para empresas",
             "itemListElement": [
-              { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Cobrança de dívidas comerciais", "provider": { "@id": "https://www.correiacrespo-advogados.pt/#legal-service" } } },
-              { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Contratos e prestação de serviços", "provider": { "@id": "https://www.correiacrespo-advogados.pt/#legal-service" } } },
-              { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Construção civil e subempreitadas", "provider": { "@id": "https://www.correiacrespo-advogados.pt/#legal-service" } } },
-              { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Agricultura e fornecimentos", "provider": { "@id": "https://www.correiacrespo-advogados.pt/#legal-service" } } },
-              { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Arrendamento comercial", "provider": { "@id": "https://www.correiacrespo-advogados.pt/#legal-service" } } },
-              { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Sociedades, gerentes e credores", "provider": { "@id": "https://www.correiacrespo-advogados.pt/#legal-service" } } }
+              {
+                "@type": "Offer",
+                "itemOffered": {
+                  "@type": "Service",
+                  "name": "Cobrança de dívidas comerciais",
+                  "provider": {
+                    "@id": "https://www.correiacrespo-advogados.pt/#legal-service"
+                  }
+                }
+              },
+              {
+                "@type": "Offer",
+                "itemOffered": {
+                  "@type": "Service",
+                  "name": "Contratos e prestação de serviços",
+                  "provider": {
+                    "@id": "https://www.correiacrespo-advogados.pt/#legal-service"
+                  }
+                }
+              },
+              {
+                "@type": "Offer",
+                "itemOffered": {
+                  "@type": "Service",
+                  "name": "Construção civil e subempreitadas",
+                  "provider": {
+                    "@id": "https://www.correiacrespo-advogados.pt/#legal-service"
+                  }
+                }
+              },
+              {
+                "@type": "Offer",
+                "itemOffered": {
+                  "@type": "Service",
+                  "name": "Agricultura e fornecimentos",
+                  "provider": {
+                    "@id": "https://www.correiacrespo-advogados.pt/#legal-service"
+                  }
+                }
+              },
+              {
+                "@type": "Offer",
+                "itemOffered": {
+                  "@type": "Service",
+                  "name": "Arrendamento comercial",
+                  "provider": {
+                    "@id": "https://www.correiacrespo-advogados.pt/#legal-service"
+                  }
+                }
+              },
+              {
+                "@type": "Offer",
+                "itemOffered": {
+                  "@type": "Service",
+                  "name": "Sociedades, gerentes e credores",
+                  "provider": {
+                    "@id": "https://www.correiacrespo-advogados.pt/#legal-service"
+                  }
+                }
+              }
             ]
           }
         ]
+      },
+      "founder": {
+        "@id": "https://www.correiacrespo-advogados.pt/sobre.html#luis-correia-crespo"
       }
     },
     {
@@ -120,7 +211,9 @@
       "url": "https://www.correiacrespo-advogados.pt/",
       "name": "Correia Crespo — Advogados",
       "inLanguage": "pt-PT",
-      "publisher": { "@id": "https://www.correiacrespo-advogados.pt/#organization" }
+      "publisher": {
+        "@id": "https://www.correiacrespo-advogados.pt/#legal-service"
+      }
     },
     {
       "@type": "WebPage",
@@ -128,16 +221,33 @@
       "url": "https://www.correiacrespo-advogados.pt/",
       "name": "Correia Crespo — Advogados | Particulares e Empresas na Lourinhã",
       "description": "Advogados na Lourinhã e no Litoral Oeste. Apoio jurídico a famílias, particulares, pequenas e médias empresas, gerentes e credores. Consulta jurídica por marcação.",
-      "isPartOf": { "@id": "https://www.correiacrespo-advogados.pt/#website" },
-      "about": { "@id": "https://www.correiacrespo-advogados.pt/#legal-service" },
+      "isPartOf": {
+        "@id": "https://www.correiacrespo-advogados.pt/#website"
+      },
+      "about": {
+        "@id": "https://www.correiacrespo-advogados.pt/#legal-service"
+      },
       "inLanguage": "pt-PT"
     },
     {
       "@type": "BreadcrumbList",
       "@id": "https://www.correiacrespo-advogados.pt/#breadcrumb-home",
       "itemListElement": [
-        { "@type": "ListItem", "position": 1, "name": "Início", "item": "https://www.correiacrespo-advogados.pt/" }
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Início",
+          "item": "https://www.correiacrespo-advogados.pt/"
+        }
       ]
+    },
+    {
+      "@type": "Person",
+      "@id": "https://www.correiacrespo-advogados.pt/sobre.html#luis-correia-crespo",
+      "name": "Luís Correia Crespo",
+      "worksFor": {
+        "@id": "https://www.correiacrespo-advogados.pt/#legal-service"
+      }
     }
   ]
 }
@@ -166,19 +276,28 @@
         </span>
       </a>
 
-      <nav class="nav" aria-label="Navegação principal">
-        <button class="nav-toggle" type="button" aria-label="Abrir menu" aria-expanded="false" aria-controls="menu-principal" aria-haspopup="true">
-          <span></span><span></span><span></span>
-        </button>
-        <div class="nav-links" id="menu-principal">
-          <a href="particulares.html" data-nav="particulares">Particulares</a>
-          <a href="empresas.html" data-nav="empresas">Empresas</a>
-          <a href="residentes-no-estrangeiro.html" data-nav="residentes">Residentes no estrangeiro</a>
-          <a href="sobre.html" data-nav="sobre">Sobre</a>
-          <a href="contactos.html" data-nav="contactos">Contactos</a>
-          <a class="btn primary small" href="consulta-juridica.html#pedido-consulta" data-nav="consulta" data-loc="header">Pedir consulta</a>
-        </div>
-      </nav>
+      <div class="header-tools">
+        <nav class="language-switcher" aria-label="Idioma">
+    <ul class="language-switcher__list">
+      <li><span class="language-switcher__current" aria-current="page" lang="pt">PT</span></li>
+      <li><a href="en/index.html" hreflang="en" lang="en">EN</a></li>
+      <li><a href="fr/index.html" hreflang="fr" lang="fr">FR</a></li>
+    </ul>
+  </nav>
+        <nav class="nav" aria-label="Navegação principal">
+          <button class="nav-toggle" type="button" aria-label="Abrir menu" aria-expanded="false" aria-controls="menu-principal" aria-haspopup="true">
+            <span></span><span></span><span></span>
+          </button>
+          <div class="nav-links" id="menu-principal">
+            <a href="particulares.html" data-nav="particulares">Particulares</a>
+            <a href="empresas.html" data-nav="empresas">Empresas</a>
+            <a href="residentes-no-estrangeiro.html" data-nav="residentes">Residentes no estrangeiro</a>
+            <a href="sobre.html" data-nav="sobre">Sobre</a>
+            <a href="contactos.html" data-nav="contactos">Contactos</a>
+            <a class="btn primary small" href="consulta-juridica.html#pedido-consulta" data-nav="consulta" data-loc="header">Pedir consulta</a>
+          </div>
+        </nav>
+      </div>
     </div>
   </header>
 

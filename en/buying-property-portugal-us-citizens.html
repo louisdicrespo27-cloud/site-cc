@@ -42,10 +42,14 @@
         "@id": "https://www.correiacrespo-advogados.pt/sobre.html#luis-correia-crespo",
         "name": "Luís Correia Crespo"
       },
-      "publisher": { "@id": "https://www.correiacrespo-advogados.pt/#organization" },
+      "publisher": {
+        "@id": "https://www.correiacrespo-advogados.pt/#legal-service"
+      },
       "url": "https://www.correiacrespo-advogados.pt/en/buying-property-portugal-us-citizens.html",
       "inLanguage": "en",
-      "isPartOf": { "@id": "https://www.correiacrespo-advogados.pt/#website" },
+      "isPartOf": {
+        "@id": "https://www.correiacrespo-advogados.pt/#website"
+      },
       "mainEntityOfPage": {
         "@type": "WebPage",
         "@id": "https://www.correiacrespo-advogados.pt/en/buying-property-portugal-us-citizens.html"
@@ -92,9 +96,24 @@
     {
       "@type": "BreadcrumbList",
       "itemListElement": [
-        { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.correiacrespo-advogados.pt/" },
-        { "@type": "ListItem", "position": 2, "name": "Residents abroad", "item": "https://www.correiacrespo-advogados.pt/residentes-no-estrangeiro.html" },
-        { "@type": "ListItem", "position": 3, "name": "Buying property in Portugal as a US citizen", "item": "https://www.correiacrespo-advogados.pt/en/buying-property-portugal-us-citizens.html" }
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://www.correiacrespo-advogados.pt/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Residents abroad",
+          "item": "https://www.correiacrespo-advogados.pt/residentes-no-estrangeiro.html"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "Buying property in Portugal as a US citizen",
+          "item": "https://www.correiacrespo-advogados.pt/en/buying-property-portugal-us-citizens.html"
+        }
       ]
     }
   ]
@@ -109,7 +128,7 @@
 
   <header class="header">
     <div class="container header-inner">
-      <a class="brand" href="../index.html" aria-label="Home — Correia Crespo Advogados">
+      <a class="brand" href="index.html" aria-label="Home — Correia Crespo Advogados">
         <span class="brand-mark" aria-hidden="true">
           <img src="../assets/img/logo-mark.svg" alt="" width="34" height="34" loading="eager" decoding="async" />
         </span>
@@ -119,19 +138,28 @@
         </span>
       </a>
 
-      <nav class="nav" aria-label="Main navigation">
-        <button class="nav-toggle" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="menu-principal" aria-haspopup="true">
-          <span></span><span></span><span></span>
-        </button>
-        <div class="nav-links" id="menu-principal">
-          <a href="../sobre.html" data-nav="sobre">About</a>
-          <a href="../particulares.html" data-nav="particulares">Individuals</a>
-          <a href="../empresas.html" data-nav="empresas">Businesses</a>
-          <a href="../residentes-no-estrangeiro.html" data-nav="residentes">Residents abroad</a>
-          <a href="../contactos.html" data-nav="contactos">Contact</a>
-          <a class="btn primary small" href="../consulta-juridica.html#pedido-consulta" data-nav="consulta">Legal consultation</a>
-        </div>
-      </nav>
+      <div class="header-tools">
+        <nav class="language-switcher" aria-label="Language">
+    <ul class="language-switcher__list">
+      <li><a href="../index.html" hreflang="pt-PT" lang="pt">PT</a></li>
+      <li><span class="language-switcher__current" aria-current="page" lang="en">EN</span></li>
+      <li><a href="../fr/index.html" hreflang="fr" lang="fr">FR</a></li>
+    </ul>
+  </nav>
+        <nav class="nav" aria-label="Main navigation">
+          <button class="nav-toggle" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="menu-principal" aria-haspopup="true">
+            <span></span><span></span><span></span>
+          </button>
+          <div class="nav-links" id="menu-principal">
+            <a href="index.html" data-nav="home">Home</a>
+            <a href="imovel-portugal-nao-residentes.html" data-nav="property">Property in Portugal</a>
+            <a href="heranca-portugal-nao-residentes.html" data-nav="inheritance">Inheritance in Portugal</a>
+            <a href="about.html" data-nav="about">About the lawyer</a>
+            <a href="contact.html" data-nav="contact">Contact</a>
+            <a class="btn primary small" href="legal-consultation.html#pedido-consulta" data-nav="consulta" data-loc="header">Request a consultation</a>
+          </div>
+        </nav>
+      </div>
     </div>
   </header>
 
@@ -272,8 +300,8 @@
     <section class="section-cta" aria-label="Next step">
       <p>If you are a US citizen intending to buy, sell or manage property in Portugal, you may request a legal consultation for analysis of the facts and available documentation.</p>
       <div class="cta-row u-mt-sm">
-        <a class="btn primary" href="../consulta-juridica.html#pedido-consulta">Request legal consultation</a>
-        <a class="btn secondary" href="../contactos.html">Go to contact</a>
+        <a class="btn primary" href="legal-consultation.html#pedido-consulta">Request legal consultation</a>
+        <a class="btn secondary" href="contact.html">Go to contact</a>
       </div>
     </section>
 
@@ -291,7 +319,7 @@
         <li><a href="../residentes-no-estrangeiro.html">Residents abroad</a></li>
         <li><a href="../estrangeiro-heranca-imovel-portugal.html">Inheritance or property in Portugal: where to start</a></li>
         <li><a href="../imobiliario-arrendamento.html">Property and tenancy</a></li>
-        <li><a href="../consulta-juridica.html#pedido-consulta">Legal consultation</a></li>
+        <li><a href="legal-consultation.html#pedido-consulta">Legal consultation</a></li>
       </ul>
     </section>
 
@@ -319,17 +347,14 @@
       </div>
       <div class="footer-right">
         <div class="footer-links">
-          <a href="../sobre.html">About</a>
-          <a href="../particulares.html">Individuals</a>
-          <a href="../empresas.html">Businesses</a>
-          <a href="../familia-menores.html">Family and minors</a>
-          <a href="../imobiliario-arrendamento.html">Property and tenancy</a>
-          <a href="../execucoes-insolvencia.html">Enforcement and insolvency</a>
-          <a href="../residentes-no-estrangeiro.html">Residents abroad</a>
-          <a href="../contactos.html">Contact</a>
-          <a href="../consulta-juridica.html#pedido-consulta">Legal consultation</a>
-          <a href="../politica-de-privacidade.html">Privacy policy</a>
-          <a href="../aviso-legal.html">Legal notice</a>
+          <a href="index.html">Home</a>
+          <a href="imovel-portugal-nao-residentes.html">Property in Portugal</a>
+          <a href="heranca-portugal-nao-residentes.html">Inheritance in Portugal</a>
+          <a href="about.html">About the lawyer</a>
+          <a href="contact.html">Contact</a>
+          <a href="legal-consultation.html#pedido-consulta">Request a consultation</a>
+          <a href="privacy.html">Privacy policy</a>
+          <a href="legal-notice.html">Legal notice</a>
         </div>
         <p class="footer-disclaimer">The content of this site is for information only and does not constitute legal advice or advertising that may compromise the duty of independence and prudence proper to the profession.</p>
         <p class="footer-copy">© <span id="year"></span> Correia Crespo — Advogados. All rights reserved.</p>
@@ -341,7 +366,7 @@
       <p id="cookie-consent-desc" class="cookie-consent__text">
         <span id="cookie-consent-title" class="cookie-consent__title">Analytics cookies.</span>
         This site uses analytics cookies (Google Analytics) to understand how the website is used, only with your consent.
-        See the <a href="../politica-de-privacidade.html">privacy policy</a>.
+        See the <a href="privacy.html">privacy policy</a>.
       </p>
       <div class="cookie-consent__actions">
         <button type="button" class="btn secondary small" data-cookie-reject>Reject</button>

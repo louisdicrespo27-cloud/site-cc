@@ -152,8 +152,7 @@ function improveArticleJsonLd(html, slug) {
       changed = true;
     }
     if (node.publisher && !node.publisher.name) {
-      node.publisher['@type'] = node.publisher['@type'] || 'Organization';
-      node.publisher.name = 'Correia Crespo — Advogados';
+      node.publisher = { '@id': 'https://www.correiacrespo-advogados.pt/#legal-service' };
       changed = true;
     }
   }

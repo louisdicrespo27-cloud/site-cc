@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /**
  * Normaliza meta Open Graph / Twitter e gera sitemap.xml.
- * Executar: node scripts/normalize-seo.mjs
+ * lastmod: só quando existe data editorial fiável (JSON-LD dateModified ou mapa explícito).
  */
 import fs from 'fs';
 import path from 'path';
@@ -11,7 +11,20 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.join(__dirname, '..');
 const SITE = 'https://www.correiacrespo-advogados.pt';
 const OG_IMAGE = `${SITE}/assets/img/og.jpg`;
-const LASTMOD = new Date().toISOString().split('T')[0];
+
+/** Páginas institucionais EN/FR criadas na implementação i18n (Prompt 6). */
+const I18N_INSTITUTIONAL_LASTMOD = {
+  'en/about.html': '2026-07-05',
+  'en/contact.html': '2026-07-05',
+  'en/legal-consultation.html': '2026-07-05',
+  'en/privacy.html': '2026-07-05',
+  'en/legal-notice.html': '2026-07-05',
+  'fr/a-propos.html': '2026-07-05',
+  'fr/contact.html': '2026-07-05',
+  'fr/consultation-juridique.html': '2026-07-05',
+  'fr/confidentialite.html': '2026-07-05',
+  'fr/mentions-legales.html': '2026-07-05',
+};
 
 function walkHtml(dir, acc = []) {
   for (const ent of fs.readdirSync(dir, { withFileTypes: true })) {
@@ -46,7 +59,23 @@ function isNoindex(html) {
 }
 
 function isRedirectStub(html) {
-  return /http-equiv="refresh"/i.test(html) && /location\.replace/i.test(html);
+  return (
+    /<html\b[^>]*\bdata-redirect-stub\b/i.test(html) ||
+    (/http-equiv="refresh"/i.test(html) && /location\.replace/i.test(html))
+  );
+}
+
+/**
+ * Resolve lastmod conforme prioridade editorial.
+ * Retorna null quando não existe data fiável → omite <lastmod>.
+ */
+function resolveLastmod(html, rel) {
+  const jsonLdMatch = html.match(/"dateModified"\s*:\s*"(\d{4}-\d{2}-\d{2})"/);
+  if (jsonLdMatch) return jsonLdMatch[1];
+
+  if (I18N_INSTITUTIONAL_LASTMOD[rel]) return I18N_INSTITUTIONAL_LASTMOD[rel];
+
+  return null;
 }
 
 function patchHead(html, relPath) {
@@ -57,7 +86,9 @@ function patchHead(html, relPath) {
   const desc = descM ? decodeEnt(descM[1]) : '';
 
   let ogLocale = 'pt_PT';
-  if (relPath.startsWith('en/')) ogLocale = 'en_US';
+  if (relPath.startsWith('en/')) {
+    ogLocale = relPath.includes('buying-property-portugal-us-citizens') ? 'en_US' : 'en_GB';
+  }
   if (relPath.startsWith('fr/')) ogLocale = 'fr_FR';
 
   let out = html;
@@ -106,7 +137,15 @@ function patchHead(html, relPath) {
 function shouldIncludeInSitemap(relPath, html) {
   if (relPath.startsWith('partials/')) return false;
   if (isNoindex(html)) return false;
+  if (isRedirectStub(html)) return false;
   return true;
+}
+
+function buildUrlXmlEntry(entry) {
+  let block = `  <url>\n    <loc>${entry.loc}</loc>`;
+  if (entry.lastmod) block += `\n    <lastmod>${entry.lastmod}</lastmod>`;
+  block += `\n    <changefreq>monthly</changefreq>\n  </url>`;
+  return block;
 }
 
 function main() {
@@ -125,22 +164,27 @@ function main() {
   console.log(`Heads atualizados: ${changed} ficheiros.`);
 
   const urls = [];
+  let withLastmod = 0;
+  let withoutLastmod = 0;
   for (const abs of files) {
     const rel = path.relative(ROOT, abs).replace(/\\/g, '/');
     if (rel.startsWith('templates/') || rel.startsWith('partials/')) continue;
     const raw = fs.readFileSync(abs, 'utf8');
     if (!shouldIncludeInSitemap(rel, raw)) continue;
-    urls.push({ loc: fileToUrl(rel), lastmod: LASTMOD });
+    const lastmod = resolveLastmod(raw, rel);
+    if (lastmod) withLastmod++;
+    else withoutLastmod++;
+    urls.push({ loc: fileToUrl(rel), lastmod });
   }
   urls.sort((a, b) => a.loc.localeCompare(b.loc));
 
   const xml =
     `<?xml version="1.0" encoding="UTF-8"?>\n` +
     `<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n` +
-    urls.map((u) => `  <url>\n    <loc>${u.loc}</loc>\n    <lastmod>${u.lastmod}</lastmod>\n    <changefreq>monthly</changefreq>\n  </url>`).join('\n') +
+    urls.map(buildUrlXmlEntry).join('\n') +
     `\n</urlset>\n`;
   fs.writeFileSync(path.join(ROOT, 'sitemap.xml'), xml);
-  console.log(`sitemap.xml: ${urls.length} URLs.`);
+  console.log(`sitemap.xml: ${urls.length} URLs (${withLastmod} com lastmod, ${withoutLastmod} sem lastmod).`);
 }
 
 main();

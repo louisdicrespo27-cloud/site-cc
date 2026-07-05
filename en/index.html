@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta name="robots" content="index,follow" />
 
-  <title>Portuguese Lawyer for Non-Residents | Buying Property in Portugal | Correia Crespo — Lawyers</title>
+  <title>Portuguese lawyer for non-residents | Correia Crespo — Advogados</title>
   <meta name="description" content="Legal support for US, UK and Canadian buyers purchasing property in Portugal: NIF, fiscal representative, power of attorney, due diligence. Consultation by appointment in Lourinhã." />
   <link rel="canonical" href="https://www.correiacrespo-advogados.pt/en/index.html" />
   <link rel="alternate" hreflang="pt-PT" href="https://www.correiacrespo-advogados.pt/" />
@@ -15,7 +15,7 @@
 
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="Correia Crespo — Advogados" />
-  <meta property="og:locale" content="en_US" />
+  <meta property="og:locale" content="en_GB" />
   <meta property="og:title" content="Portuguese Lawyer for Non-Residents | Buying Property in Portugal" />
   <meta property="og:description" content="Legal support for international buyers: NIF, fiscal representative, power of attorney and due diligence when purchasing property in Portugal." />
   <meta property="og:url" content="https://www.correiacrespo-advogados.pt/en/index.html" />
@@ -40,17 +40,20 @@
       "url": "https://www.correiacrespo-advogados.pt/en/index.html",
       "name": "Portuguese Lawyer for Non-Residents | Buying Property in Portugal",
       "description": "Legal support for US, UK and Canadian buyers purchasing property in Portugal: NIF, fiscal representative, power of attorney, due diligence.",
-      "isPartOf": { "@id": "https://www.correiacrespo-advogados.pt/#website" },
+      "isPartOf": {
+        "@id": "https://www.correiacrespo-advogados.pt/#website"
+      },
       "inLanguage": "en",
-      "about": { "@id": "https://www.correiacrespo-advogados.pt/en/index.html#legal-service" }
+      "about": {
+        "@id": "https://www.correiacrespo-advogados.pt/en/index.html#legal-service"
+      }
     },
     {
       "@type": "LegalService",
-      "@id": "https://www.correiacrespo-advogados.pt/en/index.html#legal-service",
+      "@id": "https://www.correiacrespo-advogados.pt/#legal-service",
       "name": "Correia Crespo — Advogados",
       "url": "https://www.correiacrespo-advogados.pt/en/index.html",
       "image": "https://www.correiacrespo-advogados.pt/assets/img/og.jpg",
-      "parentOrganization": { "@id": "https://www.correiacrespo-advogados.pt/#organization" },
       "telephone": "+351 914 376 903",
       "email": "correiacrespo-67709L@adv.oa.pt",
       "address": {
@@ -60,22 +63,41 @@
         "postalCode": "2530-804",
         "addressCountry": "PT"
       },
-      "areaServed": { "@type": "Country", "name": "Portugal" },
-      "employee": { "@id": "https://www.correiacrespo-advogados.pt/sobre.html#luis-correia-crespo" }
+      "areaServed": {
+        "@type": "Country",
+        "name": "Portugal"
+      },
+      "employee": {
+        "@id": "https://www.correiacrespo-advogados.pt/sobre.html#luis-correia-crespo"
+      },
+      "founder": {
+        "@id": "https://www.correiacrespo-advogados.pt/sobre.html#luis-correia-crespo"
+      }
     },
     {
-      "@type": "Attorney",
+      "@type": "Person",
       "@id": "https://www.correiacrespo-advogados.pt/sobre.html#luis-correia-crespo",
       "name": "Luís Correia Crespo",
       "identifier": "67709L",
-      "memberOf": { "@id": "https://www.correiacrespo-advogados.pt/#organization" },
-      "worksFor": { "@id": "https://www.correiacrespo-advogados.pt/en/index.html#legal-service" },
-      "knowsAbout": ["Property law", "Non-resident buyers", "Portuguese civil law"]
+      "jobTitle": "Advogado",
+      "worksFor": {
+        "@id": "https://www.correiacrespo-advogados.pt/#legal-service"
+      },
+      "knowsAbout": [
+        "Property law",
+        "Non-resident buyers",
+        "Portuguese civil law"
+      ]
     },
     {
       "@type": "BreadcrumbList",
       "itemListElement": [
-        { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.correiacrespo-advogados.pt/en/index.html" }
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://www.correiacrespo-advogados.pt/en/index.html"
+        }
       ]
     }
   ]
@@ -85,7 +107,7 @@
   <link rel="manifest" href="../site.webmanifest" />
   <meta name="theme-color" content="#5c1829" />
 </head>
-<body class="site-page" data-site-base="../" data-current-nav="residentes" data-ga-id="G-NGDK1RD6Y3">
+<body class="site-page" data-site-base="../" data-i18n-key="index" data-current-nav="home" data-ga-id="G-NGDK1RD6Y3">
   <a class="skip-link" href="#conteudo">Skip to content</a>
 
   <header class="header">
@@ -100,19 +122,28 @@
         </span>
       </a>
 
-      <nav class="nav" aria-label="Main navigation">
-        <button class="nav-toggle" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="menu-principal" aria-haspopup="true">
-          <span></span><span></span><span></span>
-        </button>
-        <div class="nav-links" id="menu-principal">
-          <a href="../sobre.html" data-nav="sobre">About</a>
-          <a href="../particulares.html" data-nav="particulares">Individuals</a>
-          <a href="../empresas.html" data-nav="empresas">Businesses</a>
-          <a href="index.html" data-nav="residentes">Non-residents</a>
-          <a href="../contactos.html" data-nav="contactos">Contact</a>
-          <a class="btn primary small" href="../consulta-juridica.html#pedido-consulta" data-nav="consulta">Legal consultation</a>
-        </div>
-      </nav>
+      <div class="header-tools">
+        <nav class="language-switcher" aria-label="Language">
+    <ul class="language-switcher__list">
+      <li><a href="../index.html" hreflang="pt-PT" lang="pt">PT</a></li>
+      <li><span class="language-switcher__current" aria-current="page" lang="en">EN</span></li>
+      <li><a href="../fr/index.html" hreflang="fr" lang="fr">FR</a></li>
+    </ul>
+  </nav>
+        <nav class="nav" aria-label="Main navigation">
+          <button class="nav-toggle" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="menu-principal" aria-haspopup="true">
+            <span></span><span></span><span></span>
+          </button>
+          <div class="nav-links" id="menu-principal">
+            <a href="index.html" data-nav="home">Home</a>
+            <a href="imovel-portugal-nao-residentes.html" data-nav="property">Property in Portugal</a>
+            <a href="heranca-portugal-nao-residentes.html" data-nav="inheritance">Inheritance in Portugal</a>
+            <a href="about.html" data-nav="about">About the lawyer</a>
+            <a href="contact.html" data-nav="contact">Contact</a>
+            <a class="btn primary small" href="legal-consultation.html#pedido-consulta" data-nav="consulta" data-loc="header">Request a consultation</a>
+          </div>
+        </nav>
+      </div>
     </div>
   </header>
 
@@ -129,8 +160,8 @@
             </p>
             <p class="hero-mini"><span class="dot" aria-hidden="true"></span><span>Consultation by appointment — in person in Lourinhã or by videoconference when appropriate.</span></p>
             <div class="hero-actions">
-              <a class="btn primary" href="#contacto-hub">Request a consultation</a>
-              <a class="btn secondary" href="buying-property-portugal-us-citizens.html">Guide for US buyers</a>
+              <a class="btn primary" href="legal-consultation.html#pedido-consulta" data-loc="hero">Request a consultation</a>
+              <a class="btn secondary" href="contact.html" data-loc="hero">Contact</a>
             </div>
           </div>
         </div>
@@ -182,12 +213,12 @@
       <div class="container">
         <h2 class="section-title" id="advogado-hub-titulo">Who will handle your matter</h2>
         <p>
-          <strong>Luís Correia Crespo</strong> is a lawyer (<em>advogado</em>) registered with the Portuguese Bar Association (<em>Ordem dos Advogados</em>), professional licence no. <strong>67709L</strong>. He practises from Lourinhã, on Portugal's west coast, and advises individuals and businesses on matters governed by Portuguese law, including property transactions for clients who live abroad.
+          Correia Crespo — Advogados is the professional designation used by Luís Correia Crespo, a Portuguese lawyer registered with the Portuguese Bar Association, professional licence no. <strong>67709L</strong>. He practises from Lourinhã, on Portugal's west coast, and advises on matters governed by Portuguese law, including property and inheritance for clients who live abroad.
         </p>
         <p>
-          The firm does not promise outcomes, guaranteed timelines or results in court. Initial contact and general information do not, by themselves, create a lawyer–client relationship or substitute a booked legal consultation. A mandate is only accepted after the case has been analysed and terms have been agreed.
+          Initial contact and general information do not, by themselves, create a lawyer–client relationship or substitute a booked legal consultation. A mandate is only accepted after the case has been analysed and terms have been agreed.
         </p>
-        <p class="u-mt-sm"><a class="btn secondary" href="../sobre.html">About the firm</a></p>
+        <p class="u-mt-sm"><a class="btn secondary" href="about.html">About the lawyer</a></p>
       </div>
     </section>
 
@@ -202,11 +233,23 @@
           <h3 class="consulta-booking__title">Request an appointment</h3>
           <p class="consulta-booking__intro">You may write in English. Briefly describe whether you are looking to buy, at what stage you are, and where you are tax-resident. Do not send extensive confidential documents in a first message.</p>
           <div class="consulta-booking__actions">
-            <a class="btn primary" href="mailto:correiacrespo-67709L@adv.oa.pt?subject=Request%20for%20legal%20consultation%20%E2%80%94%20property%20in%20Portugal&amp;body=Dear%20Sir%20or%20Madam%2C%0A%0AI%20would%20like%20to%20request%20an%20appointment%20for%20a%20legal%20consultation%20regarding%20the%20purchase%20of%20property%20in%20Portugal.%0A%0AKind%20regards%2C%0A" data-loc="cta">Email to request consultation</a>
-            <a class="btn secondary" href="https://wa.me/351914376903?text=Dear%20Sir%20or%20Madam%2C%0A%0AI%20would%20like%20to%20request%20an%20appointment%20for%20a%20legal%20consultation%20with%20Correia%20Crespo%20%E2%80%94%20Advogados%20regarding%20property%20in%20Portugal.%0A%0AThank%20you." target="_blank" rel="noopener noreferrer" data-loc="cta">WhatsApp</a>
+            <a class="btn primary" href="legal-consultation.html#pedido-consulta" data-loc="cta">Request a consultation</a>
+            <a class="btn secondary" href="contact.html" data-loc="cta">Contact form</a>
+            <a class="btn secondary" href="https://wa.me/351914376903?text=Dear%20Sir%20or%20Madam%2C%0A%0AI%20would%20like%20to%20request%20an%20appointment%20for%20a%20legal%20consultation%20with%20Correia%20Crespo%20%E2%80%94%20Advogados.%0A%0AThank%20you." target="_blank" rel="noopener noreferrer" data-loc="cta">WhatsApp</a>
           </div>
-          <p class="consulta-booking__note">You may also use the <a href="../contactos.html">contact form</a> on the main site (in Portuguese). This initial contact does not constitute legal advice.</p>
+          <p class="consulta-booking__note">This initial contact does not constitute legal advice or acceptance of a mandate.</p>
         </div>
+      </div>
+    </section>
+
+    <section class="section" id="leituras" aria-labelledby="leituras-titulo">
+      <div class="container">
+        <h2 class="section-title" id="leituras-titulo">Selected reading</h2>
+        <p class="section-subtitle">Editorial articles for context only — not legal advice.</p>
+        <ul class="resource-list">
+          <li><a href="why-portugal-a-life-worth-choosing.html">Why Portugal — a life worth choosing</a></li>
+          <li><a href="buying-property-portugal-us-citizens.html">Guide for US buyers</a> <span class="muted">(additional information in Portuguese may apply to some topics)</span></li>
+        </ul>
       </div>
     </section>
   </main>
@@ -226,17 +269,14 @@
       </div>
       <div class="footer-right">
         <div class="footer-links">
-          <a href="../sobre.html">About</a>
-          <a href="../particulares.html">Individuals</a>
-          <a href="../empresas.html">Businesses</a>
-          <a href="../familia-menores.html">Family and minors</a>
-          <a href="../imobiliario-arrendamento.html">Property and tenancy</a>
-          <a href="../execucoes-insolvencia.html">Enforcement and insolvency</a>
-          <a href="../residentes-no-estrangeiro.html">Residents abroad</a>
-          <a href="../contactos.html">Contact</a>
-          <a href="../consulta-juridica.html#pedido-consulta">Legal consultation</a>
-          <a href="../politica-de-privacidade.html">Privacy policy</a>
-          <a href="../aviso-legal.html">Legal notice</a>
+          <a href="index.html">Home</a>
+          <a href="imovel-portugal-nao-residentes.html">Property in Portugal</a>
+          <a href="heranca-portugal-nao-residentes.html">Inheritance in Portugal</a>
+          <a href="about.html">About the lawyer</a>
+          <a href="contact.html">Contact</a>
+          <a href="legal-consultation.html#pedido-consulta">Request a consultation</a>
+          <a href="privacy.html">Privacy policy</a>
+          <a href="legal-notice.html">Legal notice</a>
         </div>
         <p class="footer-disclaimer">The content of this site is for information only and does not constitute legal advice or advertising that may compromise the duty of independence and prudence proper to the profession.</p>
         <p class="footer-copy">© <span id="year"></span> Correia Crespo — Advogados. All rights reserved.</p>
@@ -248,7 +288,7 @@
       <p id="cookie-consent-desc" class="cookie-consent__text">
         <span id="cookie-consent-title" class="cookie-consent__title">Analytics cookies.</span>
         This site uses analytics cookies (Google Analytics) to understand how the website is used, only with your consent.
-        See the <a href="../politica-de-privacidade.html">privacy policy</a>.
+        See the <a href="privacy.html">privacy policy</a>.
       </p>
       <div class="cookie-consent__actions">
         <button type="button" class="btn secondary small" data-cookie-reject>Reject</button>

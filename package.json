@@ -6,6 +6,9 @@
   "scripts": {
     "build": "node scripts/build.mjs",
     "seo": "node scripts/normalize-seo.mjs",
+    "qa:i18n": "node scripts/qa-i18n.mjs",
+    "validate:hreflang": "node scripts/validate-hreflang.mjs",
+    "qa:prompt6": "node scripts/qa-prompt6-browser.mjs",
     "prepare:public": "node scripts/prepare-public.mjs",
     "pack": "node scripts/pack-dist.mjs",
     "redirects": "node scripts/generate-redirects.mjs"

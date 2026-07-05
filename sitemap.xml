@@ -2,66 +2,61 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://www.correiacrespo-advogados.pt/</loc>
-    <lastmod>2026-07-05</lastmod>
     <changefreq>monthly</changefreq>
   </url>
   <url>
     <loc>https://www.correiacrespo-advogados.pt/agricultura-fornecimentos-pagamentos.html</loc>
-    <lastmod>2026-07-05</lastmod>
     <changefreq>monthly</changefreq>
   </url>
   <url>
     <loc>https://www.correiacrespo-advogados.pt/arrendamento-comercial-imoveis-empresas.html</loc>
-    <lastmod>2026-07-05</lastmod>
     <changefreq>monthly</changefreq>
   </url>
   <url>
     <loc>https://www.correiacrespo-advogados.pt/aviso-legal.html</loc>
-    <lastmod>2026-07-05</lastmod>
     <changefreq>monthly</changefreq>
   </url>
   <url>
     <loc>https://www.correiacrespo-advogados.pt/cobranca-dividas-empresas.html</loc>
-    <lastmod>2026-07-05</lastmod>
     <changefreq>monthly</changefreq>
   </url>
   <url>
     <loc>https://www.correiacrespo-advogados.pt/cobranca-dividas-injuncao-execucao.html</loc>
-    <lastmod>2026-07-05</lastmod>
+    <lastmod>2026-06-16</lastmod>
     <changefreq>monthly</changefreq>
   </url>
   <url>
     <loc>https://www.correiacrespo-advogados.pt/construcao-civil-obras-subempreitadas.html</loc>
-    <lastmod>2026-07-05</lastmod>
     <changefreq>monthly</changefreq>
   </url>
   <url>
     <loc>https://www.correiacrespo-advogados.pt/consulta-juridica.html</loc>
-    <lastmod>2026-07-05</lastmod>
     <changefreq>monthly</changefreq>
   </url>
   <url>
     <loc>https://www.correiacrespo-advogados.pt/contactos.html</loc>
-    <lastmod>2026-07-05</lastmod>
     <changefreq>monthly</changefreq>
   </url>
   <url>
     <loc>https://www.correiacrespo-advogados.pt/contratos-comerciais-empresas.html</loc>
-    <lastmod>2026-07-05</lastmod>
     <changefreq>monthly</changefreq>
   </url>
   <url>
     <loc>https://www.correiacrespo-advogados.pt/divorcio-casa-credito-habitacao.html</loc>
-    <lastmod>2026-07-05</lastmod>
+    <lastmod>2026-06-16</lastmod>
     <changefreq>monthly</changefreq>
   </url>
   <url>
     <loc>https://www.correiacrespo-advogados.pt/divorcio-mutuo-consentimento-filhos-menores.html</loc>
-    <lastmod>2026-07-05</lastmod>
+    <lastmod>2026-06-16</lastmod>
     <changefreq>monthly</changefreq>
   </url>
   <url>
     <loc>https://www.correiacrespo-advogados.pt/empresas.html</loc>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://www.correiacrespo-advogados.pt/en/about.html</loc>
     <lastmod>2026-07-05</lastmod>
     <changefreq>monthly</changefreq>
   </url>
@@ -71,17 +66,36 @@
     <changefreq>monthly</changefreq>
   </url>
   <url>
-    <loc>https://www.correiacrespo-advogados.pt/en/heranca-portugal-nao-residentes.html</loc>
+    <loc>https://www.correiacrespo-advogados.pt/en/contact.html</loc>
     <lastmod>2026-07-05</lastmod>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://www.correiacrespo-advogados.pt/en/heranca-portugal-nao-residentes.html</loc>
+    <lastmod>2026-06-23</lastmod>
     <changefreq>monthly</changefreq>
   </url>
   <url>
     <loc>https://www.correiacrespo-advogados.pt/en/imovel-portugal-nao-residentes.html</loc>
-    <lastmod>2026-07-05</lastmod>
+    <lastmod>2026-06-23</lastmod>
     <changefreq>monthly</changefreq>
   </url>
   <url>
     <loc>https://www.correiacrespo-advogados.pt/en/index.html</loc>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://www.correiacrespo-advogados.pt/en/legal-consultation.html</loc>
+    <lastmod>2026-07-05</lastmod>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://www.correiacrespo-advogados.pt/en/legal-notice.html</loc>
+    <lastmod>2026-07-05</lastmod>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://www.correiacrespo-advogados.pt/en/privacy.html</loc>
     <lastmod>2026-07-05</lastmod>
     <changefreq>monthly</changefreq>
   </url>
@@ -92,41 +106,62 @@
   </url>
   <url>
     <loc>https://www.correiacrespo-advogados.pt/estrangeiro-heranca-imovel-portugal.html</loc>
-    <lastmod>2026-07-05</lastmod>
+    <lastmod>2026-06-16</lastmod>
     <changefreq>monthly</changefreq>
   </url>
   <url>
     <loc>https://www.correiacrespo-advogados.pt/execucao-insolvencia-empresas.html</loc>
-    <lastmod>2026-07-05</lastmod>
     <changefreq>monthly</changefreq>
   </url>
   <url>
     <loc>https://www.correiacrespo-advogados.pt/execucoes-insolvencia.html</loc>
-    <lastmod>2026-07-05</lastmod>
     <changefreq>monthly</changefreq>
   </url>
   <url>
     <loc>https://www.correiacrespo-advogados.pt/familia-menores.html</loc>
-    <lastmod>2026-07-05</lastmod>
     <changefreq>monthly</changefreq>
   </url>
   <url>
     <loc>https://www.correiacrespo-advogados.pt/fatura-por-cobrar-empresa.html</loc>
+    <lastmod>2026-06-16</lastmod>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://www.correiacrespo-advogados.pt/fr/a-propos.html</loc>
+    <lastmod>2026-07-05</lastmod>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://www.correiacrespo-advogados.pt/fr/confidentialite.html</loc>
+    <lastmod>2026-07-05</lastmod>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://www.correiacrespo-advogados.pt/fr/consultation-juridique.html</loc>
+    <lastmod>2026-07-05</lastmod>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://www.correiacrespo-advogados.pt/fr/contact.html</loc>
     <lastmod>2026-07-05</lastmod>
     <changefreq>monthly</changefreq>
   </url>
   <url>
     <loc>https://www.correiacrespo-advogados.pt/fr/heranca-portugal-nao-residentes.html</loc>
-    <lastmod>2026-07-05</lastmod>
+    <lastmod>2026-06-23</lastmod>
     <changefreq>monthly</changefreq>
   </url>
   <url>
     <loc>https://www.correiacrespo-advogados.pt/fr/imovel-portugal-nao-residentes.html</loc>
-    <lastmod>2026-07-05</lastmod>
+    <lastmod>2026-06-23</lastmod>
     <changefreq>monthly</changefreq>
   </url>
   <url>
     <loc>https://www.correiacrespo-advogados.pt/fr/index.html</loc>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://www.correiacrespo-advogados.pt/fr/mentions-legales.html</loc>
     <lastmod>2026-07-05</lastmod>
     <changefreq>monthly</changefreq>
   </url>
@@ -137,77 +172,71 @@
   </url>
   <url>
     <loc>https://www.correiacrespo-advogados.pt/heranca-portugal-nao-residentes.html</loc>
-    <lastmod>2026-07-05</lastmod>
+    <lastmod>2026-06-23</lastmod>
     <changefreq>monthly</changefreq>
   </url>
   <url>
     <loc>https://www.correiacrespo-advogados.pt/imobiliario-arrendamento.html</loc>
-    <lastmod>2026-07-05</lastmod>
     <changefreq>monthly</changefreq>
   </url>
   <url>
     <loc>https://www.correiacrespo-advogados.pt/imovel-portugal-nao-residentes.html</loc>
-    <lastmod>2026-07-05</lastmod>
+    <lastmod>2026-06-23</lastmod>
     <changefreq>monthly</changefreq>
   </url>
   <url>
     <loc>https://www.correiacrespo-advogados.pt/insolvencia-pessoal-exoneracao-passivo-restante.html</loc>
-    <lastmod>2026-07-05</lastmod>
+    <lastmod>2026-06-16</lastmod>
     <changefreq>monthly</changefreq>
   </url>
   <url>
     <loc>https://www.correiacrespo-advogados.pt/particulares.html</loc>
-    <lastmod>2026-07-05</lastmod>
     <changefreq>monthly</changefreq>
   </url>
   <url>
     <loc>https://www.correiacrespo-advogados.pt/pensao-alimentos-em-atraso.html</loc>
-    <lastmod>2026-07-05</lastmod>
+    <lastmod>2026-06-16</lastmod>
     <changefreq>monthly</changefreq>
   </url>
   <url>
     <loc>https://www.correiacrespo-advogados.pt/politica-de-privacidade.html</loc>
-    <lastmod>2026-07-05</lastmod>
     <changefreq>monthly</changefreq>
   </url>
   <url>
     <loc>https://www.correiacrespo-advogados.pt/produto-agricola-entregue-nao-pago.html</loc>
-    <lastmod>2026-07-05</lastmod>
+    <lastmod>2026-06-16</lastmod>
     <changefreq>monthly</changefreq>
   </url>
   <url>
     <loc>https://www.correiacrespo-advogados.pt/quanto-tempo-demora-divorcio-portugal.html</loc>
-    <lastmod>2026-07-05</lastmod>
+    <lastmod>2026-06-16</lastmod>
     <changefreq>monthly</changefreq>
   </url>
   <url>
     <loc>https://www.correiacrespo-advogados.pt/renda-em-atraso-senhorio-arrendatario.html</loc>
-    <lastmod>2026-07-05</lastmod>
+    <lastmod>2026-06-16</lastmod>
     <changefreq>monthly</changefreq>
   </url>
   <url>
     <loc>https://www.correiacrespo-advogados.pt/residentes-no-estrangeiro.html</loc>
-    <lastmod>2026-07-05</lastmod>
     <changefreq>monthly</changefreq>
   </url>
   <url>
     <loc>https://www.correiacrespo-advogados.pt/responsabilidades-parentais-pais-nao-casados.html</loc>
-    <lastmod>2026-07-05</lastmod>
+    <lastmod>2026-06-16</lastmod>
     <changefreq>monthly</changefreq>
   </url>
   <url>
     <loc>https://www.correiacrespo-advogados.pt/sobre.html</loc>
-    <lastmod>2026-07-05</lastmod>
     <changefreq>monthly</changefreq>
   </url>
   <url>
     <loc>https://www.correiacrespo-advogados.pt/sociedades-gerentes-empresas-familiares.html</loc>
-    <lastmod>2026-07-05</lastmod>
     <changefreq>monthly</changefreq>
   </url>
   <url>
     <loc>https://www.correiacrespo-advogados.pt/trabalhos-extra-obra-nao-pagos.html</loc>
-    <lastmod>2026-07-05</lastmod>
+    <lastmod>2026-06-16</lastmod>
     <changefreq>monthly</changefreq>
   </url>
 </urlset>

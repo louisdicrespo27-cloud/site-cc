@@ -1,20 +1,6 @@
 #!/usr/bin/env node
 /**
- * build.mjs — Injeta header e footer inline em páginas HTML da raiz e footer+banner
- * nas subpastas de idioma (ex.: en/, fr/).
- * Executar: node scripts/build.mjs  (ou: npm run build)
- *
- * Lê partials/header.html e partials/footer.html (ou footer.en.html / footer.fr.html
- * consoante a pasta da página), substitui %%BASE%% pelo valor
- * de data-site-base na tag <body> de cada página (vazio na raiz, ../ em subpastas),
- * e substitui os divs site-header-mount / site-footer-mount pelo markup inline.
- *
- * Se os mounts já não existirem (página já construída), substitui o bloco
- * <header class="header">…</header> e <footer class="footer">…</footer>
- * (e o banner #cookie-consent, se existir após o footer).
- *
- * Nas subpastas de topo com HTML, só o footer+banner é injetado (o header traduzido
- * permanece na página). Na raiz, header e footer são ambos injetados.
+ * build.mjs — Injeta header, footer e seletor de idioma conforme o idioma da página.
  */
 import fs from 'node:fs';
 import path from 'node:path';
@@ -23,8 +9,8 @@ import { fileURLToPath } from 'node:url';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.join(__dirname, '..');
 const PARTIALS = path.join(ROOT, 'partials');
+const I18N_MAP_PATH = path.join(__dirname, 'i18n-map.json');
 
-/** Subpastas de topo ignoradas pelo build de idiomas. */
 const SKIP_SUBDIR_BUILD = new Set([
   'assets',
   'artigos',
@@ -38,6 +24,41 @@ const SKIP_SUBDIR_BUILD = new Set([
 ]);
 
 const EXCLUDED_HTML = new Set(['og-image-template.html']);
+
+const PATH_I18N_KEY = {
+  'index.html': 'index',
+  'sobre.html': 'about',
+  'contactos.html': 'contact',
+  'consulta-juridica.html': 'consultation',
+  'politica-de-privacidade.html': 'privacy',
+  'aviso-legal.html': 'legal-notice',
+  'imovel-portugal-nao-residentes.html': 'property',
+  'heranca-portugal-nao-residentes.html': 'inheritance',
+  'en/index.html': 'index',
+  'en/about.html': 'about',
+  'en/contact.html': 'contact',
+  'en/legal-consultation.html': 'consultation',
+  'en/privacy.html': 'privacy',
+  'en/legal-notice.html': 'legal-notice',
+  'en/imovel-portugal-nao-residentes.html': 'property',
+  'en/heranca-portugal-nao-residentes.html': 'inheritance',
+  'fr/index.html': 'index',
+  'fr/a-propos.html': 'about',
+  'fr/contact.html': 'contact',
+  'fr/consultation-juridique.html': 'consultation',
+  'fr/confidentialite.html': 'privacy',
+  'fr/mentions-legales.html': 'legal-notice',
+  'fr/imovel-portugal-nao-residentes.html': 'property',
+  'fr/heranca-portugal-nao-residentes.html': 'inheritance',
+};
+
+const SWITCHER_LABELS = {
+  pt: 'Idioma',
+  en: 'Language',
+  fr: 'Langue',
+};
+
+const HREFLANG = { pt: 'pt-PT', en: 'en', fr: 'fr' };
 
 function isRedirectStub(html) {
   return (
@@ -54,7 +75,6 @@ function writeUtf8(p, s) {
   fs.writeFileSync(p, s, 'utf8');
 }
 
-/** Prefixa cada linha com `indent` (ex.: dois espaços, alinhado ao resto do HTML). */
 function indentBlock(html, indent = '  ') {
   return html
     .trimEnd()
@@ -74,10 +94,73 @@ function extractDataSiteBase(html) {
   return m ? m[1] : '';
 }
 
+function extractI18nKey(html, rel) {
+  const bodyOpen = html.match(/<body\b[^>]*>/i);
+  if (bodyOpen) {
+    const m = bodyOpen[0].match(/\bdata-i18n-key="([^"]+)"/i);
+    if (m) return m[1];
+  }
+  return PATH_I18N_KEY[rel] || null;
+}
+
+function detectLang(rel) {
+  if (rel.startsWith('en/')) return 'en';
+  if (rel.startsWith('fr/')) return 'fr';
+  return 'pt';
+}
+
+function clusterPathToFile(clusterPath) {
+  if (clusterPath === '/') return 'index.html';
+  return clusterPath.replace(/^\//, '');
+}
+
+function relativeHref(fromRel, targetFile) {
+  const fromDir = path.dirname(fromRel);
+  const rel = path.relative(fromDir === '.' ? '' : fromDir, targetFile);
+  return rel.split(path.sep).join('/');
+}
+
+function loadI18nMap() {
+  return JSON.parse(readUtf8(I18N_MAP_PATH));
+}
+
+function resolveClusterUrls(i18nMap, key, fromRel) {
+  const cluster = i18nMap.clusters.find((c) => c.key === key);
+  const hubs = i18nMap.hubs;
+  const result = {};
+  for (const lang of ['pt', 'en', 'fr']) {
+    const abs = cluster ? cluster[lang] : hubs[lang];
+    result[lang] = relativeHref(fromRel, clusterPathToFile(abs));
+  }
+  return result;
+}
+
+function renderLangItem(langCode, href, isCurrent) {
+  const hreflang = HREFLANG[langCode];
+  const label = langCode.toUpperCase();
+  if (isCurrent) {
+    return `<span class="language-switcher__current" aria-current="page" lang="${langCode === 'pt' ? 'pt' : langCode}">${label}</span>`;
+  }
+  return `<a href="${href}" hreflang="${hreflang}" lang="${langCode === 'pt' ? 'pt' : langCode}">${label}</a>`;
+}
+
+function buildLanguageSwitcher(fromRel, currentLang, i18nKey, i18nMap) {
+  const urls = resolveClusterUrls(i18nMap, i18nKey, fromRel);
+  const label = SWITCHER_LABELS[currentLang];
+  const ptItem = renderLangItem('pt', urls.pt, currentLang === 'pt');
+  const enItem = renderLangItem('en', urls.en, currentLang === 'en');
+  const frItem = renderLangItem('fr', urls.fr, currentLang === 'fr');
+  return `<nav class="language-switcher" aria-label="${label}">
+  <ul class="language-switcher__list">
+    <li>${ptItem}</li>
+    <li>${enItem}</li>
+    <li>${frItem}</li>
+  </ul>
+</nav>`;
+}
+
 function injectOrReplace(html, headerHtml, footerHtml, { replaceHeader = true } = {}) {
   let out = html;
-  // Incluir indentação da linha antes do mount, para não duplicar espaços.
-  // Só consumir quebras de linha após o mount, nunca `\s*` (absorvia a indentação do <main> seguinte).
   const headerMount = /[\t ]*<div\s+id="site-header-mount"\s*>\s*<\/div>(?:\r?\n)+/;
   const footerMount = /[\t ]*<div\s+id="site-footer-mount"\s*>\s*<\/div>(?:\r?\n)+/;
   const headerBlock = /[\t ]*<header\b[^>]*class="header"[^>]*>[\s\S]*?<\/header>(?:\r?\n)+/i;
@@ -99,11 +182,6 @@ function injectOrReplace(html, headerHtml, footerHtml, { replaceHeader = true } 
   return out;
 }
 
-/**
- * Substitui a região já construída desde <footer class="footer"> até <script (exclusive).
- * Consumir o intervalo completo torna a injeção idempotente e elimina lixo residual
- * (ex.: </div> órfãos deixados por regex parcial no cookie-consent).
- */
 function replaceBuiltFooterRegion(html, footerHtml) {
   const footerMatch = html.match(/[\t ]*<footer\b[^>]*class="footer"[^>]*>/i);
   if (!footerMatch || footerMatch.index === undefined) return html;
@@ -119,13 +197,18 @@ function replaceBuiltFooterRegion(html, footerHtml) {
   return `${before}${footerHtml}\n\n${after}`;
 }
 
+function resolveHeaderPartial(rel) {
+  if (rel.startsWith('en/')) return path.join(PARTIALS, 'header-en.html');
+  if (rel.startsWith('fr/')) return path.join(PARTIALS, 'header-fr.html');
+  return path.join(PARTIALS, 'header.html');
+}
+
 function resolveFooterPartial(rel) {
-  if (rel.startsWith('en/')) return path.join(PARTIALS, 'footer.en.html');
-  if (rel.startsWith('fr/')) return path.join(PARTIALS, 'footer.fr.html');
+  if (rel.startsWith('en/')) return path.join(PARTIALS, 'footer-en.html');
+  if (rel.startsWith('fr/')) return path.join(PARTIALS, 'footer-fr.html');
   return path.join(PARTIALS, 'footer.html');
 }
 
-/** Páginas da raiz (header+footer) e HTML em subpastas de topo (só footer+banner). */
 function collectBuildTargets() {
   const targets = [];
 
@@ -142,7 +225,7 @@ function collectBuildTargets() {
       if (!file.isFile() || !file.name.endsWith('.html') || EXCLUDED_HTML.has(file.name)) continue;
       targets.push({
         rel: path.join(ent.name, file.name).replace(/\\/g, '/'),
-        replaceHeader: false,
+        replaceHeader: true,
       });
     }
   }
@@ -150,29 +233,40 @@ function collectBuildTargets() {
   return targets;
 }
 
-function processHtmlFile(filePath, headerTpl, footerTpl, replaceHeader) {
+function processHtmlFile(filePath, headerTpl, footerTpl, replaceHeader, rel, i18nMap) {
   const raw = readUtf8(filePath);
   const base = extractDataSiteBase(raw);
-  const headerHtml = indentBlock(applyBase(headerTpl, base));
+  const currentLang = detectLang(rel);
+  const i18nKey = extractI18nKey(raw, rel);
+  const switcher = buildLanguageSwitcher(rel, currentLang, i18nKey, i18nMap);
+  let headerWithSwitcher = headerTpl.replace('%%LANGUAGE_SWITCHER%%', switcher);
+  const headerHtml = indentBlock(applyBase(headerWithSwitcher, base));
   const footerHtml = indentBlock(applyBase(footerTpl, base));
   const next = injectOrReplace(raw, headerHtml, footerHtml, { replaceHeader });
   return { raw, next };
 }
 
 function main() {
-  const headerPath = path.join(PARTIALS, 'header.html');
+  const headerPaths = [
+    path.join(PARTIALS, 'header.html'),
+    path.join(PARTIALS, 'header-en.html'),
+    path.join(PARTIALS, 'header-fr.html'),
+  ];
   const footerPaths = [
     path.join(PARTIALS, 'footer.html'),
-    path.join(PARTIALS, 'footer.en.html'),
-    path.join(PARTIALS, 'footer.fr.html'),
+    path.join(PARTIALS, 'footer-en.html'),
+    path.join(PARTIALS, 'footer-fr.html'),
   ];
-  if (!fs.existsSync(headerPath) || footerPaths.some((p) => !fs.existsSync(p))) {
-    console.error('Faltam partials/header.html ou footer(s) em', PARTIALS);
+  if (headerPaths.some((p) => !fs.existsSync(p)) || footerPaths.some((p) => !fs.existsSync(p))) {
+    console.error('Faltam partials de header ou footer em', PARTIALS);
+    process.exit(1);
+  }
+  if (!fs.existsSync(I18N_MAP_PATH)) {
+    console.error('Falta scripts/i18n-map.json');
     process.exit(1);
   }
 
-  const headerTpl = readUtf8(headerPath);
-
+  const i18nMap = loadI18nMap();
   const targets = collectBuildTargets();
   let updated = 0;
   for (const { rel, replaceHeader } of targets) {
@@ -180,8 +274,16 @@ function main() {
     const raw = readUtf8(filePath);
     if (isRedirectStub(raw)) continue;
 
+    const headerTpl = readUtf8(resolveHeaderPartial(rel));
     const footerTpl = readUtf8(resolveFooterPartial(rel));
-    const { raw: pageRaw, next } = processHtmlFile(filePath, headerTpl, footerTpl, replaceHeader);
+    const { raw: pageRaw, next } = processHtmlFile(
+      filePath,
+      headerTpl,
+      footerTpl,
+      replaceHeader,
+      rel,
+      i18nMap
+    );
 
     if (next !== pageRaw) {
       writeUtf8(filePath, next);

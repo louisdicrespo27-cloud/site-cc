@@ -11,8 +11,6 @@
   <link rel="alternate" hreflang="pt-PT" href="https://www.correiacrespo-advogados.pt/imovel-portugal-nao-residentes.html" />
   <link rel="alternate" hreflang="en" href="https://www.correiacrespo-advogados.pt/en/imovel-portugal-nao-residentes.html" />
   <link rel="alternate" hreflang="fr" href="https://www.correiacrespo-advogados.pt/fr/imovel-portugal-nao-residentes.html" />
-  <link rel="alternate" hreflang="x-default" href="https://www.correiacrespo-advogados.pt/imovel-portugal-nao-residentes.html" />
-
   <meta property="og:type" content="article" />
   <meta property="og:site_name" content="Correia Crespo — Advogados" />
   <meta property="og:locale" content="pt_PT" />
@@ -46,10 +44,14 @@
         "@id": "https://www.correiacrespo-advogados.pt/sobre.html#luis-correia-crespo",
         "name": "Luís Correia Crespo"
       },
-      "publisher": { "@id": "https://www.correiacrespo-advogados.pt/#organization" },
+      "publisher": {
+        "@id": "https://www.correiacrespo-advogados.pt/#legal-service"
+      },
       "url": "https://www.correiacrespo-advogados.pt/imovel-portugal-nao-residentes.html",
       "inLanguage": "pt-PT",
-      "isPartOf": { "@id": "https://www.correiacrespo-advogados.pt/#website" },
+      "isPartOf": {
+        "@id": "https://www.correiacrespo-advogados.pt/#website"
+      },
       "mainEntityOfPage": {
         "@type": "WebPage",
         "@id": "https://www.correiacrespo-advogados.pt/imovel-portugal-nao-residentes.html"
@@ -96,9 +98,24 @@
     {
       "@type": "BreadcrumbList",
       "itemListElement": [
-        { "@type": "ListItem", "position": 1, "name": "Início", "item": "https://www.correiacrespo-advogados.pt/" },
-        { "@type": "ListItem", "position": 2, "name": "Residentes no estrangeiro", "item": "https://www.correiacrespo-advogados.pt/residentes-no-estrangeiro.html" },
-        { "@type": "ListItem", "position": 3, "name": "Imóvel em Portugal para não residentes", "item": "https://www.correiacrespo-advogados.pt/imovel-portugal-nao-residentes.html" }
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Início",
+          "item": "https://www.correiacrespo-advogados.pt/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Residentes no estrangeiro",
+          "item": "https://www.correiacrespo-advogados.pt/residentes-no-estrangeiro.html"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "Imóvel em Portugal para não residentes",
+          "item": "https://www.correiacrespo-advogados.pt/imovel-portugal-nao-residentes.html"
+        }
       ]
     }
   ]
@@ -123,19 +140,28 @@
         </span>
       </a>
 
-      <nav class="nav" aria-label="Navegação principal">
-        <button class="nav-toggle" type="button" aria-label="Abrir menu" aria-expanded="false" aria-controls="menu-principal" aria-haspopup="true">
-          <span></span><span></span><span></span>
-        </button>
-        <div class="nav-links" id="menu-principal">
-          <a href="particulares.html" data-nav="particulares">Particulares</a>
-          <a href="empresas.html" data-nav="empresas">Empresas</a>
-          <a href="residentes-no-estrangeiro.html" data-nav="residentes">Residentes no estrangeiro</a>
-          <a href="sobre.html" data-nav="sobre">Sobre</a>
-          <a href="contactos.html" data-nav="contactos">Contactos</a>
-          <a class="btn primary small" href="consulta-juridica.html#pedido-consulta" data-nav="consulta" data-loc="header">Pedir consulta</a>
-        </div>
-      </nav>
+      <div class="header-tools">
+        <nav class="language-switcher" aria-label="Idioma">
+    <ul class="language-switcher__list">
+      <li><span class="language-switcher__current" aria-current="page" lang="pt">PT</span></li>
+      <li><a href="en/imovel-portugal-nao-residentes.html" hreflang="en" lang="en">EN</a></li>
+      <li><a href="fr/imovel-portugal-nao-residentes.html" hreflang="fr" lang="fr">FR</a></li>
+    </ul>
+  </nav>
+        <nav class="nav" aria-label="Navegação principal">
+          <button class="nav-toggle" type="button" aria-label="Abrir menu" aria-expanded="false" aria-controls="menu-principal" aria-haspopup="true">
+            <span></span><span></span><span></span>
+          </button>
+          <div class="nav-links" id="menu-principal">
+            <a href="particulares.html" data-nav="particulares">Particulares</a>
+            <a href="empresas.html" data-nav="empresas">Empresas</a>
+            <a href="residentes-no-estrangeiro.html" data-nav="residentes">Residentes no estrangeiro</a>
+            <a href="sobre.html" data-nav="sobre">Sobre</a>
+            <a href="contactos.html" data-nav="contactos">Contactos</a>
+            <a class="btn primary small" href="consulta-juridica.html#pedido-consulta" data-nav="consulta" data-loc="header">Pedir consulta</a>
+          </div>
+        </nav>
+      </div>
     </div>
   </header>
 

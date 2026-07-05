@@ -43,10 +43,14 @@
         "name": "Luís Correia Crespo",
         "identifier": "67709L"
       },
-      "publisher": { "@id": "https://www.correiacrespo-advogados.pt/#organization" },
+      "publisher": {
+        "@id": "https://www.correiacrespo-advogados.pt/#legal-service"
+      },
       "url": "https://www.correiacrespo-advogados.pt/fr/pourquoi-le-portugal-une-vie-a-choisir.html",
       "inLanguage": "fr",
-      "isPartOf": { "@id": "https://www.correiacrespo-advogados.pt/#website" },
+      "isPartOf": {
+        "@id": "https://www.correiacrespo-advogados.pt/#website"
+      },
       "mainEntityOfPage": {
         "@type": "WebPage",
         "@id": "https://www.correiacrespo-advogados.pt/fr/pourquoi-le-portugal-une-vie-a-choisir.html"
@@ -93,8 +97,18 @@
     {
       "@type": "BreadcrumbList",
       "itemListElement": [
-        { "@type": "ListItem", "position": 1, "name": "Accueil", "item": "https://www.correiacrespo-advogados.pt/fr/index.html" },
-        { "@type": "ListItem", "position": 2, "name": "Pourquoi le Portugal : une vie à choisir", "item": "https://www.correiacrespo-advogados.pt/fr/pourquoi-le-portugal-une-vie-a-choisir.html" }
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Accueil",
+          "item": "https://www.correiacrespo-advogados.pt/fr/index.html"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Pourquoi le Portugal : une vie à choisir",
+          "item": "https://www.correiacrespo-advogados.pt/fr/pourquoi-le-portugal-une-vie-a-choisir.html"
+        }
       ]
     }
   ]
@@ -119,19 +133,28 @@
         </span>
       </a>
 
-      <nav class="nav" aria-label="Navigation principale">
-        <button class="nav-toggle" type="button" aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="menu-principal" aria-haspopup="true">
-          <span></span><span></span><span></span>
-        </button>
-        <div class="nav-links" id="menu-principal">
-          <a href="../sobre.html" data-nav="sobre">À propos</a>
-          <a href="../particulares.html" data-nav="particulares">Particuliers</a>
-          <a href="../empresas.html" data-nav="empresas">Entreprises</a>
-          <a href="index.html" data-nav="residentes">Non-résidents</a>
-          <a href="../contactos.html" data-nav="contactos">Contact</a>
-          <a class="btn primary small" href="../consulta-juridica.html#pedido-consulta" data-nav="consulta">Consultation juridique</a>
-        </div>
-      </nav>
+      <div class="header-tools">
+        <nav class="language-switcher" aria-label="Langue">
+    <ul class="language-switcher__list">
+      <li><a href="../index.html" hreflang="pt-PT" lang="pt">PT</a></li>
+      <li><a href="../en/index.html" hreflang="en" lang="en">EN</a></li>
+      <li><span class="language-switcher__current" aria-current="page" lang="fr">FR</span></li>
+    </ul>
+  </nav>
+        <nav class="nav" aria-label="Navigation principale">
+          <button class="nav-toggle" type="button" aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="menu-principal" aria-haspopup="true">
+            <span></span><span></span><span></span>
+          </button>
+          <div class="nav-links" id="menu-principal">
+            <a href="index.html" data-nav="home">Accueil</a>
+            <a href="imovel-portugal-nao-residentes.html" data-nav="property">Immobilier au Portugal</a>
+            <a href="heranca-portugal-nao-residentes.html" data-nav="inheritance">Successions au Portugal</a>
+            <a href="a-propos.html" data-nav="about">À propos de l'avocat</a>
+            <a href="contact.html" data-nav="contact">Contact</a>
+            <a class="btn primary small" href="consultation-juridique.html#pedido-consulta" data-nav="consulta" data-loc="header">Demander une consultation</a>
+          </div>
+        </nav>
+      </div>
     </div>
   </header>
 
@@ -299,7 +322,7 @@
         <li><a href="index.html">Hub non-résidents</a></li>
         <li><a href="imovel-portugal-nao-residentes.html">Immobilier pour non-résidents</a></li>
         <li><a href="heranca-portugal-nao-residentes.html">Héritage pour non-résidents</a></li>
-        <li><a href="../consulta-juridica.html#pedido-consulta">Consultation juridique</a></li>
+        <li><a href="consultation-juridique.html#pedido-consulta">Consultation juridique</a></li>
       </ul>
     </section>
 
@@ -327,17 +350,14 @@
       </div>
       <div class="footer-right">
         <div class="footer-links">
-          <a href="../sobre.html">À propos</a>
-          <a href="../particulares.html">Particuliers</a>
-          <a href="../empresas.html">Entreprises</a>
-          <a href="../familia-menores.html">Famille et mineurs</a>
-          <a href="../imobiliario-arrendamento.html">Immobilier et location</a>
-          <a href="../execucoes-insolvencia.html">Recouvrement et insolvabilité</a>
-          <a href="../residentes-no-estrangeiro.html">Résidents à l'étranger</a>
-          <a href="../contactos.html">Contact</a>
-          <a href="../consulta-juridica.html#pedido-consulta">Consultation juridique</a>
-          <a href="../politica-de-privacidade.html">Politique de confidentialité</a>
-          <a href="../aviso-legal.html">Mentions légales</a>
+          <a href="index.html">Accueil</a>
+          <a href="imovel-portugal-nao-residentes.html">Immobilier au Portugal</a>
+          <a href="heranca-portugal-nao-residentes.html">Successions au Portugal</a>
+          <a href="a-propos.html">À propos de l'avocat</a>
+          <a href="contact.html">Contact</a>
+          <a href="consultation-juridique.html#pedido-consulta">Demander une consultation</a>
+          <a href="confidentialite.html">Politique de confidentialité</a>
+          <a href="mentions-legales.html">Mentions légales</a>
         </div>
         <p class="footer-disclaimer">Le contenu de ce site est purement informatif et ne constitue ni un conseil juridique ni une publicité susceptible de compromettre le devoir d'indépendance et de prudence propre à la profession.</p>
         <p class="footer-copy">© <span id="year"></span> Correia Crespo — Advogados. Tous droits réservés.</p>
@@ -349,7 +369,7 @@
       <p id="cookie-consent-desc" class="cookie-consent__text">
         <span id="cookie-consent-title" class="cookie-consent__title">Cookies d'analyse.</span>
         Ce site utilise des cookies d'analyse (Google Analytics) pour comprendre l'utilisation du site, uniquement avec votre consentement.
-        Consultez la <a href="../politica-de-privacidade.html">politique de confidentialité</a>.
+        Consultez la <a href="confidentialite.html">politique de confidentialité</a>.
       </p>
       <div class="cookie-consent__actions">
         <button type="button" class="btn secondary small" data-cookie-reject>Refuser</button>

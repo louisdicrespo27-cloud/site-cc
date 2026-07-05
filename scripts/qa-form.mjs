@@ -229,6 +229,74 @@ async function main() {
     record(`mobile ${vp.w}: sem overflow resumo`, !overflow);
   }
 
+  async function testLocalizedForm(pagePath, langCode, emptyMsgSnippet) {
+    await mockGtag(page);
+    await page.goto(BASE + pagePath, { waitUntil: 'load' });
+    await page.click('#btnEnviar');
+    await page.waitForTimeout(100);
+    const errText = await page.locator('#contactoNomeError').textContent();
+    record(`${langCode}: validação vazia`, errText.includes(emptyMsgSnippet), errText);
+    const events = await getEvents(page);
+    const startEvt = events.find((e) => e[0] === 'event' && e[1] === 'form_error');
+    const pageLang = startEvt ? startEvt[2]?.page_lang : '';
+    record(`${langCode}: page_lang`, pageLang === langCode, pageLang);
+
+    await page.route('https://api.web3forms.com/submit', (route) => {
+      route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify({ success: true }),
+      });
+    });
+    await fillValid(page);
+    await page.click('#btnEnviar');
+    await page.waitForTimeout(300);
+    const successVisible = await page.locator('#formSucesso:not([hidden])').count();
+    record(`${langCode}: sucesso AJAX`, successVisible === 1);
+    await page.unroute('https://api.web3forms.com/submit');
+
+    const ctxNoJs = await browser.newContext({ javaScriptEnabled: false });
+    const pNoJs = await ctxNoJs.newPage();
+    await pNoJs.goto(BASE + pagePath, { waitUntil: 'load' });
+    const redirectVal = await pNoJs.locator('input[name="redirect"]').getAttribute('value');
+    record(`${langCode}: redirect sem JS`, redirectVal.includes(`/${langCode === 'en' ? 'en/request-received' : 'fr/demande-recue'}`), redirectVal);
+    await ctxNoJs.close();
+  }
+
+  await testLocalizedForm('en/contact.html', 'en', 'Please enter');
+  await testLocalizedForm('fr/contact.html', 'fr', 'Veuillez');
+
+  // --- EN journey smoke ---
+  const journeyEn = ['en/index.html', 'en/imovel-portugal-nao-residentes.html', 'en/about.html', 'en/legal-consultation.html', 'en/contact.html', 'en/privacy.html', 'en/legal-notice.html'];
+  for (const p of journeyEn) {
+    await page.goto(BASE + p, { waitUntil: 'load' });
+    const lang = await page.evaluate(() => document.documentElement.lang);
+    const hasPtNav = await page.evaluate(() => {
+      const nav = document.querySelector('.nav-links');
+      if (!nav) return false;
+      return Array.from(nav.querySelectorAll('a[href]')).some((a) => {
+        const h = a.getAttribute('href') || '';
+        return h.includes('../contactos') || h.includes('../consulta-juridica') || h.includes('../sobre.html');
+      });
+    });
+    record(`jornada EN ${p}`, lang.startsWith('en') && !hasPtNav, `lang=${lang} ptNav=${hasPtNav}`);
+  }
+
+  const journeyFr = ['fr/index.html', 'fr/imovel-portugal-nao-residentes.html', 'fr/a-propos.html', 'fr/consultation-juridique.html', 'fr/contact.html', 'fr/confidentialite.html', 'fr/mentions-legales.html'];
+  for (const p of journeyFr) {
+    await page.goto(BASE + p, { waitUntil: 'load' });
+    const lang = await page.evaluate(() => document.documentElement.lang);
+    const hasPtNav = await page.evaluate(() => {
+      const nav = document.querySelector('.nav-links');
+      if (!nav) return false;
+      return Array.from(nav.querySelectorAll('a[href]')).some((a) => {
+        const h = a.getAttribute('href') || '';
+        return h.includes('../contactos') || h.includes('../consulta-juridica') || h.includes('../sobre.html');
+      });
+    });
+    record(`jornada FR ${p}`, lang.startsWith('fr') && !hasPtNav, `lang=${lang} ptNav=${hasPtNav}`);
+  }
+
   await browser.close();
 
   const fails = results.filter((r) => !r.pass);
