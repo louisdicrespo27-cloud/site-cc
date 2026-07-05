@@ -4,7 +4,8 @@
  * nas subpastas de idioma (ex.: en/, fr/).
  * Executar: node scripts/build.mjs  (ou: npm run build)
  *
- * Lê partials/header.html e partials/footer.html, substitui %%BASE%% pelo valor
+ * Lê partials/header.html e partials/footer.html (ou footer.en.html / footer.fr.html
+ * consoante a pasta da página), substitui %%BASE%% pelo valor
  * de data-site-base na tag <body> de cada página (vazio na raiz, ../ em subpastas),
  * e substitui os divs site-header-mount / site-footer-mount pelo markup inline.
  *
@@ -110,6 +111,12 @@ function replaceBuiltFooterRegion(html, footerHtml) {
   return `${before}${footerHtml}\n\n${after}`;
 }
 
+function resolveFooterPartial(rel) {
+  if (rel.startsWith('en/')) return path.join(PARTIALS, 'footer.en.html');
+  if (rel.startsWith('fr/')) return path.join(PARTIALS, 'footer.fr.html');
+  return path.join(PARTIALS, 'footer.html');
+}
+
 /** Páginas da raiz (header+footer) e HTML em subpastas de topo (só footer+banner). */
 function collectBuildTargets() {
   const targets = [];
@@ -146,19 +153,23 @@ function processHtmlFile(filePath, headerTpl, footerTpl, replaceHeader) {
 
 function main() {
   const headerPath = path.join(PARTIALS, 'header.html');
-  const footerPath = path.join(PARTIALS, 'footer.html');
-  if (!fs.existsSync(headerPath) || !fs.existsSync(footerPath)) {
-    console.error('Faltam partials/header.html ou partials/footer.html em', PARTIALS);
+  const footerPaths = [
+    path.join(PARTIALS, 'footer.html'),
+    path.join(PARTIALS, 'footer.en.html'),
+    path.join(PARTIALS, 'footer.fr.html'),
+  ];
+  if (!fs.existsSync(headerPath) || footerPaths.some((p) => !fs.existsSync(p))) {
+    console.error('Faltam partials/header.html ou footer(s) em', PARTIALS);
     process.exit(1);
   }
 
   const headerTpl = readUtf8(headerPath);
-  const footerTpl = readUtf8(footerPath);
 
   const targets = collectBuildTargets();
   let updated = 0;
   for (const { rel, replaceHeader } of targets) {
     const filePath = path.join(ROOT, rel);
+    const footerTpl = readUtf8(resolveFooterPartial(rel));
     const { raw, next } = processHtmlFile(filePath, headerTpl, footerTpl, replaceHeader);
 
     if (next !== raw) {
