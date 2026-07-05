@@ -1,0 +1,57 @@
+[
+  {
+    "from": "residentes-fora-de-portugal.html",
+    "to": "/residentes-no-estrangeiro.html",
+    "lang": "pt-PT"
+  },
+  {
+    "from": "artigos/injuncao-recuperar-divida.html",
+    "to": "/cobranca-dividas-injuncao-execucao.html",
+    "lang": "pt-PT"
+  },
+  {
+    "from": "artigos/injuncao-ou-acao-judicial-recuperacao-credito.html",
+    "to": "/cobranca-dividas-injuncao-execucao.html",
+    "lang": "pt-PT"
+  },
+  {
+    "from": "artigos/divorcio-portugal-guia-simples.html",
+    "to": "/familia-menores.html",
+    "lang": "pt-PT"
+  },
+  {
+    "from": "artigos/regulacao-responsabilidades-parentais.html",
+    "to": "/responsabilidades-parentais-pais-nao-casados.html",
+    "lang": "pt-PT"
+  },
+  {
+    "from": "artigos/evitar-litigios-socios.html",
+    "to": "/sociedades-gerentes-empresas-familiares.html",
+    "lang": "pt-PT"
+  },
+  {
+    "from": "artigos/contratos-prestacao-servicos.html",
+    "to": "/contratos-comerciais-empresas.html",
+    "lang": "pt-PT"
+  },
+  {
+    "from": "artigos/empresa-precisa-aml-guia-simples.html",
+    "to": "/empresas.html",
+    "lang": "pt-PT"
+  },
+  {
+    "from": "en/index.html",
+    "to": "/en/heranca-portugal-nao-residentes.html",
+    "lang": "en"
+  },
+  {
+    "from": "fr/index.html",
+    "to": "/fr/heranca-portugal-nao-residentes.html",
+    "lang": "fr"
+  },
+  {
+    "from": "fr/conditions.html",
+    "to": "/fr/heranca-portugal-nao-residentes.html",
+    "lang": "fr"
+  }
+]

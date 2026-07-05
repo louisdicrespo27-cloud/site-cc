@@ -27,6 +27,7 @@ const PARTIALS = path.join(ROOT, 'partials');
 /** Subpastas de topo ignoradas pelo build de idiomas. */
 const SKIP_SUBDIR_BUILD = new Set([
   'assets',
+  'artigos',
   'dist',
   'node_modules',
   'scripts',
@@ -37,6 +38,13 @@ const SKIP_SUBDIR_BUILD = new Set([
 ]);
 
 const EXCLUDED_HTML = new Set(['og-image-template.html']);
+
+function isRedirectStub(html) {
+  return (
+    /<html\b[^>]*\bdata-redirect-stub\b/i.test(html) ||
+    (/http-equiv="refresh"/i.test(html) && /location\.replace/i.test(html))
+  );
+}
 
 function readUtf8(p) {
   return fs.readFileSync(p, 'utf8');
@@ -169,10 +177,13 @@ function main() {
   let updated = 0;
   for (const { rel, replaceHeader } of targets) {
     const filePath = path.join(ROOT, rel);
-    const footerTpl = readUtf8(resolveFooterPartial(rel));
-    const { raw, next } = processHtmlFile(filePath, headerTpl, footerTpl, replaceHeader);
+    const raw = readUtf8(filePath);
+    if (isRedirectStub(raw)) continue;
 
-    if (next !== raw) {
+    const footerTpl = readUtf8(resolveFooterPartial(rel));
+    const { raw: pageRaw, next } = processHtmlFile(filePath, headerTpl, footerTpl, replaceHeader);
+
+    if (next !== pageRaw) {
       writeUtf8(filePath, next);
       updated++;
       console.log('OK', rel);
