@@ -6,6 +6,7 @@
   "scripts": {
     "build": "node scripts/build.mjs",
     "seo": "node scripts/normalize-seo.mjs",
-    "prepare:public": "node scripts/prepare-public.mjs"
+    "prepare:public": "node scripts/prepare-public.mjs",
+    "pack": "node scripts/pack-dist.mjs"
   }
 }
