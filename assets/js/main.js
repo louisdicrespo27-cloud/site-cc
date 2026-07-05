@@ -18,11 +18,58 @@ function loadAnalytics() {
   document.head.appendChild(s);
 }
 
-function trackConversion(action, label, category) {
+function getPageContext() {
+  return {
+    page_path: location.pathname,
+    page_lang: document.documentElement.lang || '',
+  };
+}
+
+function trackConversion(action, label, category, extra = {}) {
   if (typeof window.gtag !== 'function') return;
   window.gtag('event', action, {
     event_category: category || 'engagement',
     event_label: label || '',
+    ...getPageContext(),
+    ...extra,
+  });
+}
+
+function isContactLink(anchor) {
+  const href = anchor.getAttribute('href');
+  if (!href) return false;
+  return href.startsWith('tel:') || href.startsWith('mailto:') || href.includes('wa.me');
+}
+
+function getContactType(href) {
+  if (href.startsWith('mailto:')) return 'email';
+  if (href.startsWith('tel:')) return 'tel';
+  if (href.includes('wa.me')) return 'whatsapp';
+  return 'unknown';
+}
+
+function getLinkLocation(anchor) {
+  const explicit = anchor.getAttribute('data-loc');
+  if (explicit) return explicit;
+
+  if (anchor.closest('.header')) return 'header';
+  if (anchor.closest('.footer')) return 'footer';
+  if (anchor.closest('#cookie-consent, .cookie-consent')) return 'banner';
+  if (anchor.closest('.hero')) return 'hero';
+  if (anchor.closest('.cta-row, .consulta-booking, .consulta-booking__actions, .home-contact-line')) return 'cta';
+  if (anchor.closest('main, #conteudo, .page')) return 'body';
+  return 'unknown';
+}
+
+function initContactTracking() {
+  document.addEventListener('click', (e) => {
+    const anchor = e.target.closest('a[href]');
+    if (!anchor || !isContactLink(anchor)) return;
+
+    const href = anchor.getAttribute('href');
+    trackConversion('contact_click', getContactType(href), 'contacto', {
+      link_location: getLinkLocation(anchor),
+    });
   });
 }
 
@@ -170,7 +217,7 @@ function initContactForm() {
         form.hidden = true;
         if (divSucesso) divSucesso.hidden = false;
         if (divErro)    divErro.hidden    = true;
-        trackConversion('generate_lead', 'formulario', 'contacto');
+        trackConversion('generate_lead', 'formulario', 'contacto', { link_location: 'form' });
       } else {
         throw new Error(json.message || 'Erro desconhecido');
       }
@@ -311,18 +358,6 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   initContactForm();
+  initContactTracking();
   initCookieConsent();
-
-  document.querySelectorAll('a[href^="mailto:"], a[href^="tel:"]').forEach((a) => {
-    a.addEventListener('click', () => {
-      const type = a.getAttribute('href').startsWith('mailto:') ? 'email' : 'tel';
-      trackConversion('contact_click', type);
-    });
-  });
-
-  document.querySelectorAll('a[href*="wa.me"]').forEach((a) => {
-    a.addEventListener('click', () => {
-      trackConversion('contact_click', 'whatsapp');
-    });
-  });
 });
