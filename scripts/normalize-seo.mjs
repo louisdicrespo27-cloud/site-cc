@@ -34,7 +34,7 @@ function walkHtml(dir, acc = []) {
   for (const ent of fs.readdirSync(dir, { withFileTypes: true })) {
     const p = path.join(dir, ent.name);
     if (ent.isDirectory()) {
-      if (ent.name === 'node_modules' || ent.name === '.git' || ent.name === 'dist') continue;
+      if (ent.name === 'node_modules' || ent.name === '.git' || ent.name === 'dist' || ent.name === 'scripts') continue;
       walkHtml(p, acc);
     } else if (ent.name.endsWith('.html')) acc.push(p);
   }
