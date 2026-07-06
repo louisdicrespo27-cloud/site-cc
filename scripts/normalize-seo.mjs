@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Normaliza meta Open Graph / Twitter e gera sitemap.xml.
+ * Normaliza meta Open Graph / Twitter, injeta CSP (meta http-equiv) e gera sitemap.xml.
  * lastmod: só quando existe data editorial fiável (JSON-LD dateModified ou mapa explícito).
  */
 import fs from 'fs';
@@ -11,6 +11,10 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.join(__dirname, '..');
 const SITE = 'https://www.correiacrespo-advogados.pt';
 const OG_IMAGE = `${SITE}/assets/img/og.jpg`;
+
+const CSP = "default-src 'self'; base-uri 'self'; object-src 'none'; frame-src 'none'; script-src 'self' https://www.googletagmanager.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https://www.googletagmanager.com https://*.google-analytics.com; connect-src 'self' https://*.google-analytics.com https://*.analytics.google.com https://www.googletagmanager.com https://api.web3forms.com; form-action 'self' https://api.web3forms.com;";
+
+const EXCLUDED_HTML = new Set(['og-image-template.html']);
 
 /** Páginas institucionais EN/FR criadas na implementação i18n (Prompt 6). */
 const I18N_INSTITUTIONAL_LASTMOD = {
@@ -78,6 +82,22 @@ function resolveLastmod(html, rel) {
   return null;
 }
 
+function injectCspMeta(html) {
+  const tag = `  <meta http-equiv="Content-Security-Policy" content="${escAttr(CSP)}" />`;
+  const existing = html.match(
+    /<meta\s+http-equiv="Content-Security-Policy"\s+content="([^"]*)"\s*\/?>/i
+  );
+  if (existing) {
+    const current = decodeEnt(existing[1]);
+    if (current === CSP) return html;
+    return html.replace(existing[0], tag);
+  }
+  if (/<meta\s+charset=/i.test(html)) {
+    return html.replace(/(<meta\s+charset=[^>]+>)/i, `$1\n${tag}`);
+  }
+  return html.replace(/<head>/i, `<head>\n${tag}`);
+}
+
 function patchHead(html, relPath) {
   if (!html.includes('<head>')) return html;
   if (isRedirectStub(html)) return html;
@@ -131,10 +151,23 @@ function patchHead(html, relPath) {
     );
   }
 
+  if (shouldInjectCsp(relPath, html)) {
+    out = injectCspMeta(out);
+  }
+
   return out;
 }
 
+/** Gate de CSP independente do sitemap — inclui páginas noindex servidas ao utilizador. */
+function shouldInjectCsp(relPath, html) {
+  if (EXCLUDED_HTML.has(relPath)) return false;
+  if (relPath.startsWith('partials/')) return false;
+  if (isRedirectStub(html)) return false;
+  return true;
+}
+
 function shouldIncludeInSitemap(relPath, html) {
+  if (EXCLUDED_HTML.has(relPath)) return false;
   if (relPath.startsWith('partials/')) return false;
   if (isNoindex(html)) return false;
   if (isRedirectStub(html)) return false;
@@ -153,7 +186,7 @@ function main() {
   let changed = 0;
   for (const abs of files) {
     const rel = path.relative(ROOT, abs).replace(/\\/g, '/');
-    if (rel.startsWith('templates/') || rel.startsWith('partials/')) continue;
+    if (rel.startsWith('templates/') || rel.startsWith('partials/') || EXCLUDED_HTML.has(rel)) continue;
     const raw = fs.readFileSync(abs, 'utf8');
     const next = patchHead(raw, rel);
     if (next !== raw) {
@@ -168,7 +201,7 @@ function main() {
   let withoutLastmod = 0;
   for (const abs of files) {
     const rel = path.relative(ROOT, abs).replace(/\\/g, '/');
-    if (rel.startsWith('templates/') || rel.startsWith('partials/')) continue;
+    if (rel.startsWith('templates/') || rel.startsWith('partials/') || EXCLUDED_HTML.has(rel)) continue;
     const raw = fs.readFileSync(abs, 'utf8');
     if (!shouldIncludeInSitemap(rel, raw)) continue;
     const lastmod = resolveLastmod(raw, rel);
