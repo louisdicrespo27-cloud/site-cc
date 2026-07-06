@@ -161,12 +161,130 @@
     <section class="section consulta-booking-section" id="pedido-consulta" aria-labelledby="pedido-consulta-titulo">
       <div class="consulta-booking">
         <h2 class="consulta-booking__title" id="pedido-consulta-titulo">Request a consultation appointment</h2>
-        <p class="consulta-booking__intro">You may request an appointment by <strong>email</strong> or <strong>WhatsApp</strong> (the number is the same as the telephone contact). A reply follows after the request is reviewed and according to availability.</p>
-        <div class="consulta-booking__actions">
-          <a class="btn primary" href="mailto:correiacrespo-67709L@adv.oa.pt?subject=Request%20for%20legal%20consultation%20appointment&amp;body=Dear%20Sir%20or%20Madam%2C%0A%0AI%20would%20like%20to%20request%20an%20appointment%20for%20a%20legal%20consultation.%0A%0APlease%20indicate%20availability%20for%20confirmation%20or%20contact.%0A%0AKind%20regards%2C%0A" data-loc="cta">Request by email</a>
-          <a class="btn secondary" href="https://wa.me/351914376903?text=Dear%20Sir%20or%20Madam%2C%0A%0AI%20would%20like%20to%20request%20an%20appointment%20for%20a%20legal%20consultation%20with%20Correia%20Crespo%20%E2%80%94%20Advogados.%0A%0AThank%20you." target="_blank" rel="noopener noreferrer" data-loc="cta">Request by WhatsApp</a>
+        <p class="consulta-booking__intro" id="pedido-consulta-form-desc">
+          Complete the form below to request a legal consultation appointment. State the subject, relevant deadlines and your availability. A reply follows after the request is reviewed and according to availability.
+        </p>
+
+        <form
+          id="formContacto"
+          class="contact-form"
+          action="https://api.web3forms.com/submit"
+          method="POST"
+          aria-describedby="pedido-consulta-form-desc formulario-contacto-aviso"
+        >
+          <input type="hidden" name="access_key" value="4c5ba723-0a27-4819-a414-021b67b6e639" />
+          <input type="hidden" name="subject" value="Legal consultation request (site) — EN" />
+          <input type="hidden" name="from_name" value="Site Correia Crespo — Advogados" />
+          <input
+            type="hidden"
+            name="redirect"
+            value="https://www.correiacrespo-advogados.pt/en/request-received.html"
+          />
+          <input type="text" name="botcheck" class="contact-form__honeypot" tabindex="-1" autocomplete="off" aria-hidden="true" />
+
+          <div
+            id="formErrosResumo"
+            class="contact-form__error-summary"
+            role="alert"
+            aria-live="assertive"
+            tabindex="-1"
+            hidden
+          >
+            <p><strong>Please check the fields marked:</strong></p>
+            <ul></ul>
+          </div>
+
+          <div class="contact-form__row">
+            <label for="contactoNome">Full name</label>
+            <input type="text" id="contactoNome" name="nome" required autocomplete="name" minlength="2" maxlength="120" aria-describedby="contactoNomeError" />
+            <span id="contactoNomeError" class="contact-form__error" hidden></span>
+          </div>
+          <div class="contact-form__row">
+            <label for="contactoEmail">Email address</label>
+            <input
+              type="email"
+              id="contactoEmail"
+              name="email"
+              required
+              autocomplete="email"
+              inputmode="email"
+              maxlength="254"
+              aria-describedby="contactoEmailError"
+            />
+            <span id="contactoEmailError" class="contact-form__error" hidden></span>
+          </div>
+          <div class="contact-form__row">
+            <label for="contactoTel">Phone (optional)</label>
+            <input type="tel" id="contactoTel" name="telefone" autocomplete="tel" inputmode="tel" maxlength="40" aria-describedby="contactoTelError" />
+            <span id="contactoTelError" class="contact-form__error" hidden></span>
+          </div>
+          <div class="contact-form__row">
+            <label for="contactoAssunto">Subject</label>
+            <input type="text" id="contactoAssunto" name="assunto" required minlength="3" maxlength="160" autocomplete="off" aria-describedby="contactoAssuntoError" />
+            <span id="contactoAssuntoError" class="contact-form__error" hidden></span>
+          </div>
+          <div class="contact-form__row">
+            <label for="contactoArea">Legal area (optional)</label>
+            <select id="contactoArea" name="area">
+              <option value="">Select…</option>
+              <option>Family and minors</option>
+              <option>Property and tenancy</option>
+              <option>Debt recovery</option>
+              <option>Contracts and companies</option>
+              <option>Criminal</option>
+              <option>Insolvency</option>
+              <option>Non-residents / succession</option>
+              <option>Other</option>
+            </select>
+          </div>
+          <div class="contact-form__row">
+            <label for="contactoMensagem">Message</label>
+            <p id="contactoMensagemHint" class="contact-form__hint">Do not send documents, identification numbers, bank details or extensive confidential information at this stage. Indicate known deadlines and availability for a meeting.</p>
+            <textarea
+              id="contactoMensagem"
+              name="mensagem"
+              rows="6"
+              required
+              minlength="10"
+              maxlength="2000"
+              placeholder="Summarise the matter, the purpose of the consultation and any relevant deadline."
+              aria-describedby="contactoMensagemHint contactoMensagemError"
+            ></textarea>
+            <span id="contactoMensagemError" class="contact-form__error" hidden></span>
+          </div>
+
+          <div class="contact-form__consent">
+            <input type="checkbox" id="contactoPrivacidade" name="privacidade" value="1" required aria-describedby="contactoPrivacidadeError" />
+            <label for="contactoPrivacidade">
+              I have read and understood the <a href="privacy.html">Privacy Policy</a>.
+            </label>
+          </div>
+          <span id="contactoPrivacidadeError" class="contact-form__error contact-form__error--consent" hidden></span>
+
+          <p class="contact-form__legal" id="formulario-contacto-aviso">
+            <strong>Note:</strong> submitting this request does not, by itself, create a lawyer–client relationship or confirm a legal consultation. Scheduling depends on review of the request and availability.
+          </p>
+
+          <div class="contact-form__actions">
+            <button type="submit" class="btn primary" id="btnEnviar">Send consultation request</button>
+          </div>
+        </form>
+
+        <div id="formSucesso" hidden class="contact-form-success" role="status" aria-live="polite" tabindex="-1">
+          <p><strong>Consultation request sent.</strong></p>
+          <p>The request will be reviewed by the firm. Receipt of the message does not, by itself, mean acceptance of a mandate or confirmation of date or time of consultation.</p>
+          <p>If you prefer, you can contact us by <a href="tel:+351914376903">telephone</a> or <a href="https://wa.me/351914376903" target="_blank" rel="noopener noreferrer">WhatsApp</a>.</p>
         </div>
-        <p class="consulta-booking__note">This initial contact does not, by itself, create a lawyer–client relationship or replace a consultation. You may also use the <a href="contact.html">contact form</a> for a first message with guided fields.</p>
+
+        <div id="formErro" hidden class="contact-form-error" role="alert" aria-live="assertive" tabindex="-1">
+          <p><strong>Could not send the request.</strong> Please try again or contact us directly by <a href="tel:+351914376903">telephone</a> or <a href="https://wa.me/351914376903" target="_blank" rel="noopener noreferrer">WhatsApp</a>.</p>
+        </div>
+
+        <p class="consulta-booking__note" style="margin-top: 28px; margin-bottom: 8px;">or contact us directly:</p>
+        <p class="consulta-booking__actions">
+          <a class="btn secondary" href="https://wa.me/351914376903?text=Dear%20Sir%20or%20Madam%2C%0A%0AI%20would%20like%20to%20request%20an%20appointment%20for%20a%20legal%20consultation%20with%20Correia%20Crespo%20%E2%80%94%20Advogados.%0A%0AThank%20you." target="_blank" rel="noopener noreferrer" data-loc="cta">Request by WhatsApp</a>
+        </p>
+        <p class="consulta-booking__note">This initial contact does not, by itself, create a lawyer–client relationship or replace a consultation. Address, telephone and other contact details on the <a href="contact.html">contact</a> page.</p>
       </div>
     </section>
 

@@ -167,12 +167,130 @@
     <section class="section consulta-booking-section" id="pedido-consulta" aria-labelledby="pedido-consulta-titulo">
       <div class="consulta-booking">
         <h2 class="consulta-booking__title" id="pedido-consulta-titulo">Pedido de marcação de consulta</h2>
-        <p class="consulta-booking__intro">Pode solicitar marcação por <strong>correio eletrónico</strong> ou por <strong>WhatsApp</strong> (o número é o do contacto telefónico do escritório). A resposta segue após análise do pedido e conforme a disponibilidade de agenda.</p>
-        <div class="consulta-booking__actions">
-          <a class="btn primary" href="mailto:correiacrespo-67709L@adv.oa.pt?subject=Pedido%20de%20marca%C3%A7%C3%A3o%20de%20consulta%20jur%C3%ADdica&amp;body=Exmos.%20Senhores%2C%0A%0AVenho%20por%20este%20meio%20solicitar%20a%20marca%C3%A7%C3%A3o%20de%20uma%20consulta%20jur%C3%ADdica.%0A%0AIndique%2C%20por%20favor%2C%20disponibilidade%20para%20confirma%C3%A7%C3%A3o%20ou%20contacto.%0A%0ACom%20os%20melhores%20cumprimentos%2C%0A" data-loc="cta">Pedir por email</a>
-          <a class="btn secondary" href="https://wa.me/351914376903?text=Exmos.%20Advogados%2C%0A%0AGostaria%20de%20solicitar%20marca%C3%A7%C3%A3o%20de%20consulta%20jur%C3%ADdica%20com%20o%20escrit%C3%B3rio%20Correia%20Crespo%20%E2%80%94%20Advogados.%0A%0AObrigado." target="_blank" rel="noopener noreferrer" data-loc="cta">Pedir por WhatsApp</a>
+        <p class="consulta-booking__intro" id="pedido-consulta-form-desc">
+          Preencha o formulário abaixo para solicitar marcação de consulta jurídica. Indique o assunto, prazos relevantes e disponibilidade. A resposta segue após análise do pedido e conforme a disponibilidade de agenda.
+        </p>
+
+        <form
+          id="formContacto"
+          class="contact-form"
+          action="https://api.web3forms.com/submit"
+          method="POST"
+          aria-describedby="pedido-consulta-form-desc formulario-contacto-aviso"
+        >
+          <input type="hidden" name="access_key" value="4c5ba723-0a27-4819-a414-021b67b6e639" />
+          <input type="hidden" name="subject" value="Pedido de consulta jurídica (site)" />
+          <input type="hidden" name="from_name" value="Site Correia Crespo — Advogados" />
+          <input
+            type="hidden"
+            name="redirect"
+            value="https://www.correiacrespo-advogados.pt/pedido-recebido.html"
+          />
+          <input type="text" name="botcheck" class="contact-form__honeypot" tabindex="-1" autocomplete="off" aria-hidden="true" />
+
+          <div
+            id="formErrosResumo"
+            class="contact-form__error-summary"
+            role="alert"
+            aria-live="assertive"
+            tabindex="-1"
+            hidden
+          >
+            <p><strong>Verifique os campos assinalados:</strong></p>
+            <ul></ul>
+          </div>
+
+          <div class="contact-form__row">
+            <label for="contactoNome">Nome completo</label>
+            <input type="text" id="contactoNome" name="nome" required autocomplete="name" minlength="2" maxlength="120" aria-describedby="contactoNomeError" />
+            <span id="contactoNomeError" class="contact-form__error" hidden></span>
+          </div>
+          <div class="contact-form__row">
+            <label for="contactoEmail">Endereço de email</label>
+            <input
+              type="email"
+              id="contactoEmail"
+              name="email"
+              required
+              autocomplete="email"
+              inputmode="email"
+              maxlength="254"
+              aria-describedby="contactoEmailError"
+            />
+            <span id="contactoEmailError" class="contact-form__error" hidden></span>
+          </div>
+          <div class="contact-form__row">
+            <label for="contactoTel">Telefone (opcional)</label>
+            <input type="tel" id="contactoTel" name="telefone" autocomplete="tel" inputmode="tel" maxlength="40" aria-describedby="contactoTelError" />
+            <span id="contactoTelError" class="contact-form__error" hidden></span>
+          </div>
+          <div class="contact-form__row">
+            <label for="contactoAssunto">Assunto</label>
+            <input type="text" id="contactoAssunto" name="assunto" required minlength="3" maxlength="160" autocomplete="off" aria-describedby="contactoAssuntoError" />
+            <span id="contactoAssuntoError" class="contact-form__error" hidden></span>
+          </div>
+          <div class="contact-form__row">
+            <label for="contactoArea">Área jurídica (opcional)</label>
+            <select id="contactoArea" name="area">
+              <option value="">Selecione…</option>
+              <option>Família e menores</option>
+              <option>Imóveis e arrendamento</option>
+              <option>Cobrança de dívidas</option>
+              <option>Contratos e sociedades</option>
+              <option>Criminal</option>
+              <option>Insolvência</option>
+              <option>Não residentes / sucessões</option>
+              <option>Outro</option>
+            </select>
+          </div>
+          <div class="contact-form__row">
+            <label for="contactoMensagem">Mensagem</label>
+            <p id="contactoMensagemHint" class="contact-form__hint">Não envie documentos, números de identificação, dados bancários ou informação confidencial extensa nesta fase. Indique prazos conhecidos e disponibilidade para reunião.</p>
+            <textarea
+              id="contactoMensagem"
+              name="mensagem"
+              rows="6"
+              required
+              minlength="10"
+              maxlength="2000"
+              placeholder="Resuma o assunto, o objetivo da consulta e qualquer prazo relevante."
+              aria-describedby="contactoMensagemHint contactoMensagemError"
+            ></textarea>
+            <span id="contactoMensagemError" class="contact-form__error" hidden></span>
+          </div>
+
+          <div class="contact-form__consent">
+            <input type="checkbox" id="contactoPrivacidade" name="privacidade" value="1" required aria-describedby="contactoPrivacidadeError" />
+            <label for="contactoPrivacidade">
+              Declaro que li e compreendi a <a href="politica-de-privacidade.html">Política de Privacidade</a>.
+            </label>
+          </div>
+          <span id="contactoPrivacidadeError" class="contact-form__error contact-form__error--consent" hidden></span>
+
+          <p class="contact-form__legal" id="formulario-contacto-aviso">
+            <strong>Nota:</strong> o envio deste pedido não constitui, por si só, relação advogado–cliente nem confirmação de consulta jurídica. A marcação depende de análise do pedido e de disponibilidade de agenda.
+          </p>
+
+          <div class="contact-form__actions">
+            <button type="submit" class="btn primary" id="btnEnviar">Enviar pedido de consulta</button>
+          </div>
+        </form>
+
+        <div id="formSucesso" hidden class="contact-form-success" role="status" aria-live="polite" tabindex="-1">
+          <p><strong>Pedido de consulta enviado.</strong></p>
+          <p>O pedido será analisado pelo escritório. A receção da mensagem não representa, por si só, aceitação de mandato nem confirmação de data ou hora de consulta.</p>
+          <p>Se preferir, pode contactar por <a href="tel:+351914376903">telefone</a> ou <a href="https://wa.me/351914376903" target="_blank" rel="noopener noreferrer">WhatsApp</a>.</p>
         </div>
-        <p class="consulta-booking__note">Este contacto inicial não constitui, por si só, relação advogado–cliente nem substitui a consulta. Pode ainda usar o <a href="contactos.html">formulário de contactos</a> para uma primeira mensagem com campos guiados.</p>
+
+        <div id="formErro" hidden class="contact-form-error" role="alert" aria-live="assertive" tabindex="-1">
+          <p><strong>Não foi possível enviar o pedido.</strong> Por favor tente novamente ou contacte directamente por <a href="tel:+351914376903">telefone</a> ou <a href="https://wa.me/351914376903" target="_blank" rel="noopener noreferrer">WhatsApp</a>.</p>
+        </div>
+
+        <p class="consulta-booking__note" style="margin-top: 28px; margin-bottom: 8px;">ou fale connosco directamente:</p>
+        <p class="consulta-booking__actions">
+          <a class="btn secondary" href="https://wa.me/351914376903?text=Exmos.%20Advogados%2C%0A%0AGostaria%20de%20solicitar%20marca%C3%A7%C3%A3o%20de%20consulta%20jur%C3%ADdica%20com%20o%20escrit%C3%B3rio%20Correia%20Crespo%20%E2%80%94%20Advogados.%0A%0AObrigado." target="_blank" rel="noopener noreferrer" data-loc="cta">Pedir por WhatsApp</a>
+        </p>
+        <p class="consulta-booking__note">Este contacto inicial não constitui, por si só, relação advogado–cliente nem substitui a consulta. Morada, telefone e outros meios em <a href="contactos.html">contactos</a>.</p>
       </div>
     </section>
 
