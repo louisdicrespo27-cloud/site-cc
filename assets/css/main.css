@@ -723,6 +723,10 @@ summary:focus-visible{
   line-height: 1.5;
   max-width: 52ch;
 }
+.consulta-booking__note--separador{
+  margin-top: 28px;
+  margin-bottom: 8px;
+}
 .consulta-booking__actions{
   display: flex;
   flex-wrap: wrap;

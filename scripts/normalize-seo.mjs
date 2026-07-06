@@ -12,7 +12,7 @@ const ROOT = path.join(__dirname, '..');
 const SITE = 'https://www.correiacrespo-advogados.pt';
 const OG_IMAGE = `${SITE}/assets/img/og.jpg`;
 
-const CSP = "default-src 'self'; base-uri 'self'; object-src 'none'; frame-src 'none'; script-src 'self' https://www.googletagmanager.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https://www.googletagmanager.com https://*.google-analytics.com; connect-src 'self' https://*.google-analytics.com https://*.analytics.google.com https://www.googletagmanager.com https://api.web3forms.com; form-action 'self' https://api.web3forms.com;";
+const CSP = "default-src 'self'; base-uri 'self'; object-src 'none'; frame-src 'none'; script-src 'self' https://www.googletagmanager.com; style-src 'self' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https://www.googletagmanager.com https://*.google-analytics.com; connect-src 'self' https://*.google-analytics.com https://*.analytics.google.com https://www.googletagmanager.com https://api.web3forms.com; form-action 'self' https://api.web3forms.com;";
 
 const EXCLUDED_HTML = new Set(['og-image-template.html']);
 
