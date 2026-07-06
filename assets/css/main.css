@@ -1262,7 +1262,8 @@ summary:focus-visible{
   gap: 8px;
   flex-wrap: wrap;
 }
-.footer-links a{
+.footer-links a,
+.footer-links .footer-link-btn{
   padding: 6px 12px;
   border-radius: var(--radius-sm);
   color: var(--muted);
@@ -1270,7 +1271,17 @@ summary:focus-visible{
   font-weight: 500;
   transition: color var(--duration) var(--ease), background var(--duration) var(--ease);
 }
-.footer-links a:hover{ color: var(--text); background: var(--panel); }
+.footer-links a:hover,
+.footer-links .footer-link-btn:hover{ color: var(--text); background: var(--panel); }
+.footer-links .footer-link-btn{
+  border: 0;
+  background: none;
+  font-family: inherit;
+  line-height: inherit;
+  text-decoration: none;
+  cursor: pointer;
+}
+.footer-links .footer-link-btn:hover{ text-decoration: underline; }
 .footer-disclaimer{
   margin: 0;
   max-width: 44ch;

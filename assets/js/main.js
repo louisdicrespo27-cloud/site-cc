@@ -80,35 +80,36 @@ function initContactTracking() {
 
 function initCookieConsent() {
   const banner = document.getElementById('cookie-consent');
+  if (!banner) return;
   const stored = localStorage.getItem(CONSENT_KEY);
-
-  if (stored === 'true') {
-    loadAnalytics();
-    return;
-  }
-  if (stored === 'false' || !banner) return;
-
   const acceptBtn = banner.querySelector('[data-cookie-accept]');
   const rejectBtn = banner.querySelector('[data-cookie-reject]');
+  const manageBtns = document.querySelectorAll('[data-cookie-manage]');
 
-  function closeBanner(consent) {
+  if (stored === 'true') loadAnalytics();
+  banner.hidden = (stored === 'true' || stored === 'false');
+
+  function choose(consent) {
+    const previous = localStorage.getItem(CONSENT_KEY);
     localStorage.setItem(CONSENT_KEY, consent);
     banner.hidden = true;
-  }
-
-  banner.hidden = false;
-
-  if (acceptBtn) {
-    acceptBtn.addEventListener('click', () => {
-      closeBanner('true');
+    if (consent === 'true' && previous !== 'true') {
       loadAnalytics();
-    });
+    } else if (consent === 'false' && previous === 'true') {
+      // Consentimento retirado depois de o GA já ter carregado: recarrega para o parar.
+      location.reload();
+    }
   }
-  if (rejectBtn) {
-    rejectBtn.addEventListener('click', () => {
-      closeBanner('false');
+
+  if (acceptBtn) acceptBtn.addEventListener('click', () => choose('true'));
+  if (rejectBtn) rejectBtn.addEventListener('click', () => choose('false'));
+  manageBtns.forEach((btn) => {
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
+      banner.hidden = false;
+      if (acceptBtn) acceptBtn.focus();
     });
-  }
+  });
 }
 
 function applyActiveNav() {
