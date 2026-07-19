@@ -81,6 +81,16 @@
       "pt": "/clinica-dentaria-precisa-dpo.html",
       "en": "/en/does-dental-clinic-need-dpo.html",
       "xDefault": "/clinica-dentaria-precisa-dpo.html"
+    },
+    {
+      "key": "gdpr-dental-consent",
+      "pt": "/consentimento-dados-saude-clinica-dentaria.html",
+      "xDefault": "/consentimento-dados-saude-clinica-dentaria.html"
+    },
+    {
+      "key": "gdpr-dental-retention",
+      "pt": "/conservacao-processo-clinico-clinica-dentaria.html",
+      "xDefault": "/conservacao-processo-clinico-clinica-dentaria.html"
     }
   ],
   "noindex": [

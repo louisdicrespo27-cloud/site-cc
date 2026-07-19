@@ -61,6 +61,8 @@ const PATH_I18N_KEY = {
   'erros-rgpd-comuns-clinica-dentaria.html': 'gdpr-dental-mistakes',
   'violacao-dados-clinica-primeiras-72-horas.html': 'gdpr-dental-72h',
   'clinica-dentaria-precisa-dpo.html': 'gdpr-dental-dpo',
+  'consentimento-dados-saude-clinica-dentaria.html': 'gdpr-dental-consent',
+  'conservacao-processo-clinico-clinica-dentaria.html': 'gdpr-dental-retention',
 };
 
 const SWITCHER_LABELS = {
