@@ -54,6 +54,33 @@
       "pt": "/heranca-portugal-nao-residentes.html",
       "en": "/en/heranca-portugal-nao-residentes.html",
       "fr": "/fr/heranca-portugal-nao-residentes.html"
+    },
+    {
+      "key": "gdpr-dental",
+      "pt": "/rgpd-clinicas-dentarias.html",
+      "en": "/en/data-protection-dental-clinics.html",
+      "fr": "/fr/protection-donnees-cliniques-dentaires.html",
+      "xDefault": "/rgpd-clinicas-dentarias.html"
+    },
+    {
+      "key": "gdpr-dental-mistakes",
+      "pt": "/erros-rgpd-comuns-clinica-dentaria.html",
+      "en": "/en/common-gdpr-mistakes-dental-clinic.html",
+      "fr": "/fr/erreurs-rgpd-courantes-clinique-dentaire.html",
+      "xDefault": "/erros-rgpd-comuns-clinica-dentaria.html"
+    },
+    {
+      "key": "gdpr-dental-72h",
+      "pt": "/violacao-dados-clinica-primeiras-72-horas.html",
+      "en": "/en/data-breach-dental-clinic-72-hours.html",
+      "fr": "/fr/violation-donnees-clinique-72-heures.html",
+      "xDefault": "/violacao-dados-clinica-primeiras-72-horas.html"
+    },
+    {
+      "key": "gdpr-dental-dpo",
+      "pt": "/clinica-dentaria-precisa-dpo.html",
+      "en": "/en/does-dental-clinic-need-dpo.html",
+      "xDefault": "/clinica-dentaria-precisa-dpo.html"
     }
   ],
   "noindex": [

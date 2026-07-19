@@ -39,11 +39,13 @@ function canonicalOf(html) {
 }
 
 for (const cluster of map.clusters) {
-  const members = ['pt', 'en', 'fr'].map((lang) => ({
-    lang,
-    url: `${SITE}${cluster[lang] === '/' ? '/' : cluster[lang]}`,
-    rel: clusterPathToRel(cluster[lang]),
-  }));
+  const members = ['pt', 'en', 'fr']
+    .filter((lang) => cluster[lang])
+    .map((lang) => ({
+      lang,
+      url: `${SITE}${cluster[lang] === '/' ? '/' : cluster[lang]}`,
+      rel: clusterPathToRel(cluster[lang]),
+    }));
 
   for (const member of members) {
     const html = readPage(member.rel);
@@ -68,14 +70,24 @@ for (const cluster of map.clusters) {
       }
     }
 
-    if (cluster.key === 'index' && cluster.xDefault) {
+    // Línguas ausentes do cluster não devem ter alternate
+    for (const lang of ['pt', 'en', 'fr']) {
+      if (cluster[lang]) continue;
+      const code = HREFLANG_CODES[lang];
+      const found = hreflangs.find((h) => h.hreflang === code);
+      if (found) {
+        failures.push(`${member.rel}: hreflang ${code} não deve existir no cluster ${cluster.key}`);
+      }
+    }
+
+    if (cluster.xDefault) {
       const xd = hreflangs.find((h) => h.hreflang === 'x-default');
       const expected = `${SITE}${cluster.xDefault === '/' ? '/' : cluster.xDefault}`;
-      if (!xd) failures.push(`${member.rel}: falta x-default na homepage`);
+      if (!xd) failures.push(`${member.rel}: falta x-default (esperado ${expected})`);
       else if (xd.href !== expected) failures.push(`${member.rel}: x-default incorrecto`);
     } else {
       const xd = hreflangs.find((h) => h.hreflang === 'x-default');
-      if (xd) failures.push(`${member.rel}: x-default só permitido na homepage`);
+      if (xd) failures.push(`${member.rel}: x-default só permitido quando o cluster define xDefault`);
     }
   }
 }

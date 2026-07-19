@@ -42,6 +42,10 @@ const PATH_I18N_KEY = {
   'en/legal-notice.html': 'legal-notice',
   'en/imovel-portugal-nao-residentes.html': 'property',
   'en/heranca-portugal-nao-residentes.html': 'inheritance',
+  'en/data-protection-dental-clinics.html': 'gdpr-dental',
+  'en/common-gdpr-mistakes-dental-clinic.html': 'gdpr-dental-mistakes',
+  'en/data-breach-dental-clinic-72-hours.html': 'gdpr-dental-72h',
+  'en/does-dental-clinic-need-dpo.html': 'gdpr-dental-dpo',
   'fr/index.html': 'index',
   'fr/a-propos.html': 'about',
   'fr/contact.html': 'contact',
@@ -50,6 +54,13 @@ const PATH_I18N_KEY = {
   'fr/mentions-legales.html': 'legal-notice',
   'fr/imovel-portugal-nao-residentes.html': 'property',
   'fr/heranca-portugal-nao-residentes.html': 'inheritance',
+  'fr/protection-donnees-cliniques-dentaires.html': 'gdpr-dental',
+  'fr/erreurs-rgpd-courantes-clinique-dentaire.html': 'gdpr-dental-mistakes',
+  'fr/violation-donnees-clinique-72-heures.html': 'gdpr-dental-72h',
+  'rgpd-clinicas-dentarias.html': 'gdpr-dental',
+  'erros-rgpd-comuns-clinica-dentaria.html': 'gdpr-dental-mistakes',
+  'violacao-dados-clinica-primeiras-72-horas.html': 'gdpr-dental-72h',
+  'clinica-dentaria-precisa-dpo.html': 'gdpr-dental-dpo',
 };
 
 const SWITCHER_LABELS = {
@@ -129,7 +140,7 @@ function resolveClusterUrls(i18nMap, key, fromRel) {
   const hubs = i18nMap.hubs;
   const result = {};
   for (const lang of ['pt', 'en', 'fr']) {
-    const abs = cluster ? cluster[lang] : hubs[lang];
+    const abs = cluster && cluster[lang] ? cluster[lang] : hubs[lang];
     result[lang] = relativeHref(fromRel, clusterPathToFile(abs));
   }
   return result;
