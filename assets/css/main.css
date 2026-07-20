@@ -1983,66 +1983,155 @@ summary:focus-visible{
   }
 }
 
-/* ========== Hero 3D ========== */
-.hero-3d{
+/* ========== Hero 3D — rede neural viva + HUD ========== */
+.palco-wrap{
   position: relative;
-  aspect-ratio: 1;
+  width: min(44vw, 560px);
+  aspect-ratio: 1 / 1;
+}
+@media (max-width: 900px){
+  .palco-wrap{ width: min(78vw, 420px); }
+}
+.palco-wrap::before{
+  content: "";
+  position: absolute;
+  inset: -12%;
+  background: radial-gradient(50% 50% at 50% 50%, rgba(140, 21, 38, .12), transparent 70%);
+  filter: blur(6px);
+}
+#palco{
+  position: absolute;
+  inset: 0;
   opacity: 0;
-  transition: opacity 1.6s ease .2s;
+  transition: opacity 1.8s ease .2s;
 }
-.hero-3d.hero-3d--pronto{
-  opacity: 1;
-}
-.hero-3d canvas{
+#palco.pronto{ opacity: 1; }
+#palco canvas{
   display: block;
   width: 100%;
   height: 100%;
 }
-.hero-3d::before{
+
+/* HUD: três tipos, todos brancos, ancorados a nodes 3D */
+#hud{
+  position: absolute;
+  inset: 0;
+  overflow: visible;
+  pointer-events: none;
+  z-index: 2;
+  font-family: "SF Mono", "Cascadia Mono", Consolas, "Courier New", monospace;
+}
+.hud-el{
+  position: absolute;
+  white-space: nowrap;
+  transition: opacity .35s linear;
+  will-change: left, top, opacity;
+}
+.etq{
+  transform: translate(9px, -50%);
+  font-size: 10px;
+  letter-spacing: .10em;
+  color: rgba(255, 255, 255, .94);
+  background: rgba(14, 9, 9, .42);
+  border: 1px solid rgba(255, 255, 255, .34);
+  padding: 3px 7px;
+  border-radius: 1px;
+}
+.etq::before{
   content: "";
   position: absolute;
-  inset: -14%;
-  background: radial-gradient(circle at 50% 52%, rgba(92,24,41,.10) 0%, transparent 65%);
-  filter: blur(2px);
+  left: -9px;
+  top: 50%;
+  width: 8px;
+  height: 1px;
+  background: rgba(255, 255, 255, .45);
 }
-@media (min-width: 900px){
-  .hero-grid:has(.hero-3d){
+.etq .rot{
+  color: rgba(255, 255, 255, .60);
+  margin-right: 6px;
+}
+.medidor{
+  transform: translate(11px, -50%);
+  font-size: 9px;
+  letter-spacing: .12em;
+  color: rgba(255, 255, 255, .88);
+  background: rgba(14, 9, 9, .38);
+  border-left: 1px solid rgba(255, 255, 255, .55);
+  padding: 3px 8px 4px;
+}
+.medidor .rot{
+  display: block;
+  color: rgba(255, 255, 255, .62);
+  margin-bottom: 3px;
+}
+.medidor .trilho{
+  display: block;
+  width: 50px;
+  height: 2px;
+  background: rgba(255, 255, 255, .16);
+  position: relative;
+}
+.medidor .carga{
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  background: rgba(255, 255, 255, .92);
+  transition: width .4s ease;
+}
+.marca-c{
+  transform: translate(-50%, -50%);
+  font-size: 8.5px;
+  letter-spacing: .14em;
+  color: rgba(255, 255, 255, .62);
+}
+.marca-c .cruz{
+  color: rgba(255, 255, 255, .78);
+  margin-right: 4px;
+  font-size: 9.5px;
+}
+
+@media (min-width: 901px){
+  .hero-grid:has(.palco-wrap){
     grid-template-columns: minmax(0, 52fr) minmax(0, 48fr);
     max-width: none;
     gap: clamp(32px, 4vw, 56px);
     align-items: center;
   }
-  .hero-grid:has(.hero-3d) .hero-copy{
+  .hero-grid:has(.palco-wrap) .hero-copy{
     grid-column: 1;
     grid-row: 1;
   }
-  .hero-grid:has(.hero-3d) .hero-3d{
+  .hero-grid:has(.palco-wrap) .palco-wrap{
     grid-column: 2;
     grid-row: 1;
-    width: min(40vw, 500px);
     justify-self: center;
     align-self: center;
   }
 }
-@media (max-width: 899px){
-  .hero-grid:has(.hero-3d){
+@media (max-width: 900px){
+  .hero-grid:has(.palco-wrap){
     grid-template-columns: 1fr;
     max-width: none;
   }
-  .hero-grid:has(.hero-3d) .hero-3d{
-    width: min(62vw, 300px);
+  .hero-grid:has(.palco-wrap) .palco-wrap{
     margin: 0 auto 20px;
     grid-row: 1;
   }
-  .hero-grid:has(.hero-3d) .hero-copy{
+  .hero-grid:has(.palco-wrap) .hero-copy{
     grid-row: 2;
   }
 }
+@media (max-width: 700px){
+  .etq{ font-size: 8.5px; }
+  .medidor{ font-size: 8px; }
+  .marca-c{ font-size: 7.5px; }
+  .marca-c:nth-child(2n){ display: none; }
+}
 @media (prefers-reduced-motion: reduce){
-  .hero-3d{
-    transition: none;
-    opacity: 1;
-  }
+  #palco{ transition: none; opacity: 1; }
+  .hud-el{ transition: none; }
+  .medidor .carga{ transition: none; }
 }
 
 .nav-badge{
