@@ -1,19 +1,10 @@
 /* =====================================================================
-   V11 — REDE VERMELHA, DADOS BRANCOS, TAMANHO REAL
-   Evolução da v10, a pedido:
-   · REDE maioritariamente vermelho/bordeaux: o mapeamento de cor
-     comprime cada camada para a zona baixa do gradiente. O petróleo
-     passa a veio ocasional; o bege/branco a faísca rara. O contraste
-     figura-fundo inverte-se: rede quente e escura, dados brancos.
-   · DADOS todos BRANCOS e mais presentes: opacidades máximas sobem
-     (caixas .95 › medidores .88 › marcas .62), bordas e tipos mais
-     claros, barra de carga branca. Rótulos em branco a 60% para
-     hierarquia dentro da própria etiqueta.
-   · MAIS DADOS: 9 caixas + 5 medidores + 10 marcas = 24 âncoras.
-   · TAMANHO REAL: o elemento é renderizado no tamanho exato do slot
-     do hero — min(44vw,560px) desktop, min(78vw,420px) mobile,
-     quadrado. O HUD é posicionado RELATIVO ao contentor, por isso
-     a composição transporta-se 1:1 para o site.
+   V12 — REDE NEURAL PARA FUNDO CLARO
+   Correção da v11 (blending aditivo sobre creme):
+   · NormalBlending + nodes redondos (textura radial)
+   · Paleta tinta escura (G_CLARO); núcleo mais escuro
+   · Perspetiva aérea: desvanecimento para FUNDO (#F7F5F3)
+   Estrutura, movimento, velocidade e HUD: iguais à v11.
    Robustez (site): pausa rAF com visibilitychange + IntersectionObserver;
    fallback se WebGL indisponível (esconde contentor, sem erro).
    Requisitos: THREE r128 global (assets/js/vendor/three.min.js) e
@@ -63,6 +54,20 @@
   }
   dimensiona();
   window.addEventListener('resize', dimensiona);
+
+  /* ---------- textura circular (corrige os "quadrados") ---------- */
+  function texturaPonto(){
+    const c = document.createElement('canvas'); c.width = c.height = 64;
+    const g = c.getContext('2d');
+    const grad = g.createRadialGradient(32,32,0, 32,32,32);
+    grad.addColorStop(0.00,'rgba(255,255,255,1)');
+    grad.addColorStop(0.40,'rgba(255,255,255,0.98)');
+    grad.addColorStop(0.72,'rgba(255,255,255,0.45)');
+    grad.addColorStop(1.00,'rgba(255,255,255,0)');
+    g.fillStyle = grad; g.fillRect(0,0,64,64);
+    const t = new THREE.Texture(c); t.needsUpdate = true; return t;
+  }
+  const texPonto = texturaPonto();
 
   /* ---------- utilitários ---------- */
   let semente = 11;
@@ -121,20 +126,21 @@
     geo.setAttribute('color',    new THREE.BufferAttribute(new Float32Array(n*3),3));
     const mat = new THREE.PointsMaterial({
       size:tamanho, vertexColors:true, transparent:true, opacity:opac,
-      blending:THREE.AdditiveBlending, depthWrite:false, sizeAttenuation:true
+      map:texPonto, blending:THREE.NormalBlending,
+      depthWrite:false, sizeAttenuation:true
     });
     return {obj:new THREE.Points(geo,mat), geo, inicio, fim};
   }
-  const pExt = fazPontos(0, n1, 0.020, 0.70);
-  const pMed = fazPontos(n1, fimMed, 0.032, 0.90);
-  const pNuc = fazPontos(fimMed, N, 0.046, 1.00);
+  const pExt = fazPontos(0, n1, 0.019, 0.85);
+  const pMed = fazPontos(n1, fimMed, 0.030, 0.92);
+  const pNuc = fazPontos(fimMed, N, 0.044, 1.00);
 
   const geoL = new THREE.BufferGeometry();
   geoL.setAttribute('position', new THREE.BufferAttribute(posLinhas,3));
   geoL.setAttribute('color', new THREE.BufferAttribute(corLinhas,3));
   const matL = new THREE.LineBasicMaterial({
-    vertexColors:true, transparent:true, opacity:0.29,
-    blending:THREE.AdditiveBlending, depthWrite:false
+    vertexColors:true, transparent:true, opacity:0.34,
+    blending:THREE.NormalBlending, depthWrite:false
   });
   const linhas = new THREE.LineSegments(geoL, matL);
 
@@ -143,15 +149,11 @@
   grupo.rotation.x = 0.30;
   cena.add(grupo);
 
-  /* ---------- paleta — rede maioritariamente vermelho/bordeaux ----------
-     Gradiente: escuro → bordeaux → vermelho-claro → petróleo → bege → branco.
-     O mapeamento por camada COMPRIME os valores para a zona baixa:
-     · exterior:  v ∈ [0.04, 0.58] — vermelhos, a roçar o petróleo
-     · intermédia: v ∈ [0.10, 0.66] — vermelhos com veios de petróleo
-     · núcleo:    v ∈ [0.24, 0.80] — mais claro (legível), bege ocasional
-     O branco pleno fica reservado às faíscas raras do núcleo. */
+  /* ---------- paleta clara — tinta escura sobre creme ----------
+     Núcleo = mais escuro (lê-se através da casca); casca = vermelhos. */
   function hex(c){ const x = new THREE.Color(c); return [x.r,x.g,x.b]; }
-  const G = [hex('#4A0D18'), hex('#8C1526'), hex('#C63A47'), hex('#1F6F78'), hex('#E8DCC8'), hex('#FFF6EC')];
+  const G = [hex('#2B0A12'), hex('#6E1423'), hex('#A62435'), hex('#C63A47'), hex('#1F6F78'), hex('#4C6B70')];
+  const FUNDO = [0.969, 0.961, 0.953]; // #F7F5F3 — alvo do desvanecimento
   function amostra(v, saida){
     const n = G.length-1;
     const t = Math.min(Math.max(v,0),0.9999)*n;
@@ -178,11 +180,13 @@
   const desloc = new Array(N);
   for(let i=0;i<N;i++) desloc[i] = new THREE.Vector3();
   const tmp = new THREE.Vector3();
+  const mundo = new THREE.Vector3();
   const eixoCor = new THREE.Vector3(0.6, 0.8, 0.4).normalize();
   const corTmp = [0,0,0];
   const ruidoNode = new Float32Array(N);
+  const profNode = new Float32Array(N);
 
-  /* ================= HUD — MAIS DADOS, TODOS BRANCOS ================= */
+  /* ================= HUD ================= */
 
   /* TIPO A — caixas de medição (9) */
   const CAIXAS = [
@@ -250,13 +254,11 @@
   const proj = new THREE.Vector3();
 
   function atualizaHUD(t){
-    grupo.updateMatrixWorld();
     for(const e of elems){
       const i = e.def.i;
       proj.copy(desloc[i]).applyMatrix4(grupo.matrixWorld);
       const zMundo = proj.z;
       proj.project(cam);
-      // posições relativas ao contentor (o HUD vive dentro do wrap)
       e.el.style.left = (( proj.x*0.5 + 0.5) * larg).toFixed(1)+'px';
       e.el.style.top  = ((-proj.y*0.5 + 0.5) * alt ).toFixed(1)+'px';
       const vis = Math.max(0, Math.min(1, (zMundo + 0.25) / 0.65));
@@ -282,6 +284,10 @@
     const rMed = 1 + 0.034*Math.sin(t*0.45 + 1.6);
     const rNuc = 1 + 0.042*Math.sin(t*0.45 + 3.1);
 
+    grupo.rotation.y = t*0.10;
+    grupo.rotation.x = 0.30 + 0.05*Math.sin(t*0.17);
+    grupo.updateMatrixWorld();
+
     for(let i=0;i<N;i++){
       const c = camada(i);
       tmp.copy(base[i]);
@@ -294,14 +300,22 @@
       desloc[i].copy(tmp).multiplyScalar(resp * (1 + 0.055*n));
       posPontos[i*3]=desloc[i].x; posPontos[i*3+1]=desloc[i].y; posPontos[i*3+2]=desloc[i].z;
 
-      // rede maioritariamente vermelha: valores comprimidos p/ zona baixa do gradiente
+      mundo.copy(desloc[i]).applyMatrix4(grupo.matrixWorld);
+      profNode[i] = mundo.z;
+
       const w = 0.5 + 0.5*Math.sin(tmp.dot(eixoCor)*2.4 + t*0.30 + n*1.6);
       let v;
-      if(c===0)      v = 0.04 + 0.54*w;
-      else if(c===1) v = 0.10 + 0.56*w;
-      else           v = 0.24 + 0.56*w;
+      if(c===0)      v = 0.22 + 0.62*w;
+      else if(c===1) v = 0.10 + 0.58*w;
+      else           v = 0.00 + 0.46*w;
       amostra(v, corTmp);
-      corPontos[i*3]=corTmp[0]; corPontos[i*3+1]=corTmp[1]; corPontos[i*3+2]=corTmp[2];
+
+      const d01 = Math.max(0, Math.min(1, (profNode[i] + 1.15) / 2.30));
+      let fade = Math.pow(1 - d01, 1.25) * 0.80;
+      if(c===2) fade *= 0.62;
+      corPontos[i*3]   = corTmp[0] + (FUNDO[0]-corTmp[0])*fade;
+      corPontos[i*3+1] = corTmp[1] + (FUNDO[1]-corTmp[1])*fade;
+      corPontos[i*3+2] = corTmp[2] + (FUNDO[2]-corTmp[2])*fade;
     }
 
     for(let e=0;e<nA;e++){
@@ -321,8 +335,6 @@
     geoL.attributes.position.needsUpdate = true;
     geoL.attributes.color.needsUpdate = true;
 
-    grupo.rotation.y = t*0.10;
-    grupo.rotation.x = 0.30 + 0.05*Math.sin(t*0.17);
     renderer.render(cena, cam);
     atualizaHUD(t);
   }

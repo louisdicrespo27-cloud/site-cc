@@ -2012,7 +2012,7 @@ summary:focus-visible{
   height: 100%;
 }
 
-/* HUD: três tipos, todos brancos, ancorados a nodes 3D */
+/* HUD: tinta escura sobre creme, ancorado a nodes 3D */
 #hud{
   position: absolute;
   inset: 0;
@@ -2031,9 +2031,9 @@ summary:focus-visible{
   transform: translate(9px, -50%);
   font-size: 10px;
   letter-spacing: .10em;
-  color: rgba(255, 255, 255, .94);
-  background: rgba(14, 9, 9, .42);
-  border: 1px solid rgba(255, 255, 255, .34);
+  color: #2B0A12;
+  background: rgba(255, 253, 251, .82);
+  border: 1px solid rgba(110, 20, 35, .38);
   padding: 3px 7px;
   border-radius: 1px;
 }
@@ -2044,31 +2044,31 @@ summary:focus-visible{
   top: 50%;
   width: 8px;
   height: 1px;
-  background: rgba(255, 255, 255, .45);
+  background: rgba(110, 20, 35, .45);
 }
 .etq .rot{
-  color: rgba(255, 255, 255, .60);
+  color: rgba(110, 20, 35, .72);
   margin-right: 6px;
 }
 .medidor{
   transform: translate(11px, -50%);
   font-size: 9px;
   letter-spacing: .12em;
-  color: rgba(255, 255, 255, .88);
-  background: rgba(14, 9, 9, .38);
-  border-left: 1px solid rgba(255, 255, 255, .55);
+  color: #2B0A12;
+  background: rgba(255, 253, 251, .76);
+  border-left: 1px solid rgba(110, 20, 35, .62);
   padding: 3px 8px 4px;
 }
 .medidor .rot{
   display: block;
-  color: rgba(255, 255, 255, .62);
+  color: rgba(110, 20, 35, .72);
   margin-bottom: 3px;
 }
 .medidor .trilho{
   display: block;
   width: 50px;
   height: 2px;
-  background: rgba(255, 255, 255, .16);
+  background: rgba(110, 20, 35, .16);
   position: relative;
 }
 .medidor .carga{
@@ -2076,17 +2076,17 @@ summary:focus-visible{
   left: 0;
   top: 0;
   bottom: 0;
-  background: rgba(255, 255, 255, .92);
+  background: #6E1423;
   transition: width .4s ease;
 }
 .marca-c{
   transform: translate(-50%, -50%);
   font-size: 8.5px;
   letter-spacing: .14em;
-  color: rgba(255, 255, 255, .62);
+  color: rgba(43, 10, 18, .62);
 }
 .marca-c .cruz{
-  color: rgba(255, 255, 255, .78);
+  color: rgba(110, 20, 35, .78);
   margin-right: 4px;
   font-size: 9.5px;
 }
