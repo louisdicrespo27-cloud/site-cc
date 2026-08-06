@@ -2142,10 +2142,10 @@ summary:focus-visible{
 }
 
 @media (min-width: 1200px){
-  .header-tools{ gap: 8px; }
+  .header-tools{ gap: 6px; }
   .nav-links{ gap: 0; }
-  .nav-links a{ padding: 8px 4px; white-space: nowrap; }
-  .nav-links a.btn{ padding: 8px 12px; }
+  .nav-links a{ padding: 8px 3px; white-space: nowrap; }
+  .nav-links a.btn{ padding: 8px 10px; }
   .language-switcher a,
   .language-switcher__current{ padding: 0 4px; min-width: 36px; }
 }
