@@ -175,8 +175,7 @@ const FORM_MESSAGES = {
       nome: 'Nome completo',
       email: 'Endereço de email',
       tel: 'Telefone (opcional)',
-      assunto: 'Assunto',
-      mensagem: 'Mensagem',
+      mensagem: 'A sua questão',
       privacidade: 'Política de Privacidade',
     },
     errors: {
@@ -187,10 +186,8 @@ const FORM_MESSAGES = {
       emailMax: 'O email não pode exceder 254 caracteres.',
       emailInvalid: 'Indique um endereço de email válido.',
       telMax: 'O telefone não pode exceder 40 caracteres.',
-      assuntoMin: 'Indique um assunto (mínimo 3 caracteres).',
-      assuntoMax: 'O assunto não pode exceder 160 caracteres.',
-      mensagemMin: 'Escreva uma mensagem (mínimo 10 caracteres).',
-      mensagemMax: 'A mensagem não pode exceder 2000 caracteres.',
+      mensagemMin: 'Descreva a sua questão (mínimo 10 caracteres).',
+      mensagemMax: 'A questão não pode exceder 2000 caracteres.',
       privacidade: 'Deve declarar que leu e compreendeu a Política de Privacidade.',
     },
     errorSummaryTitle: 'Verifique os campos assinalados:',
@@ -201,8 +198,7 @@ const FORM_MESSAGES = {
       nome: 'Full name',
       email: 'Email address',
       tel: 'Telephone (optional)',
-      assunto: 'Subject',
-      mensagem: 'Message',
+      mensagem: 'Your question',
       privacidade: 'Privacy policy',
     },
     errors: {
@@ -213,10 +209,8 @@ const FORM_MESSAGES = {
       emailMax: 'Email cannot exceed 254 characters.',
       emailInvalid: 'Please enter a valid email address.',
       telMax: 'Telephone cannot exceed 40 characters.',
-      assuntoMin: 'Please enter a subject (minimum 3 characters).',
-      assuntoMax: 'Subject cannot exceed 160 characters.',
-      mensagemMin: 'Please write a message (minimum 10 characters).',
-      mensagemMax: 'Message cannot exceed 2000 characters.',
+      mensagemMin: 'Please describe your question (minimum 10 characters).',
+      mensagemMax: 'Your question cannot exceed 2000 characters.',
       privacidade: 'You must confirm that you have read and understood the Privacy policy.',
     },
     errorSummaryTitle: 'Please check the highlighted fields:',
@@ -227,8 +221,7 @@ const FORM_MESSAGES = {
       nome: 'Nom complet',
       email: 'Adresse e-mail',
       tel: 'Téléphone (facultatif)',
-      assunto: 'Objet',
-      mensagem: 'Message',
+      mensagem: 'Votre question',
       privacidade: 'Politique de confidentialité',
     },
     errors: {
@@ -239,10 +232,8 @@ const FORM_MESSAGES = {
       emailMax: 'L’adresse e-mail ne peut pas dépasser 254 caractères.',
       emailInvalid: 'Veuillez indiquer une adresse e-mail valide.',
       telMax: 'Le téléphone ne peut pas dépasser 40 caractères.',
-      assuntoMin: 'Veuillez indiquer un objet (minimum 3 caractères).',
-      assuntoMax: 'L’objet ne peut pas dépasser 160 caractères.',
-      mensagemMin: 'Veuillez rédiger un message (minimum 10 caractères).',
-      mensagemMax: 'Le message ne peut pas dépasser 2000 caractères.',
+      mensagemMin: 'Veuillez décrire votre question (minimum 10 caractères).',
+      mensagemMax: 'Votre question ne peut pas dépasser 2000 caractères.',
       privacidade: 'Vous devez confirmer avoir lu et compris la politique de confidentialité.',
     },
     errorSummaryTitle: 'Veuillez vérifier les champs signalés :',
@@ -273,8 +264,6 @@ function initContactForm() {
   const emailErr = form.querySelector('#contactoEmailError');
   const telInput = form.querySelector('#contactoTel');
   const telErr = form.querySelector('#contactoTelError');
-  const assuntoEl = form.querySelector('#contactoAssunto');
-  const assuntoErr = form.querySelector('#contactoAssuntoError');
   const msgEl = form.querySelector('#contactoMensagem');
   const msgErr = form.querySelector('#contactoMensagemError');
   const consentCb = form.querySelector('#contactoPrivacidade');
@@ -295,7 +284,6 @@ function initContactForm() {
     nome: { input: nomeInput, err: nomeErr, label: msgs.fields.nome, id: 'contactoNome' },
     email: { input: emailInput, err: emailErr, label: msgs.fields.email, id: 'contactoEmail' },
     tel: { input: telInput, err: telErr, label: msgs.fields.tel, id: 'contactoTel' },
-    assunto: { input: assuntoEl, err: assuntoErr, label: msgs.fields.assunto, id: 'contactoAssunto' },
     mensagem: { input: msgEl, err: msgErr, label: msgs.fields.mensagem, id: 'contactoMensagem' },
     privacidade: { input: consentCb, err: privacidadeErr, label: msgs.fields.privacidade, id: 'contactoPrivacidade', isCheckbox: true },
   };
@@ -397,12 +385,6 @@ function initContactForm() {
         if (val.length > 40) return e.telMax;
         return null;
       }
-      case 'assunto': {
-        const val = assuntoEl ? String(assuntoEl.value || '').trim() : '';
-        if (val.length < 3) return e.assuntoMin;
-        if (val.length > 160) return e.assuntoMax;
-        return null;
-      }
       case 'mensagem': {
         const val = msgEl ? String(msgEl.value || '').trim() : '';
         if (val.length < 10) return e.mensagemMin;
@@ -450,11 +432,10 @@ function initContactForm() {
     contactoNome: 'nome',
     contactoEmail: 'email',
     contactoTel: 'tel',
-    contactoAssunto: 'assunto',
     contactoMensagem: 'mensagem',
   };
 
-  const startFields = [nomeInput, emailInput, telInput, assuntoEl, msgEl];
+  const startFields = [nomeInput, emailInput, telInput, msgEl];
   startFields.forEach((el) => {
     if (!el) return;
     el.addEventListener('input', () => {

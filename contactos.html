@@ -263,21 +263,16 @@
           <span id="contactoTelError" class="contact-form__error" hidden></span>
         </div>
         <div class="contact-form__row">
-          <label for="contactoAssunto">Assunto</label>
-          <input type="text" id="contactoAssunto" name="assunto" required minlength="3" maxlength="160" autocomplete="off" aria-describedby="contactoAssuntoError" />
-          <span id="contactoAssuntoError" class="contact-form__error" hidden></span>
-        </div>
-        <div class="contact-form__row">
-          <label for="contactoMensagem">Mensagem</label>
+          <label for="contactoMensagem">A sua questão</label>
           <p id="contactoMensagemHint" class="contact-form__hint">Não envie documentos, números de identificação, dados bancários ou informação confidencial extensa nesta fase.</p>
           <textarea
             id="contactoMensagem"
             name="mensagem"
-            rows="6"
+            rows="8"
             required
             minlength="10"
             maxlength="2000"
-            placeholder="Resuma a natureza do assunto, indique se existe algum prazo e qual o objetivo do contacto."
+            placeholder="Descreva resumidamente a sua situação: o que se passa, com quem, e o que gostaria de resolver. Quanto mais claro, melhor o podemos orientar."
             aria-describedby="contactoMensagemHint contactoMensagemError"
           ></textarea>
           <span id="contactoMensagemError" class="contact-form__error" hidden></span>

@@ -219,35 +219,16 @@
             <span id="contactoTelError" class="contact-form__error" hidden></span>
           </div>
           <div class="contact-form__row">
-            <label for="contactoAssunto">Subject</label>
-            <input type="text" id="contactoAssunto" name="assunto" required minlength="3" maxlength="160" autocomplete="off" aria-describedby="contactoAssuntoError" />
-            <span id="contactoAssuntoError" class="contact-form__error" hidden></span>
-          </div>
-          <div class="contact-form__row">
-            <label for="contactoArea">Legal area (optional)</label>
-            <select id="contactoArea" name="area">
-              <option value="">Select…</option>
-              <option>Family and minors</option>
-              <option>Property and tenancy</option>
-              <option>Debt recovery</option>
-              <option>Contracts and companies</option>
-              <option>Criminal</option>
-              <option>Insolvency</option>
-              <option>Non-residents / succession</option>
-              <option>Other</option>
-            </select>
-          </div>
-          <div class="contact-form__row">
-            <label for="contactoMensagem">Message</label>
+            <label for="contactoMensagem">Your question</label>
             <p id="contactoMensagemHint" class="contact-form__hint">Do not send documents, identification numbers, bank details or extensive confidential information at this stage. Indicate known deadlines and availability for a meeting.</p>
             <textarea
               id="contactoMensagem"
               name="mensagem"
-              rows="6"
+              rows="8"
               required
               minlength="10"
               maxlength="2000"
-              placeholder="Summarise the matter, the purpose of the consultation and any relevant deadline."
+              placeholder="Briefly describe your situation: what is happening, with whom, and what you would like to resolve. The clearer it is, the better we can guide you."
               aria-describedby="contactoMensagemHint contactoMensagemError"
             ></textarea>
             <span id="contactoMensagemError" class="contact-form__error" hidden></span>
