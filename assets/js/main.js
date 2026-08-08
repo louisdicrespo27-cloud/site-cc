@@ -115,12 +115,37 @@ function initCookieConsent() {
 function applyActiveNav() {
   const current = document.body.getAttribute('data-current-nav');
   if (!current) return;
+
+  const path = (location.pathname.split('/').pop() || 'index.html').split('#')[0];
+  const groupAliases = {
+    particulares: 'particulares',
+    'estado-previo': 'particulares',
+    empresas: 'empresas',
+    condominios: 'empresas',
+    'rgpd-saude': 'empresas',
+    residentes: 'residentes',
+    sobre: 'sobre',
+    contactos: 'sobre',
+  };
+
   document.querySelectorAll('.nav a[data-nav]').forEach((a) => {
-    if (a.getAttribute('data-nav') === current) {
+    const hrefFile = (a.getAttribute('href') || '').split('#')[0].split('/').pop();
+    if (hrefFile === path) {
       a.classList.add('is-active');
       a.setAttribute('aria-current', 'page');
+    } else if (a.getAttribute('data-nav') === current && a.classList.contains('btn')) {
+      a.classList.add('is-active');
     }
   });
+
+  const groupKey = groupAliases[current];
+  if (groupKey) {
+    document.querySelectorAll(`.nav-group[data-nav-group="${groupKey}"]`).forEach((group) => {
+      group.classList.add('is-active');
+      const toggle = group.querySelector('.nav-group-toggle');
+      if (toggle) toggle.classList.add('is-active');
+    });
+  }
 }
 
 function hideErr(el) {
@@ -523,6 +548,25 @@ document.addEventListener('DOMContentLoaded', () => {
   const navLinks = document.querySelector('.nav-links');
   const mqCompactNav = window.matchMedia('(max-width: 980px)');
   const navUi = NAV_UI[getFormLang()] || NAV_UI.pt;
+  const navGroups = navLinks
+    ? Array.from(navLinks.querySelectorAll('.nav-group'))
+    : [];
+
+  function setNavGroupOpen(group, open) {
+    const btn = group.querySelector('.nav-group-toggle');
+    const panel = group.querySelector('.nav-panel');
+    if (!btn || !panel) return;
+    btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+    panel.hidden = !open;
+    group.classList.toggle('is-open', open);
+  }
+
+  function closeAllNavGroups(except) {
+    navGroups.forEach((group) => {
+      if (except && group === except) return;
+      setNavGroupOpen(group, false);
+    });
+  }
 
   function closeMobileNav(options = {}) {
     const { returnFocus = false } = options;
@@ -531,6 +575,7 @@ document.addEventListener('DOMContentLoaded', () => {
     navToggle.setAttribute('aria-expanded', 'false');
     navToggle.setAttribute('aria-label', navUi.open);
     document.body.classList.remove('nav-menu-open');
+    closeAllNavGroups();
     if (returnFocus) {
       navToggle.focus({ preventScroll: true });
     }
@@ -543,7 +588,7 @@ document.addEventListener('DOMContentLoaded', () => {
     navToggle.setAttribute('aria-label', navUi.close);
     document.body.classList.add('nav-menu-open');
     if (moveFocusToFirstLink) {
-      const first = navLinks.querySelector('a');
+      const first = navLinks.querySelector('.nav-group-toggle, a');
       if (first) requestAnimationFrame(() => first.focus());
     }
   }
@@ -568,29 +613,86 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     navLinks.querySelectorAll('a').forEach((a) => {
-      a.addEventListener('click', closeMobileNav);
+      a.addEventListener('click', () => {
+        if (mqCompactNav.matches) closeMobileNav();
+        else closeAllNavGroups();
+      });
     });
 
     document.addEventListener('keydown', (e) => {
       if (e.key !== 'Escape') return;
-      if (!navLinks.classList.contains('active')) return;
-      closeMobileNav({ returnFocus: true });
+      if (mqCompactNav.matches && navLinks.classList.contains('active')) {
+        closeMobileNav({ returnFocus: true });
+        return;
+      }
+      const openGroup = navGroups.find((g) => g.classList.contains('is-open'));
+      if (openGroup) {
+        const btn = openGroup.querySelector('.nav-group-toggle');
+        closeAllNavGroups();
+        if (btn) btn.focus({ preventScroll: true });
+      }
     });
 
     document.addEventListener('pointerup', (event) => {
-      if (!mqCompactNav.matches || !navLinks.classList.contains('active')) return;
-
       const target = event.target;
       if (!(target instanceof Node)) return;
-      if (navLinks.contains(target) || navToggle.contains(target)) return;
 
-      closeMobileNav();
+      if (mqCompactNav.matches) {
+        if (!navLinks.classList.contains('active')) return;
+        if (navLinks.contains(target) || navToggle.contains(target)) return;
+        closeMobileNav();
+        return;
+      }
+
+      if (!navGroups.some((g) => g.classList.contains('is-open'))) return;
+      if (navLinks.contains(target)) return;
+      closeAllNavGroups();
     });
 
     mqCompactNav.addEventListener('change', (ev) => {
+      closeAllNavGroups();
       if (!ev.matches) closeMobileNav();
     });
   }
+
+  navGroups.forEach((group) => {
+    const btn = group.querySelector('.nav-group-toggle');
+    const panel = group.querySelector('.nav-panel');
+    if (!btn || !panel) return;
+
+    btn.setAttribute('aria-controls', panel.id);
+    panel.setAttribute('aria-labelledby', btn.id);
+
+    btn.addEventListener('click', () => {
+      const expanded = btn.getAttribute('aria-expanded') === 'true';
+      closeAllNavGroups(expanded ? null : group);
+      setNavGroupOpen(group, !expanded);
+    });
+
+    group.addEventListener('mouseenter', () => {
+      if (mqCompactNav.matches) return;
+      closeAllNavGroups(group);
+      setNavGroupOpen(group, true);
+    });
+
+    group.addEventListener('mouseleave', () => {
+      if (mqCompactNav.matches) return;
+      setNavGroupOpen(group, false);
+    });
+
+    group.addEventListener('focusin', () => {
+      if (mqCompactNav.matches) return;
+      closeAllNavGroups(group);
+      setNavGroupOpen(group, true);
+    });
+
+    group.addEventListener('focusout', (e) => {
+      if (mqCompactNav.matches) return;
+      const next = e.relatedTarget;
+      if (next instanceof Node && group.contains(next)) return;
+      setNavGroupOpen(group, false);
+    });
+  });
 
   let accordionRootIdx = 0;
   document.querySelectorAll('[data-accordion]').forEach((accordion) => {

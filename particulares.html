@@ -169,14 +169,54 @@
             <span></span><span></span><span></span>
           </button>
           <div class="nav-links" id="menu-principal">
-            <a href="particulares.html" data-nav="particulares">Particulares</a>
-            <a href="empresas.html" data-nav="empresas">Empresas</a>
-            <a href="gestao-de-condominio.html" data-nav="condominios">Condomínios</a>
-            <a href="rgpd-dados-de-saude.html" data-nav="rgpd-saude">RGPD Saúde</a>
-            <a href="residentes-no-estrangeiro.html" data-nav="residentes">Residentes no estrangeiro</a>
-            <a href="estado-previo-imovel.html" data-nav="estado-previo">Estado Prévio<span class="nav-badge" aria-hidden="true">Novo</span></a>
-            <a href="sobre.html" data-nav="sobre">Sobre</a>
-            <a href="contactos.html" data-nav="contactos">Contactos</a>
+            <div class="nav-group" data-nav-group="particulares">
+              <button type="button" class="nav-group-toggle" id="nav-btn-particulares" aria-expanded="false" aria-haspopup="true" aria-controls="nav-panel-particulares">
+                Particulares
+              </button>
+              <ul class="nav-panel" id="nav-panel-particulares" role="list" hidden>
+                <li><a href="familia-menores.html" data-nav="particulares">Família e menores</a></li>
+                <li><a href="imobiliario-arrendamento.html" data-nav="particulares">Imobiliário e arrendamento</a></li>
+                <li><a href="estado-previo-imovel.html" data-nav="estado-previo">Estado Prévio<span class="nav-badge" aria-hidden="true">Novo</span></a></li>
+                <li><a href="insolvencia-pessoal-exoneracao-passivo-restante.html" data-nav="particulares">Insolvência pessoal</a></li>
+                <li><a href="particulares.html" data-nav="particulares">Ver tudo para particulares</a></li>
+              </ul>
+            </div>
+
+            <div class="nav-group" data-nav-group="empresas">
+              <button type="button" class="nav-group-toggle" id="nav-btn-empresas" aria-expanded="false" aria-haspopup="true" aria-controls="nav-panel-empresas">
+                Empresas
+              </button>
+              <ul class="nav-panel" id="nav-panel-empresas" role="list" hidden>
+                <li><a href="cobranca-dividas-empresas.html" data-nav="empresas">Cobrança de dívidas</a></li>
+                <li><a href="gestao-de-condominio.html" data-nav="condominios">Condomínios</a></li>
+                <li><a href="rgpd-dados-de-saude.html" data-nav="rgpd-saude">RGPD Saúde</a></li>
+                <li><a href="sociedades-gerentes-empresas-familiares.html" data-nav="empresas">Contratos e sociedades</a></li>
+                <li><a href="execucao-insolvencia-empresas.html" data-nav="empresas">Insolvência de empresas</a></li>
+                <li><a href="empresas.html" data-nav="empresas">Ver tudo para empresas</a></li>
+              </ul>
+            </div>
+
+            <div class="nav-group" data-nav-group="residentes">
+              <button type="button" class="nav-group-toggle" id="nav-btn-residentes" aria-expanded="false" aria-haspopup="true" aria-controls="nav-panel-residentes">
+                Não-residentes
+              </button>
+              <ul class="nav-panel" id="nav-panel-residentes" role="list" hidden>
+                <li><a href="heranca-portugal-nao-residentes.html" data-nav="residentes">Heranças em Portugal</a></li>
+                <li><a href="imovel-portugal-nao-residentes.html" data-nav="residentes">Imóveis em Portugal</a></li>
+                <li><a href="residentes-no-estrangeiro.html" data-nav="residentes">Ver tudo</a></li>
+              </ul>
+            </div>
+
+            <div class="nav-group" data-nav-group="sobre">
+              <button type="button" class="nav-group-toggle" id="nav-btn-sobre" aria-expanded="false" aria-haspopup="true" aria-controls="nav-panel-sobre">
+                Sobre
+              </button>
+              <ul class="nav-panel" id="nav-panel-sobre" role="list" hidden>
+                <li><a href="sobre.html" data-nav="sobre">Sobre o escritório</a></li>
+                <li><a href="contactos.html" data-nav="contactos">Contactos</a></li>
+              </ul>
+            </div>
+
             <a class="btn primary small" href="consulta-juridica.html#pedido-consulta" data-nav="consulta" data-loc="header">Pedir consulta</a>
           </div>
         </nav>
