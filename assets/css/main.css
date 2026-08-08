@@ -2321,3 +2321,28 @@ summary:focus-visible{
     justify-content: center;
   }
 }
+
+/* Visible article breadcrumbs */
+.breadcrumbs{
+  margin: 0 0 1.25rem;
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  color: var(--muted);
+}
+.breadcrumbs a{
+  color: var(--muted);
+  text-decoration: none;
+  font-weight: 500;
+}
+.breadcrumbs a:hover{
+  color: var(--text);
+  text-decoration: underline;
+}
+.breadcrumbs span[aria-hidden="true"]{
+  margin: 0 0.35em;
+  color: var(--muted);
+  opacity: 0.85;
+}
+.breadcrumbs span[aria-current="page"]{
+  color: var(--muted);
+}

@@ -24,6 +24,7 @@ Atendimento: por marcação
 - Início: /
 - Particulares: /particulares.html
 - Empresas: /empresas.html
+- Artigos e guias (índice): /artigos-e-guias.html
 - Consulta jurídica: /consulta-juridica.html
 - Contactos: /contactos.html
 - Sobre: /sobre.html
@@ -47,11 +48,55 @@ Atendimento: por marcação
 - Sociedades, gerentes e empresas familiares: /sociedades-gerentes-empresas-familiares.html
 - Execução e insolvência de empresas: /execucao-insolvencia-empresas.html
 
-## Artigos informativos para empresas
+## Artigos — empresas e gerentes
 
 - Fatura por cobrar: /fatura-por-cobrar-empresa.html
 - Trabalhos extra em obra não pagos: /trabalhos-extra-obra-nao-pagos.html
 - Produto agrícola entregue e não pago: /produto-agricola-entregue-nao-pago.html
+- Reversão fiscal — responsabilidade do gerente: /gerente-responsabilidade-dividas-fiscais-reversao.html
+- Conflito entre sócios e destituição de gerente: /conflito-entre-socios-destituicao-gerente.html
+- Fiança e aval — responsabilidade pessoal: /fianca-aval-empresario-responsabilidade-pessoal.html
+- Recuperar a empresa antes da insolvência (PER): /recuperar-empresa-dificuldade-per-antes-insolvencia.html
+
+## Artigos — condomínios
+
+- Gestão de condomínio (pilar): /gestao-de-condominio.html
+- Responsabilidades do administrador (Lei 8/2022): /condominio-responsabilidades-administrador-lei-8-2022.html
+- Cobrança de quotas e prazo de 90 dias: /condominio-cobranca-quotas-90-dias.html
+- Assembleias — convocatória, quórum e atas: /condominio-assembleias-convocatoria-quorum-atas.html
+- Obras nas partes comuns e maiorias: /condominio-obras-partes-comuns-maiorias.html
+- Ata como título executivo: /condominio-ata-titulo-executivo.html
+- Venda de fração com dívidas — declaração de encargos: /condominio-venda-fracao-dividas-declaracao.html
+
+## Artigos — RGPD e dados de saúde
+
+- Dados de saúde — obrigações de RGPD: /rgpd-dados-de-saude.html
+- RGPD para clínicas dentárias: /rgpd-clinicas-dentarias.html
+- Clínica médica em grande escala: /rgpd-clinica-medica-grande-escala.html
+- Farmácia e proteção de dados: /rgpd-farmacia-protecao-dados.html
+- Lar de idosos e proteção de dados: /rgpd-lar-idosos-protecao-dados.html
+- Erros de RGPD numa clínica dentária: /erros-rgpd-comuns-clinica-dentaria.html
+- Consentimento e dados de saúde: /consentimento-dados-saude-clinica-dentaria.html
+- Conservação do processo clínico: /conservacao-processo-clinico-clinica-dentaria.html
+- Clínica dentária precisa de DPO?: /clinica-dentaria-precisa-dpo.html
+- Violação de dados — primeiras 72 horas: /violacao-dados-clinica-primeiras-72-horas.html
+
+## Artigos EN — Americanos e Portugal
+
+- Moving to Portugal from the US (2026): /en/moving-to-portugal-from-us-2026.html
+- Buying to rent — US investor: /en/buying-to-rent-portugal-us-investor.html
+- Taxes for Americans living in Portugal: /en/taxes-americans-living-portugal.html
+- Buying property as a US citizen: /en/buying-property-portugal-us-citizens.html
+- Property in Portugal for non-residents: /en/imovel-portugal-nao-residentes.html
+- Inheritance in Portugal for non-residents: /en/heranca-portugal-nao-residentes.html
+
+## Artigos FR — Successions
+
+- Héritage au Portugal pour non-résidents: /fr/heranca-portugal-nao-residentes.html
+- Compte bancaire après un décès: /fr/succession-compte-bancaire-portugal.html
+- Sortir de l'indivision — désaccord entre héritiers: /fr/heritiers-desaccord-bien-portugal-indivision.html
+- Fiscalité et loi applicable (succession franco-portugaise): /fr/succession-franco-portugaise-fiscalite-loi-applicable.html
+- Bien immobilier au Portugal pour non-résidents: /fr/imovel-portugal-nao-residentes.html
 
 ## Orientação de uso
 

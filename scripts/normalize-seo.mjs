@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /**
  * Normaliza meta Open Graph / Twitter, injeta CSP (meta http-equiv) e gera sitemap.xml.
- * lastmod: só quando existe data editorial fiável (JSON-LD dateModified ou mapa explícito).
+ * lastmod: JSON-LD dateModified → mapa explícito → data de modificação do ficheiro.
  */
 import fs from 'fs';
 import path from 'path';
@@ -70,16 +70,17 @@ function isRedirectStub(html) {
 }
 
 /**
- * Resolve lastmod conforme prioridade editorial.
- * Retorna null quando não existe data fiável → omite <lastmod>.
+ * Resolve lastmod: dateModified no JSON-LD, mapa institucional, ou mtime do ficheiro.
+ * Sempre devolve YYYY-MM-DD (todas as URLs do sitemap têm <lastmod>).
  */
-function resolveLastmod(html, rel) {
+function resolveLastmod(html, rel, absPath) {
   const jsonLdMatch = html.match(/"dateModified"\s*:\s*"(\d{4}-\d{2}-\d{2})"/);
   if (jsonLdMatch) return jsonLdMatch[1];
 
   if (I18N_INSTITUTIONAL_LASTMOD[rel]) return I18N_INSTITUTIONAL_LASTMOD[rel];
 
-  return null;
+  const mtime = fs.statSync(absPath).mtime;
+  return mtime.toISOString().slice(0, 10);
 }
 
 function injectCspMeta(html) {
@@ -175,10 +176,13 @@ function shouldIncludeInSitemap(relPath, html) {
 }
 
 function buildUrlXmlEntry(entry) {
-  let block = `  <url>\n    <loc>${entry.loc}</loc>`;
-  if (entry.lastmod) block += `\n    <lastmod>${entry.lastmod}</lastmod>`;
-  block += `\n    <changefreq>monthly</changefreq>\n  </url>`;
-  return block;
+  return (
+    `  <url>\n` +
+    `    <loc>${entry.loc}</loc>\n` +
+    `    <lastmod>${entry.lastmod}</lastmod>\n` +
+    `    <changefreq>monthly</changefreq>\n` +
+    `  </url>`
+  );
 }
 
 function main() {
@@ -197,16 +201,12 @@ function main() {
   console.log(`Heads atualizados: ${changed} ficheiros.`);
 
   const urls = [];
-  let withLastmod = 0;
-  let withoutLastmod = 0;
   for (const abs of files) {
     const rel = path.relative(ROOT, abs).replace(/\\/g, '/');
     if (rel.startsWith('templates/') || rel.startsWith('partials/') || EXCLUDED_HTML.has(rel)) continue;
     const raw = fs.readFileSync(abs, 'utf8');
     if (!shouldIncludeInSitemap(rel, raw)) continue;
-    const lastmod = resolveLastmod(raw, rel);
-    if (lastmod) withLastmod++;
-    else withoutLastmod++;
+    const lastmod = resolveLastmod(raw, rel, abs);
     urls.push({ loc: fileToUrl(rel), lastmod });
   }
   urls.sort((a, b) => a.loc.localeCompare(b.loc));
@@ -217,7 +217,7 @@ function main() {
     urls.map(buildUrlXmlEntry).join('\n') +
     `\n</urlset>\n`;
   fs.writeFileSync(path.join(ROOT, 'sitemap.xml'), xml);
-  console.log(`sitemap.xml: ${urls.length} URLs (${withLastmod} com lastmod, ${withoutLastmod} sem lastmod).`);
+  console.log(`sitemap.xml: ${urls.length} URLs (${urls.length} com lastmod).`);
 }
 
 main();
