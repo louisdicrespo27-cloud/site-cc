@@ -2356,3 +2356,15 @@ summary:focus-visible{
   letter-spacing: .01em;
 }
 .resource-group:first-of-type { margin-top: .9rem; }
+
+/* Data de revisão do conteúdo — sinal de atualidade para o leitor e para
+   sistemas que citem a página. Emparelha com dateModified do JSON-LD. */
+.artigo-data{
+  margin: -0.35rem 0 1.5rem;
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  color: var(--muted);
+}
+.artigo-data time{
+  font-variant-numeric: tabular-nums;
+}

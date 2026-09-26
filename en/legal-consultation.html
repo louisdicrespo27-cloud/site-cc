@@ -36,14 +36,32 @@
       "url": "https://www.correiacrespo-advogados.pt/en/legal-consultation.html",
       "name": "Legal consultation",
       "description": "Book a consultation by email or WhatsApp; what a consultation involves and what this stage does not cover. Lourinhã, Portugal.",
-      "isPartOf": { "@id": "https://www.correiacrespo-advogados.pt/#website" },
-      "inLanguage": "en"
+      "isPartOf": {
+        "@id": "https://www.correiacrespo-advogados.pt/#website"
+      },
+      "inLanguage": "en",
+      "author": {
+        "@type": "Person",
+        "@id": "https://www.correiacrespo-advogados.pt/sobre.html#luis-correia-crespo",
+        "name": "Luís Correia Crespo"
+      },
+      "dateModified": "2026-08-08"
     },
     {
       "@type": "BreadcrumbList",
       "itemListElement": [
-        { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.correiacrespo-advogados.pt/en/index.html" },
-        { "@type": "ListItem", "position": 2, "name": "Legal consultation", "item": "https://www.correiacrespo-advogados.pt/en/legal-consultation.html" }
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://www.correiacrespo-advogados.pt/en/index.html"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Legal consultation",
+          "item": "https://www.correiacrespo-advogados.pt/en/legal-consultation.html"
+        }
       ]
     },
     {
@@ -133,6 +151,7 @@
 
   <main id="conteudo" class="container page page-agendar">
     <h1>Legal consultation</h1>
+    <p class="artigo-data">Updated <time datetime="2026-08-08">August 8, 2026</time></p>
     <p class="lead">
       A consultation is a meeting with a lawyer in which you set out the facts, answer questions and present the documentation you have brought. The lawyer explains the legal framework, what is established and what depends on evidence or on a decision by others. It is for deciding with informed advice — it does not replace generic material on the internet and does not, by itself, create an obligation of mandate beyond the time and fee agreed for that session.
     </p>
@@ -323,7 +342,7 @@
     </section>
 
     <section class="faq" aria-label="Frequently asked questions">
-      <h2 class="faq-title">Frequently asked questions</h2>
+      <h2 class="faq-title" id="faq">Frequently asked questions</h2>
       <div class="accordion" data-accordion>
         <button class="acc-item" type="button" aria-expanded="false">
           <span>Is the consultation paid?</span>

@@ -36,14 +36,32 @@
       "url": "https://www.correiacrespo-advogados.pt/consulta-juridica.html",
       "name": "Consulta jurídica",
       "description": "Marcação de consulta por email ou WhatsApp; informação sobre o que é a consulta e o que não faz parte desta fase. Escritório na Lourinhã.",
-      "isPartOf": { "@id": "https://www.correiacrespo-advogados.pt/#website" },
-      "inLanguage": "pt-PT"
+      "isPartOf": {
+        "@id": "https://www.correiacrespo-advogados.pt/#website"
+      },
+      "inLanguage": "pt-PT",
+      "author": {
+        "@type": "Person",
+        "@id": "https://www.correiacrespo-advogados.pt/sobre.html#luis-correia-crespo",
+        "name": "Luís Correia Crespo"
+      },
+      "dateModified": "2026-08-08"
     },
     {
       "@type": "BreadcrumbList",
       "itemListElement": [
-        { "@type": "ListItem", "position": 1, "name": "Início", "item": "https://www.correiacrespo-advogados.pt/" },
-        { "@type": "ListItem", "position": 2, "name": "Consulta jurídica", "item": "https://www.correiacrespo-advogados.pt/consulta-juridica.html" }
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Início",
+          "item": "https://www.correiacrespo-advogados.pt/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Consulta jurídica",
+          "item": "https://www.correiacrespo-advogados.pt/consulta-juridica.html"
+        }
       ]
     },
     {
@@ -183,6 +201,7 @@
 
   <main id="conteudo" class="container page page-agendar">
     <h1>Consulta jurídica</h1>
+    <p class="artigo-data">Atualizado em <time datetime="2026-08-08">8 de agosto de 2026</time></p>
     <p class="lead">
       A consulta é uma reunião com advogado em que expõe os factos, responde a perguntas e apresenta a documentação que trouxe. O advogado explica o enquadramento jurídico, o que está assente e o que depende de prova ou de decisão alheia. Serve para decidir com informação fundamentada — não substitui textos genéricos na internet nem cria, por si, obrigação de mandato além do tempo e do valor acordados para essa sessão.
     </p>
@@ -373,7 +392,7 @@
     </section>
 
     <section class="faq" aria-label="Perguntas frequentes">
-      <h2 class="faq-title">Perguntas frequentes</h2>
+      <h2 class="faq-title" id="faq">Perguntas frequentes</h2>
       <div class="accordion" data-accordion>
         <button class="acc-item" type="button" aria-expanded="false">
           <span>A consulta é paga?</span>
