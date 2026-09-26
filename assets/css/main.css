@@ -2346,3 +2346,13 @@ summary:focus-visible{
 .breadcrumbs span[aria-current="page"]{
   color: var(--muted);
 }
+
+/* Subtítulos dos grupos de leituras (índices de idioma) */
+.resource-group {
+  font-family: var(--font-display, Fraunces, Georgia, serif);
+  font-size: 1.02rem;
+  font-weight: 600;
+  margin: 1.6rem 0 .5rem;
+  letter-spacing: .01em;
+}
+.resource-group:first-of-type { margin-top: .9rem; }
