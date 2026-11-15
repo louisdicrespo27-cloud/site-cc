@@ -2381,3 +2381,19 @@ summary:focus-visible{
 }
 .artigo-autor a{ color: inherit; font-weight: 600; }
 .artigo-autor a:hover{ color: var(--text); }
+
+/* Passos do bloco de contacto nos artigos */
+.artigo-contacto__passos{
+  margin: 0 0 var(--space-lg);
+  padding-left: 1.4rem;
+  max-width: 42rem;
+  color: var(--text-soft);
+  font-size: 1rem;
+  line-height: 1.6;
+}
+.artigo-contacto__passos li + li{
+  margin-top: var(--space-sm);
+}
+.artigo-contacto__passos strong{
+  color: var(--text);
+}
